@@ -50,15 +50,15 @@ public class LoginController : MonoBehaviour {
             data = command.ExecuteReader();
             if (data.Read())
             {
-                psyc = new Psychologist(Convert.ToInt32(data["psyc_id"]),
-                    data["psyc_name"].ToString(),
-                    data["psyc_cpf"].ToString(),
-                    data["psyc_rg"].ToString(),
-                    data["psyc_phone"].ToString(),
-                    data["psyc_email"].ToString(),
-                    data["psyc_gender"].ToString(),
-                    data["psyc_password"].ToString(),
-                    Convert.ToDateTime(data["psyc_birthday"].ToString()));
+                // psyc = new Psychologist(Convert.ToInt32(data["psyc_id"]),
+                //     data["psyc_name"].ToString(),
+                //     data["psyc_cpf"].ToString(),
+                //     data["psyc_rg"].ToString(),
+                //     data["psyc_phone"].ToString(),
+                //     data["psyc_email"].ToString(),
+                //     data["psyc_gender"].ToString(),
+                //     data["psyc_password"].ToString(),
+                //     Convert.ToDateTime(data["psyc_birthday"].ToString()));
 
                 data.Close();
                 SceneManager.LoadScene("Scenario1");

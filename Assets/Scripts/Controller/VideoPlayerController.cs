@@ -13,9 +13,9 @@ public class VideoPlayerController : MonoBehaviour
     }
 
     public void onChange(){
-        //bool flag = videoPlayer.activeInHierarchy;
-        //videoPlayer.SetActive(!flag);
-        videoPlayer.SetActive(false);
+        bool flag = videoPlayer.activeInHierarchy;
+        videoPlayer.SetActive(!flag);
+        //videoPlayer.SetActive(false);
     }
 
 }
