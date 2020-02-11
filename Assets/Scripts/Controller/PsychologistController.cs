@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PsychologistController : MonoBehaviour {
-
+    private int state; //0 - nada, 1 - novo, 2 - alterando
     // campos da tela inicial
     [SerializeField] private Text textTitle;
     [SerializeField] private InputField inputFieldSearch;
@@ -15,7 +15,7 @@ public class PsychologistController : MonoBehaviour {
     // campos da tela de edição
     [SerializeField] private Text textPhysiotherapistID;
     [SerializeField] private InputField inputFieldName;
-    [SerializeField] private InputField inputFielCpf;
+    [SerializeField] private InputField inputFieldCpf;
     [SerializeField] private InputField inputFieldEmail;
     [SerializeField] private InputField inputFieldPhone;
     [SerializeField] private Dropdown dropdownDay;
@@ -49,18 +49,37 @@ public class PsychologistController : MonoBehaviour {
     [SerializeField] private Button buttonMessage;
 
     void Start () {
-        inputFieldPassword.inputType = InputField.InputType.Password;
-        inputFieldConfirmPassword.inputType = InputField.InputType.Password;
-	}
+        inputFieldConfirmPassword.characterLimit = 45;
+        inputFieldCpf.characterLimit = 11;
+        inputFieldCRP.characterLimit = 45;
+        inputFieldEmail.characterLimit = 60;
+        inputFieldName.characterLimit = 45;
+        inputFieldPassword.characterLimit = 45; 
+        inputFieldPhone.characterLimit = 15;
+        //inputFieldSearch.characterLimit = 
+        inputFieldYear.characterLimit = 4;
+
+        inputFieldCpf.contentType = InputField.ContentType.IntegerNumber;
+        inputFieldEmail.contentType = InputField.ContentType.EmailAddress;
+        inputFieldName.contentType = InputField.ContentType.Name;
+        inputFieldPhone.contentType = InputField.ContentType.IntegerNumber;
+        inputFieldYear.contentType = InputField.ContentType.IntegerNumber;
+        inputFieldPassword.contentType = InputField.ContentType.Password;
+        inputFieldConfirmPassword.contentType = InputField.ContentType.Password; 
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
 
-    public void FirstClick()
+    public void Begin()
     {
-
+        state = 0;
+        textTitle.text = "Gerenciar Psicólogos";
+        panelEdit.SetActive(false);
+        // inputFieldSearch.text = "";
+        // toggleStatusSearch.isOn = false;
     }
 
     public void ShowPanel(bool flag)
@@ -70,24 +89,29 @@ public class PsychologistController : MonoBehaviour {
 
     }
 
-    public void InsertPsyc()
+    public void New()
+    {
+        state = 1;
+        textTitle.text = "Gerenciar Psicólogos - Novo";
+    }
+
+    public void ConfirmClick()
     {
         string name = inputFieldName.text;
         string email = inputFieldEmail.text;
-        string cpf = inputFielCpf.text;
+        string cpf = inputFieldCpf.text;
         string crp = inputFieldCRP.text;
         string phone = inputFieldPhone.text;
         string password = inputFieldPassword.text;
         string password2 = inputFieldConfirmPassword.text;
-        string year = inputFieldYear.text;
+        string yearString = inputFieldYear.text;
         int day = dropdownDay.value;
         int month = dropdownMonth.value;
-        string genderS = dropdownGender.options[dropdownGender.value].text;// = dropdownGender.value;
-        char gender = genderS[0];
-        bool status;
-
-        Debug.Log("dia " + day + " mes " + month + " sexu " + gender);
-        //DateTime birthday = new DateTime(year,month,day); transformar o year para int
+        int year;
+        string genderString = dropdownGender.options[dropdownGender.value].text;// = dropdownGender.value;
+        char gender = genderString[0];
+        bool status = toggleStatus.isOn;        
+        
         
         if(name.Trim() == "")
             Debug.Log("Erro no nome");
@@ -99,8 +123,12 @@ public class PsychologistController : MonoBehaviour {
             Debug.Log("Erro no crp");
         else if(phone.Trim() == "")
             Debug.Log("Erro no phone");
-        else if(year.Trim() == "")
+        else if(yearString.Trim() == "")
             Debug.Log("Erro no year");
+        else if(!Int32.TryParse(yearString, out year))
+            Debug.Log("Erro no ano de nascimento ");
+        else if(year < 1920 || year > 2010)
+            Debug.Log("Erro no ano de nascimento");
         else if(password.Trim() == "")
             Debug.Log("Erro no password");
         else if(password2.Trim() == "")
@@ -108,13 +136,17 @@ public class PsychologistController : MonoBehaviour {
         else if(password != password2)
             Debug.Log("Senhas não são iguais!");
         else {
-            Debug.Log("infos" + "nome - " + name + 
-            " email - " + email +
-            " cpf - " + cpf + 
-            " crp - " + crp + 
-            " phone - " + phone + 
-            " password - " + password + " password2 - " + password2);
+            DateTime birthday = new DateTime(year,month+1,day+1);
+            Psychologist psyc = new Psychologist(name,cpf,phone,email,gender,password,status,crp,birthday);
+            if(state == 1) //adding
+            {
+                string returnMsg = psyc.Insert();
+                Debug.Log(returnMsg);
+            } 
+            else if(state == 2) //alter
+            {
 
+            }
         }
     }
 }

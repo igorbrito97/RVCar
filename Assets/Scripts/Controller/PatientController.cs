@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System;
+using MySql.Data.MySqlClient;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 public class PatientController : MonoBehaviour {
 
+    private int state; //0 - nada, 1 - novo, 2 - alterando
     // campos da tela inicial
     [SerializeField] private Text textTitle;
     [SerializeField] private InputField inputFieldSearch;
@@ -44,7 +46,21 @@ public class PatientController : MonoBehaviour {
 
 
     void Start () {
-		
+        inputFieldCpf.characterLimit = 11;
+        inputFieldEmail.characterLimit = 60;
+        inputFieldName.characterLimit = 45;
+        inputFieldObservation.characterLimit = 250;
+        inputFieldPhone.characterLimit = 15;
+        //inputFieldSearch.characterLimit = 
+        inputFieldYear.characterLimit = 4;
+
+        inputFieldCpf.contentType = InputField.ContentType.IntegerNumber;
+        inputFieldEmail.contentType = InputField.ContentType.EmailAddress;
+        inputFieldName.contentType = InputField.ContentType.Name;
+        inputFieldPhone.contentType = InputField.ContentType.IntegerNumber;
+        inputFieldYear.contentType = InputField.ContentType.IntegerNumber;
+
+        Begin();
 	}
 	
 	// Update is called once per frame
@@ -52,8 +68,13 @@ public class PatientController : MonoBehaviour {
 		
 	}
 
-    public void FirstClick()
+    public void Begin()
     {
+        state = 0;
+        textTitle.text = "Gerenciar Pacientes";
+        panelEdit.SetActive(false);
+        // inputFieldSearch.text = "";
+        // toggleStatusSearch.isOn = false;
 
     }
 
@@ -64,8 +85,54 @@ public class PatientController : MonoBehaviour {
 
     }
 
-    public void TableLoad()
+    public void New()
     {
+        state = 1;
+        textTitle.text = "Gerenciar Pacientes - Novo";
+    }
 
+    public void ConfirmClick()
+    {
+        string name = inputFieldName.text;
+        string cpf = inputFieldCpf.text;
+        string email = inputFieldEmail.text;
+        string phone = inputFieldPhone.text;
+        string yearString = inputFieldYear.text;
+        int day = dropdownDay.value;
+        int month = dropdownMonth.value;
+        int year;
+        string genderString = dropdownGender.options[dropdownGender.value].text;// = dropdownGender.value;
+        char gender = genderString[0];
+        bool status = toggleStatus.isOn;    
+        string note = inputFieldObservation.text;    
+        
+        
+        if(name.Trim() == "")
+            Debug.Log("Erro no nome");
+        else if(email.Trim() == "")
+            Debug.Log("Erro no email");
+        else if(cpf.Trim() == "")
+            Debug.Log("Erro no cpf");
+        else if(phone.Trim() == "")
+            Debug.Log("Erro no phone");
+        else if(yearString.Trim() == "")
+            Debug.Log("Erro no year");
+        else if(!Int32.TryParse(yearString, out year))
+            Debug.Log("Erro no ano de nascimento ");
+        else if(year < 1920 || year > 2010)
+            Debug.Log("Erro no ano de nascimento");
+        else {
+            DateTime birthday = new DateTime(year,month+1,day+1);
+            Patient pat = new Patient(name,cpf,birthday,phone,email,note,gender,status);
+            if(state == 1)//adding
+            {
+                string returnMsg = pat.Insert();
+                Debug.Log(returnMsg);
+            }
+            else if(state == 2) //alter
+            {
+
+            }
+        }
     }
 }
