@@ -30,8 +30,8 @@ public class PsychologistController : MonoBehaviour {
 
     // tabela da tela inicial
     [SerializeField] private Text textNameB;
-    [SerializeField] private Text textCrefitoB;
-    [SerializeField] private Text textUserProfileB;
+    [SerializeField] private Text textCpfB;
+    [SerializeField] private Text textBirthdayB;
     [SerializeField] private Text textStatusB;
     [SerializeField] private Text textID;
     [SerializeField] private Button row;
@@ -56,7 +56,7 @@ public class PsychologistController : MonoBehaviour {
         inputFieldName.characterLimit = 45;
         inputFieldPassword.characterLimit = 45; 
         inputFieldPhone.characterLimit = 15;
-        //inputFieldSearch.characterLimit = 
+        inputFieldSearch.characterLimit = 45;
         inputFieldYear.characterLimit = 4;
 
         inputFieldCpf.contentType = InputField.ContentType.IntegerNumber;
@@ -66,6 +66,8 @@ public class PsychologistController : MonoBehaviour {
         inputFieldYear.contentType = InputField.ContentType.IntegerNumber;
         inputFieldPassword.contentType = InputField.ContentType.Password;
         inputFieldConfirmPassword.contentType = InputField.ContentType.Password; 
+        
+        Begin();
     }
 	
 	// Update is called once per frame
@@ -78,8 +80,27 @@ public class PsychologistController : MonoBehaviour {
         state = 0;
         textTitle.text = "Gerenciar Psicólogos";
         panelEdit.SetActive(false);
-        // inputFieldSearch.text = "";
-        // toggleStatusSearch.isOn = false;
+        inputFieldSearch.text = "";
+        toggleStatusSearch.isOn = false;
+        Clear();
+    }
+
+    public void Clear()
+    {
+        textPhysiotherapistID.text = "";
+        inputFieldName.text = "";
+        inputFieldCpf.text = "";
+        inputFieldEmail.text = "";
+        inputFieldPhone.text = "";
+        inputFieldYear.text = "";
+        inputFieldCRP.text = "";
+        inputFieldPassword.text = "";
+        inputFieldConfirmPassword.text = "";
+        toggleStatus.isOn = true;
+        dropdownGender.value = 0;    
+        dropdownDay.value = 0;
+        dropdownMonth.value = 0;
+        buttonDelete.gameObject.SetActive(false);
     }
 
     public void ShowPanel(bool flag)
@@ -148,5 +169,53 @@ public class PsychologistController : MonoBehaviour {
 
             }
         }
+    }
+
+    public void TableLoad()
+    {
+        Psychologist psyc;
+        List<Psychologist> psychologists;
+        Button newRow;
+
+        if (rowsClone != null)
+        {
+            var clones = new Transform[rows.transform.childCount];
+            for (var i = 1; i < clones.Length; i++)
+            {
+                clones[i] = rows.transform.GetChild(i);
+                Destroy(clones[i].gameObject);
+            }
+            row.gameObject.SetActive(true);
+        }
+
+        psyc = new Psychologist();
+        psychologists = psyc.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
+        Debug.Log("contagem psicologs: " + psychologists.Count);
+        for(int i=0; i< psychologists.Count; i++)
+        {
+            textID.text = psychologists[i].Id.ToString();
+            textNameB.text = psychologists[i].Name;
+            textCpfB.text = psychologists[i].Cpf;
+            textBirthdayB.text = psychologists[i].Birthday.ToString();
+            textStatusB.text  = psychologists[i].Status ? "Ativo" : "Desativado";
+        }
+
+        rowsClone = rows;
+        row.gameObject.SetActive(false);
+        AddListener();
+
+    }
+    public void AddListener()
+    {
+        foreach (Button btn in btns)
+        {
+            btn.onClick.AddListener(() => RowClick(btn));
+        }
+    }
+
+    public void RowClick(Button bt)
+    {
+        state = 2;
+        textTitle.text = "Gerenciar Psicológos - Alterar";
     }
 }

@@ -67,7 +67,7 @@ public class Psychologist : MonoBehaviour {
         sql = sql.Replace("$c", this.cpf);
         sql = sql.Replace("$e", this.email);
         sql = sql.Replace("$p", this.phone);
-        sql = sql.Replace("$b", this.birthday + "");
+        sql = sql.Replace("$b", this.birthday.Year + "-" + this.birthday.Month + "-" + this.birthday.Day);
         sql = sql.Replace("$g", this.gender + "");
         sql = sql.Replace("$r", this.crp);
         sql = sql.Replace("$s", this.status + "");
@@ -106,7 +106,7 @@ public class Psychologist : MonoBehaviour {
         sql = sql.Replace("$c", this.cpf);
         sql = sql.Replace("$e", this.email);
         sql = sql.Replace("$p", this.phone);
-        sql = sql.Replace("$b", this.birthday + "");
+        sql = sql.Replace("$b", this.birthday.Year + "-" + this.birthday.Month + "-" + this.birthday.Day);
         sql = sql.Replace("$g", this.gender + "");
         sql = sql.Replace("$r", this.crp);
         sql = sql.Replace("$s", this.status + "");
@@ -157,16 +157,50 @@ public class Psychologist : MonoBehaviour {
                 data["psyc_password"].ToString(),
                 Convert.ToBoolean(data["psyc_status"]),
                 data["psyc_crp"].ToString(),
-                Convert.ToDateTime(data["psyc_birthday"].ToString()));
+                Convert.ToDateTime(data["psyc_birthday"]));
         }
                 
         data.Close();
         return psyc;
     }
 
-    public List<Psychologist> SearchAll()
+    public List<Psychologist> SearchAll(string filter,bool status)
     {
-        return null;
+        Debug.Log("Pesquisa, filtro: " + filter + " stat: " + status);
+        List<Psychologist> list = new List<Psychologist>();
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        String sql = "select * from psychologist ";
+
+        if(!filter.Trim().Equals(""))
+        {
+            sql+= "where psyc_name like '%$f'";
+            sql = sql.Replace("$f",filter);
+            if(!status)
+                sql +=" and psyc_status = 1";
+        }
+        else if(!status)
+            sql +="where psyc_status = 1";
+
+        Debug.Log("SQL: " + sql);
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+        while (data.Read())
+        {
+            list.Add(new Psychologist(Convert.ToInt32(data["psyc_id"]),
+                data["psyc_name"].ToString(),
+                data["psyc_cpf"].ToString(),
+                data["psyc_phone"].ToString(),
+                data["psyc_email"].ToString(),
+                Convert.ToChar(data["psyc_gender"]),
+                data["psyc_password"].ToString(),
+                Convert.ToBoolean(data["psyc_status"]),
+                data["psyc_crp"].ToString(),
+                Convert.ToDateTime(data["psyc_birthday"])));
+        }
+        data.Close();
+
+        return list;
     }
 
     public int Id { get => id; set => id = value; }

@@ -17,8 +17,10 @@ public class DatabaseController : MonoBehaviour {
                 instance = this;
                 sql = @"Server=localhost;
                         Database=rvcardb;
+                        Port=3306;
                         User ID=iguinho;
-                        Password=rvcar2020";
+                        Password=rvcar2020;
+                        CharSet=utf8";
 
                 connection = new MySqlConnection(sql);
             }

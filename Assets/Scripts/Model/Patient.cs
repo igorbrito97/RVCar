@@ -60,14 +60,15 @@ public class Patient : MonoBehaviour
                             pat_note,
                             pat_status)
                     values ('$n','$c','$e','$p','$b','$g','$o', $s);";
+        Debug.Log("inserting, sql:" + sql);
         
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$c", this.cpf);
         sql = sql.Replace("$e", this.email);
         sql = sql.Replace("$p", this.phone);
-        sql = sql.Replace("$b", this.birthday + "");
+        sql = sql.Replace("$b", this.birthday.Year + "-" + this.birthday.Month + "-" + this.birthday.Day);
         sql = sql.Replace("$g", this.gender + "");
-        sql = sql.Replace("$r", this.note);
+        sql = sql.Replace("$o", this.note);
         sql = sql.Replace("$s", this.status + "");
 
         command.CommandText = sql;
@@ -102,12 +103,13 @@ public class Patient : MonoBehaviour
         sql = sql.Replace("$c", this.cpf);
         sql = sql.Replace("$e", this.email);
         sql = sql.Replace("$p", this.phone);
-        sql = sql.Replace("$b", this.birthday + "");
+        sql = sql.Replace("$b", this.birthday.Year + "-" + this.birthday.Month + "-" + this.birthday.Day);
         sql = sql.Replace("$g", this.gender + "");
-        sql = sql.Replace("$r", this.note);
+        sql = sql.Replace("$o", this.note);
         sql = sql.Replace("$s", this.status + "");
 
         command.CommandText = sql;
+        command.CommandTimeout = 86400;
         result = command.ExecuteNonQuery();
         Debug.Log("resultado query: " + result);
         if(result == 1)
@@ -116,7 +118,7 @@ public class Patient : MonoBehaviour
         }
 
         
-        return "Erro ao inserir!";
+        return "Erro ao alterar!";
     }
 
     public bool Delete(int id)
@@ -158,9 +160,42 @@ public class Patient : MonoBehaviour
         return patient;
     }
 
-    public List<Patient> SearchAll()
+    public List<Patient> SearchAll(String filter,bool status)
     {
-        return null;
+        Debug.Log("Pesquisa, filtro: " + filter + " stat: " + status);
+        List<Patient> list = new List<Patient>();
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        String sql = "select * from patient ";
+
+        if(!filter.Trim().Equals(""))
+        {
+            sql+= "where pat_name like '%$f'";
+            sql = sql.Replace("$f",filter);
+            if(!status)
+                sql +=" and pat_status = 1";
+        }
+        else if(!status)
+            sql +="where pat_status = 1";
+
+        Debug.Log("SQL: " + sql);
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+        while (data.Read())
+        {
+            list.Add(new Patient(Convert.ToInt32(data["pat_id"]),
+                data["pat_name"].ToString(),
+                data["pat_cpf"].ToString(),
+                Convert.ToDateTime(data["pat_birthday"]),
+                data["pat_phone"].ToString(),
+                data["pat_email"].ToString(),
+                data["pat_note"].ToString(),
+                Convert.ToChar(data["pat_gender"]),
+                Convert.ToBoolean(data["pat_status"])));
+        }
+        data.Close();
+
+        return list;
     }
 
     public int Id { get => id; set => id = value; }

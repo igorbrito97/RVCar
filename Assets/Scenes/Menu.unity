@@ -5037,7 +5037,7 @@ GameObject:
   - component: {fileID: 87531940}
   - component: {fileID: 87531939}
   m_Layer: 5
-  m_Name: TextRiskStratificationH
+  m_Name: TextCpfH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5095,7 +5095,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Risk stratification
+  m_Text: CPF
 --- !u!222 &87531940
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25179,7 +25179,7 @@ GameObject:
   - component: {fileID: 404502549}
   - component: {fileID: 404502548}
   m_Layer: 5
-  m_Name: TextUserProfileB
+  m_Name: TextBirthdayB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30312,7 +30312,7 @@ GameObject:
   - component: {fileID: 501066034}
   - component: {fileID: 501066033}
   m_Layer: 5
-  m_Name: TextRiskStratificationB
+  m_Name: TextCpfB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32252,7 +32252,7 @@ RectTransform:
   m_GameObject: {fileID: 530740362}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000046, y: 1.0000046, z: 1.0000046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1729828146}
   m_RootOrder: 3
@@ -43570,7 +43570,7 @@ GameObject:
   - component: {fileID: 689645311}
   - component: {fileID: 689645310}
   m_Layer: 5
-  m_Name: TextTypeDiseaseB
+  m_Name: TextBirthdayB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44802,7 +44802,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1115632416}
         m_MethodName: TableLoad
         m_Mode: 1
         m_Arguments:
@@ -50796,7 +50796,7 @@ GameObject:
   - component: {fileID: 821541410}
   - component: {fileID: 821541409}
   m_Layer: 5
-  m_Name: TextTypeDiseaseH
+  m_Name: TextBirthdayH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50854,7 +50854,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Disease type
+  m_Text: Data de nascimento
 --- !u!222 &821541410
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -68684,7 +68684,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080643511}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -3.2425113, y: 10.163009, z: 51.93439}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -71364,13 +71364,13 @@ MonoBehaviour:
   inputFieldPassword: {fileID: 1929372204}
   inputFieldConfirmPassword: {fileID: 1598301705}
   buttonDelete: {fileID: 53197220}
-  textNameB: {fileID: 0}
-  textCrefitoB: {fileID: 0}
-  textUserProfileB: {fileID: 0}
-  textStatusB: {fileID: 0}
-  textID: {fileID: 0}
-  row: {fileID: 0}
-  rows: {fileID: 0}
+  textNameB: {fileID: 1759757894}
+  textCpfB: {fileID: 1963505191}
+  textBirthdayB: {fileID: 404502548}
+  textStatusB: {fileID: 218489576}
+  textID: {fileID: 1255345006}
+  row: {fileID: 863401615}
+  rows: {fileID: 58677081}
   panelEdit: {fileID: 1056246482}
   buttonMessage: {fileID: 0}
 --- !u!114 &1115632417
@@ -96205,7 +96205,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: Nome
 --- !u!222 &1540275987
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -98904,7 +98904,7 @@ GameObject:
   - component: {fileID: 1585189759}
   - component: {fileID: 1585189758}
   m_Layer: 5
-  m_Name: TextUserProfileH
+  m_Name: TextBirthdayH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98962,7 +98962,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: User profile
+  m_Text: Data de nascimento
 --- !u!222 &1585189759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -107109,7 +107109,7 @@ GameObject:
   - component: {fileID: 1746306298}
   - component: {fileID: 1746306297}
   m_Layer: 5
-  m_Name: TextCrefitoH
+  m_Name: TextCpfH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107167,7 +107167,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CREFITO
+  m_Text: CPF
 --- !u!222 &1746306298
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -110006,7 +110006,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: Nome
 --- !u!222 &1796291328
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -110828,13 +110828,13 @@ MonoBehaviour:
   toggleStatus: {fileID: 2037685271}
   inputFieldObservation: {fileID: 1182403856}
   buttonDelete: {fileID: 974485407}
-  textID: {fileID: 0}
-  textNameB: {fileID: 0}
-  textRiskStratificationB: {fileID: 0}
-  textDiseaseB: {fileID: 0}
-  textStatusB: {fileID: 0}
-  row: {fileID: 0}
-  rows: {fileID: 0}
+  textID: {fileID: 259827227}
+  textNameB: {fileID: 178371246}
+  textCpfB: {fileID: 501066033}
+  textBirthdayB: {fileID: 689645310}
+  textStatusB: {fileID: 242316598}
+  row: {fileID: 2132827599}
+  rows: {fileID: 256116694}
   panelEdit: {fileID: 1906897738}
 --- !u!114 &1804317057
 MonoBehaviour:
@@ -120981,7 +120981,7 @@ GameObject:
   - component: {fileID: 1963505192}
   - component: {fileID: 1963505191}
   m_Layer: 5
-  m_Name: TextCrefitoB
+  m_Name: TextCpfB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
