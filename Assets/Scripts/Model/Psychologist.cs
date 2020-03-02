@@ -13,15 +13,16 @@ public class Psychologist : MonoBehaviour {
     private string email;
     private char gender;
     private string password;
-    private bool status;
+    private int status;
     private string crp;
     private DateTime birthday;
 
     public Psychologist()
     {
+        //TESTANDO O PUSH E PULL
     }
 
-    public Psychologist(string name, string cpf, string phone, string email, char gender, string password, bool status, string crp, DateTime birthday)
+    public Psychologist(string name, string cpf, string phone, string email, char gender, string password, int status, string crp, DateTime birthday)
     {
         this.name = name;
         this.cpf = cpf;
@@ -34,7 +35,7 @@ public class Psychologist : MonoBehaviour {
         this.birthday = birthday;
     }
 
-    public Psychologist(int id, string name, string cpf, string phone, string email, char gender, string password, bool status, string crp, DateTime birthday)
+    public Psychologist(int id, string name, string cpf, string phone, string email, char gender, string password, int status, string crp, DateTime birthday)
     {
         this.id = id;
         this.name = name;
@@ -63,6 +64,7 @@ public class Psychologist : MonoBehaviour {
                             psyc_status,
                             psyc_password)
                     values ('$n','$c','$e','$p','$b','$g','$r', $s ,'$w');";
+                    
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$c", this.cpf);
         sql = sql.Replace("$e", this.email);
@@ -72,6 +74,8 @@ public class Psychologist : MonoBehaviour {
         sql = sql.Replace("$r", this.crp);
         sql = sql.Replace("$s", this.status + "");
         sql = sql.Replace("$w", this.password);
+        
+        Debug.Log("inserting, sql:" + sql);
 
         command.CommandText = sql;
         result = command.ExecuteNonQuery();
@@ -112,6 +116,7 @@ public class Psychologist : MonoBehaviour {
         sql = sql.Replace("$s", this.status + "");
         sql = sql.Replace("$w", this.password);
 
+        Debug.Log("inserting, sql:" + sql);
         command.CommandText = sql;
         result = command.ExecuteNonQuery();
 
@@ -155,7 +160,7 @@ public class Psychologist : MonoBehaviour {
                 data["psyc_email"].ToString(),
                 Convert.ToChar(data["psyc_gender"]),
                 data["psyc_password"].ToString(),
-                Convert.ToBoolean(data["psyc_status"]),
+                Convert.ToInt32(data["psyc_status"]),
                 data["psyc_crp"].ToString(),
                 Convert.ToDateTime(data["psyc_birthday"]));
         }
@@ -172,6 +177,7 @@ public class Psychologist : MonoBehaviour {
         MySqlDataReader data;
         String sql = "select * from psychologist ";
 
+/*
         if(!filter.Trim().Equals(""))
         {
             sql+= "where psyc_name like '%$f'";
@@ -181,6 +187,7 @@ public class Psychologist : MonoBehaviour {
         }
         else if(!status)
             sql +="where psyc_status = 1";
+         */
 
         Debug.Log("SQL: " + sql);
         command.CommandText = sql;
@@ -194,7 +201,7 @@ public class Psychologist : MonoBehaviour {
                 data["psyc_email"].ToString(),
                 Convert.ToChar(data["psyc_gender"]),
                 data["psyc_password"].ToString(),
-                Convert.ToBoolean(data["psyc_status"]),
+                Convert.ToInt32(data["psyc_status"]),
                 data["psyc_crp"].ToString(),
                 Convert.ToDateTime(data["psyc_birthday"])));
         }
@@ -210,7 +217,7 @@ public class Psychologist : MonoBehaviour {
     public string Email { get => email; set => email = value; }
     public char Gender { get => gender; set => gender = value; }
     public string Password { get => password; set => password = value; }
-    public bool Status { get => status; set => status = value; }
+    public int Status { get => status; set => status = value; }
     public string Crp { get => crp; set => crp = value; }
     public DateTime Birthday { get => birthday; set => birthday = value; }
 }

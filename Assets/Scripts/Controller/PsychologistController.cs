@@ -158,7 +158,7 @@ public class PsychologistController : MonoBehaviour {
             Debug.Log("Senhas não são iguais!");
         else {
             DateTime birthday = new DateTime(year,month+1,day+1);
-            Psychologist psyc = new Psychologist(name,cpf,phone,email,gender,password,status,crp,birthday);
+            Psychologist psyc = new Psychologist(name,cpf,phone,email,gender,password,status ? 1 : 0,crp,birthday);
             if(state == 1) //adding
             {
                 string returnMsg = psyc.Insert();
@@ -197,7 +197,7 @@ public class PsychologistController : MonoBehaviour {
             textNameB.text = psychologists[i].Name;
             textCpfB.text = psychologists[i].Cpf;
             textBirthdayB.text = psychologists[i].Birthday.ToString();
-            textStatusB.text  = psychologists[i].Status ? "Ativo" : "Desativado";
+            textStatusB.text  = psychologists[i].Status == 1 ? "Ativo" : "Desativado";
         }
 
         rowsClone = rows;

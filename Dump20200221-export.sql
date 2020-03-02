@@ -23,7 +23,7 @@ USE `rvcardb`;
 
 DROP TABLE IF EXISTS `patient`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `patient` (
   `pat_id` int NOT NULL AUTO_INCREMENT,
   `pat_name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE `patient` (
   `pat_status` tinyint DEFAULT NULL,
   PRIMARY KEY (`pat_id`),
   UNIQUE KEY `pat_cpf_UNIQUE` (`pat_cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,7 +55,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `psychologist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `psychologist` (
   `psyc_id` int NOT NULL AUTO_INCREMENT,
   `psyc_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `psychologist` (
   `psyc_password` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`psyc_id`),
   UNIQUE KEY `psyc_cpf_UNIQUE` (`psyc_cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

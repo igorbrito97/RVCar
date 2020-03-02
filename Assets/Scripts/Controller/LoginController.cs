@@ -72,7 +72,7 @@ public class LoginController : MonoBehaviour {
                 data["psyc_email"].ToString(),
                 Convert.ToChar(data["psyc_gender"]),
                 data["psyc_password"].ToString(),
-                Convert.ToBoolean(data["psyc_status"]),
+                Convert.ToInt32(data["psyc_status"]),
                 data["psyc_crp"].ToString(),
                 Convert.ToDateTime(data["psyc_birthday"]));
 

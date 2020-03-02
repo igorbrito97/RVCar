@@ -15,11 +15,13 @@ public class GameManager : MonoBehaviour {
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            //para teste conecta aqui, porem na versão final conecta ao logar e la faz isso e da set na conexão
-            // DatabaseController db = new DatabaseController();
-            // db.Connect();
-            // con = db.GetConnection();
-            // con.Open();
+            //para teste conecta aqui, porem na versão final conecta ao logar e la faz isso e da set na conexão            
+            //GameObject database = new GameObject();    
+            //DatabaseController db = database.AddComponent<DatabaseController>();
+            DatabaseController db = new DatabaseController();
+            db.Connect();
+            con = db.GetConnection();
+            con.Open();
         }
         else
         {

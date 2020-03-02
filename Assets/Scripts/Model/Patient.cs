@@ -15,13 +15,14 @@ public class Patient : MonoBehaviour
     private string email;
     private string note;
     private char gender;
-    private bool status;
+    private int status;
 
     public Patient()
     {
+        //TESTANDO O PUSH E PULL
     }
 
-    public Patient(string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, bool status)
+    public Patient(string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, int status)
     {
         this.name = name;
         this.cpf = cpf;
@@ -33,7 +34,7 @@ public class Patient : MonoBehaviour
         this.status = status;
     }
 
-    public Patient(int id, string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, bool status)
+    public Patient(int id, string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, int status)
     {
         this.id = id;
         this.name = name;
@@ -60,7 +61,6 @@ public class Patient : MonoBehaviour
                             pat_note,
                             pat_status)
                     values ('$n','$c','$e','$p','$b','$g','$o', $s);";
-        Debug.Log("inserting, sql:" + sql);
         
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$c", this.cpf);
@@ -71,6 +71,7 @@ public class Patient : MonoBehaviour
         sql = sql.Replace("$o", this.note);
         sql = sql.Replace("$s", this.status + "");
 
+        Debug.Log("inserting, sql:" + sql);
         command.CommandText = sql;
         result = command.ExecuteNonQuery();
         Debug.Log("resultado query: " + result);
@@ -154,7 +155,7 @@ public class Patient : MonoBehaviour
                 data["pat_email"].ToString(),
                 data["pat_note"].ToString(),
                 Convert.ToChar(data["pat_gender"]),
-                Convert.ToBoolean(data["pat_status"]));
+                Convert.ToInt32(data["pat_status"]));
         }
         data.Close();
         return patient;
@@ -191,7 +192,7 @@ public class Patient : MonoBehaviour
                 data["pat_email"].ToString(),
                 data["pat_note"].ToString(),
                 Convert.ToChar(data["pat_gender"]),
-                Convert.ToBoolean(data["pat_status"])));
+                Convert.ToInt32(data["pat_status"])));
         }
         data.Close();
 
@@ -206,5 +207,5 @@ public class Patient : MonoBehaviour
     public string Email { get => email; set => email = value; }
     public string Note { get => note; set => note = value; }
     public char Gender { get => gender; set => gender = value; }
-    public bool Status { get => status; set => status = value; }
+    public int Status { get => status; set => status = value; }
 }

@@ -83,7 +83,6 @@ public class PatientController : MonoBehaviour
 
     public void Clear()
     {
-        textPatientID.text = "";
         inputFieldName.text = "";
         inputFieldCpf.text = "";
         inputFieldEmail.text = "";
@@ -143,7 +142,7 @@ public class PatientController : MonoBehaviour
         else
         {
             DateTime birthday = new DateTime(year, month + 1, day + 1);
-            Patient pat = new Patient(name, cpf, birthday, phone, email, note, gender, status);
+            Patient pat = new Patient(name, cpf, birthday, phone, email, note, gender, status ? 1 : 0);
             if (state == 1)//adding
             {
                 string returnMsg = pat.Insert();
@@ -184,7 +183,7 @@ public class PatientController : MonoBehaviour
                 textNameB.text = patients[i].Name;
                 textCpfB.text = patients[i].Cpf;
                 textBirthdayB.text = patients[i].Birthday.ToString();
-                textStatusB.text = patients[i].Status ? "Ativo" : "Desativado";
+                textStatusB.text = patients[i].Status == 1 ? "Ativo" : "Desativado";
             }
         }
         catch(Exception e)
