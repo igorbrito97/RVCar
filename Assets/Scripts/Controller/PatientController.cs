@@ -184,15 +184,13 @@ public class PatientController : MonoBehaviour
                 textCpfB.text = patients[i].Cpf;
                 textBirthdayB.text = patients[i].Birthday.ToString();
                 textStatusB.text = patients[i].Status == 1 ? "Ativo" : "Desativado";
+                Debug.Log(i + " - " + patients[i].Name);
             }
         }
         catch(Exception e)
         {
             Debug.Log("Catchando o error. - " + e);
         }
-
-
-
         rowsClone = rows;
         row.gameObject.SetActive(false);
         AddListener();

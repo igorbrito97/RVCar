@@ -324,6 +324,15 @@
  <Reference Include="InteractionEngineUtility">
  <HintPath>C:/ARQUIVOS/bcc/8 termo/RVCar/Assets/LeapMotion/Modules/InteractionEngine/Plugins/InteractionEngineUtility.dll</HintPath>
  </Reference>
+ <Reference Include="Mono.Data">
+ <HintPath>C:/ARQUIVOS/bcc/8 termo/RVCar/Assets/Plugins/Mono.Data.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Data.Sqlite">
+ <HintPath>C:/ARQUIVOS/bcc/8 termo/RVCar/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Data.SqliteClient">
+ <HintPath>C:/ARQUIVOS/bcc/8 termo/RVCar/Assets/Plugins/Mono.Data.SqliteClient.dll</HintPath>
+ </Reference>
  <Reference Include="MySql.Data">
  <HintPath>C:/ARQUIVOS/bcc/8 termo/RVCar/Assets/Plugins/MySql.Data.dll</HintPath>
  </Reference>
