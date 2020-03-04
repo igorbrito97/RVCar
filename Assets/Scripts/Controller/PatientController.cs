@@ -95,22 +95,16 @@ public class PatientController : MonoBehaviour
         dropdownGender.value = 0;
         buttonDelete.gameObject.SetActive(false);
     }
-
-    public void ShowPanel(bool flag)
-    {
-        if (panelEdit != null)
-            panelEdit.gameObject.SetActive(flag);
-
-    }
-
     public void New()
     {
         state = 1;
         textTitle.text = "Gerenciar Pacientes - Novo";
+        panelEdit.gameObject.SetActive(true);
     }
 
     public void ConfirmClick()
     {
+        string id = textPatientID.text;
         string name = inputFieldName.text;
         string cpf = inputFieldCpf.text;
         string email = inputFieldEmail.text;
@@ -150,8 +144,30 @@ public class PatientController : MonoBehaviour
             }
             else if (state == 2) //alter
             {
-
+                string returnMsg = pat.Alter(Convert.ToInt32(id));
+                Debug.Log(returnMsg);
             }
+        }
+    }
+
+    public void DeleteClick()
+    {
+        string id = textPatientID.text;
+        bool status = toggleStatus.isOn;
+
+        if(!status)
+        {
+            Debug.Log("usuario ja desativado!");
+            return;
+        }
+
+        if(new Patient().Delete(Convert.ToInt32(id)))
+        {
+            Begin();
+            Debug.Log("Sucesso!");
+        }
+        else {
+            Debug.Log("erro");
         }
     }
 
@@ -173,28 +189,23 @@ public class PatientController : MonoBehaviour
         }
 
         pat = new Patient();
-        try
+        patients = pat.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
+        
+        for (int i = 0; i < patients.Count; i++)
         {
-            patients = pat.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
-            Debug.Log("contagem pacientes: " + patients.Count);
-            for (int i = 0; i < patients.Count; i++)
-            {
-                textID.text = patients[i].Id.ToString();
-                textNameB.text = patients[i].Name;
-                textCpfB.text = patients[i].Cpf;
-                textBirthdayB.text = patients[i].Birthday.ToString();
-                textStatusB.text = patients[i].Status == 1 ? "Ativo" : "Desativado";
-                Debug.Log(i + " - " + patients[i].Name);
-            }
+            textID.text = patients[i].Id.ToString();
+            textNameB.text = patients[i].Name;
+            textCpfB.text = patients[i].Cpf;
+            textBirthdayB.text = patients[i].Birthday.Day + " - " + patients[i].Birthday.Month + " - " + patients[i].Birthday.Year;
+            textStatusB.text = patients[i].Status == 1 ? "Ativo" : "Desativado";
+            newRow = Instantiate(row) as Button; 
+            newRow.transform.SetParent(row.transform.parent,false);
+            btns.Add(newRow);
         }
-        catch(Exception e)
-        {
-            Debug.Log("Catchando o error. - " + e);
-        }
+
         rowsClone = rows;
         row.gameObject.SetActive(false);
         AddListener();
-
     }
     public void AddListener()
     {
@@ -204,9 +215,30 @@ public class PatientController : MonoBehaviour
         }
     }
 
-    public void RowClick(Button bt)
+    public void RowClick(Button br)
     {
         state = 2;
         textTitle.text = "Gerenciar Paciente - Alterar";
+
+        Patient patient = new Patient().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textID).text));
+        buttonDelete.gameObject.SetActive(true);
+
+        textPatientID.text = patient.Id.ToString();
+        inputFieldName.text = patient.Name;
+        inputFieldCpf.text = patient.Cpf;
+        inputFieldEmail.text = patient.Email;
+        inputFieldPhone.text = patient.Phone;
+        inputFieldYear.text = patient.Birthday.Year + "";
+        inputFieldObservation.text = patient.Note;
+        
+        toggleStatus.isOn = patient.Status == 1;
+
+        dropdownDay.value = patient.Birthday.Day -1;
+        dropdownMonth.value = patient.Birthday.Month-1;
+        int i=0;
+        while(i < dropdownGender.options.Count && 
+            patient.Gender != dropdownGender.options[i].text[0])
+            i++;
+        dropdownGender.value = i;
     }
 }

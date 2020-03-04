@@ -13,7 +13,7 @@ public class PsychologistController : MonoBehaviour {
     [SerializeField] private Toggle toggleStatusSearch;
 
     // campos da tela de edição
-    [SerializeField] private Text textPhysiotherapistID;
+    [SerializeField] private Text textPsychologistID;
     [SerializeField] private InputField inputFieldName;
     [SerializeField] private InputField inputFieldCpf;
     [SerializeField] private InputField inputFieldEmail;
@@ -87,7 +87,7 @@ public class PsychologistController : MonoBehaviour {
 
     public void Clear()
     {
-        textPhysiotherapistID.text = "";
+        textPsychologistID.text = "";
         inputFieldName.text = "";
         inputFieldCpf.text = "";
         inputFieldEmail.text = "";
@@ -103,21 +103,16 @@ public class PsychologistController : MonoBehaviour {
         buttonDelete.gameObject.SetActive(false);
     }
 
-    public void ShowPanel(bool flag)
-    {
-        if(panelEdit!=null)
-            panelEdit.gameObject.SetActive(flag);
-
-    }
-
     public void New()
     {
         state = 1;
         textTitle.text = "Gerenciar Psicólogos - Novo";
+        panelEdit.gameObject.SetActive(true);
     }
 
     public void ConfirmClick()
     {
+        string id = textPsychologistID.text;
         string name = inputFieldName.text;
         string email = inputFieldEmail.text;
         string cpf = inputFieldCpf.text;
@@ -166,8 +161,30 @@ public class PsychologistController : MonoBehaviour {
             } 
             else if(state == 2) //alter
             {
-
+                string returnMsg = psyc.Alter(Convert.ToInt32(id));
+                Debug.Log(returnMsg);
             }
+        }
+    }
+
+    public void DeleteClick()
+    {
+        string id = textPsychologistID.text;
+        bool status = toggleStatus.isOn;
+
+        if(!status)
+        {
+            Debug.Log("usuário ja desativado!");
+            return;
+        }
+
+        if(new Psychologist().Delete(Convert.ToInt32(id)))
+        {
+            Begin();
+            Debug.Log("Sucesso");
+        }
+        else {
+            Debug.Log("erro");
         }
     }
 
@@ -198,6 +215,9 @@ public class PsychologistController : MonoBehaviour {
             textCpfB.text = psychologists[i].Cpf;
             textBirthdayB.text = psychologists[i].Birthday.ToString();
             textStatusB.text  = psychologists[i].Status == 1 ? "Ativo" : "Desativado";
+            newRow = Instantiate(row) as Button; 
+            newRow.transform.SetParent(row.transform.parent,false);
+            btns.Add(newRow);
         }
 
         rowsClone = rows;
@@ -213,9 +233,31 @@ public class PsychologistController : MonoBehaviour {
         }
     }
 
-    public void RowClick(Button bt)
+    public void RowClick(Button br)
     {
         state = 2;
         textTitle.text = "Gerenciar Psicológos - Alterar";
+
+        Psychologist psychologist = new Psychologist().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textID).text));
+        buttonDelete.gameObject.SetActive(true);
+
+        textPsychologistID.text = psychologist.Id.ToString();
+        inputFieldName.text = psychologist.Name;
+        inputFieldCpf.text = psychologist.Cpf;
+        inputFieldEmail.text = psychologist.Email;
+        inputFieldPhone.text = psychologist.Phone;
+        inputFieldYear.text = psychologist.Birthday.Year + "";
+        inputFieldCRP.text = psychologist.Crp;
+        inputFieldPassword.text = inputFieldConfirmPassword.text = psychologist.Password;
+
+        toggleStatus.isOn = psychologist.Status == 1;
+
+        dropdownDay.value = psychologist.Birthday.Day -1;
+        dropdownMonth.value = psychologist.Birthday.Month-1;
+        int i=0;
+        while(i < dropdownGender.options.Count && 
+            psychologist.Gender != dropdownGender.options[i].text[0])
+            i++;
+        dropdownGender.value = i;    
     }
 }

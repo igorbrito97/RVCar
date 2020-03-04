@@ -95,7 +95,7 @@ public class Psychologist : MonoBehaviour {
         MySqlDataReader data;
         int result;
         string sql = @"update psychologist set 
-                        (psyc_name = '$n',
+                        psyc_name = '$n',
                         psyc_cpf = '$c',
                         psyc_email = '$e',
                         psyc_phone = '$p',
@@ -103,7 +103,7 @@ public class Psychologist : MonoBehaviour {
                         psyc_gender = '$g',
                         psyc_crp = '$r',
                         psyc_status = $s,
-                        psyc_password = '$w')
+                        psyc_password = '$w'
                         where psyc_id = " + id;
 
         sql = sql.Replace("$n", this.name);
@@ -116,7 +116,6 @@ public class Psychologist : MonoBehaviour {
         sql = sql.Replace("$s", this.status + "");
         sql = sql.Replace("$w", this.password);
 
-        Debug.Log("inserting, sql:" + sql);
         command.CommandText = sql;
         result = command.ExecuteNonQuery();
 
@@ -177,17 +176,16 @@ public class Psychologist : MonoBehaviour {
         MySqlDataReader data;
         String sql = "select * from psychologist ";
 
-/*
         if(!filter.Trim().Equals(""))
         {
-            sql+= "where psyc_name like '%$f'";
+            sql+= "where psyc_name like '%$f%'";
             sql = sql.Replace("$f",filter);
             if(!status)
                 sql +=" and psyc_status = 1";
         }
         else if(!status)
             sql +="where psyc_status = 1";
-         */
+         
 
         Debug.Log("SQL: " + sql);
         command.CommandText = sql;

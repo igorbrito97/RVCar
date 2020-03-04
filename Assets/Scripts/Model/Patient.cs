@@ -90,14 +90,14 @@ public class Patient : MonoBehaviour
         MySqlDataReader data;
         int result;
         string sql = @"update patient set 
-                        (pat_name = '$n',
+                        pat_name = '$n',
                         pat_cpf = '$c',
                         pat_email = '$e',
                         pat_phone = '$p',
                         pat_birthday = '$b',
                         pat_gender = '$g',
                         pat_note = '$o',
-                        pat_status = $s)
+                        pat_status = $s
                         where pat_id = " + id;
 
         sql = sql.Replace("$n", this.name);
@@ -109,8 +109,8 @@ public class Patient : MonoBehaviour
         sql = sql.Replace("$o", this.note);
         sql = sql.Replace("$s", this.status + "");
 
+        Debug.Log("altering. " + sql);
         command.CommandText = sql;
-        command.CommandTimeout = 86400;
         result = command.ExecuteNonQuery();
         Debug.Log("resultado query: " + result);
         if(result == 1)
@@ -171,7 +171,7 @@ public class Patient : MonoBehaviour
 
         if(!filter.Trim().Equals(""))
         {
-            sql+= "where pat_name like '%$f'";
+            sql+= "where pat_name like '%$f%'";
             sql = sql.Replace("$f",filter);
             if(!status)
                 sql +=" and pat_status = 1";
