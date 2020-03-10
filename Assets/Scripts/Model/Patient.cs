@@ -19,7 +19,6 @@ public class Patient : MonoBehaviour
 
     public Patient()
     {
-        //TESTANDO O PUSH E PULL
     }
 
     public Patient(string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, int status)
@@ -125,7 +124,7 @@ public class Patient : MonoBehaviour
     public bool Delete(int id)
     {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        string sql = @"update patient set pat_status = false where pat_id = " + id;
+        string sql = @"update patient set pat_status = 0 where pat_id = " + id;
         int result;
 
         command.CommandText = sql;

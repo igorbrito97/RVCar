@@ -19,7 +19,6 @@ public class Psychologist : MonoBehaviour {
 
     public Psychologist()
     {
-        //TESTANDO O PUSH E PULL
     }
 
     public Psychologist(string name, string cpf, string phone, string email, char gender, string password, int status, string crp, DateTime birthday)
@@ -130,7 +129,7 @@ public class Psychologist : MonoBehaviour {
     public bool Delete(int id)
     {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        string sql = @"update psychologist set psyc_status = false where psyc_id = " + id;
+        string sql = @"update psychologist set psyc_status = 0 where psyc_id = " + id;
         int result;
 
         command.CommandText = sql;
