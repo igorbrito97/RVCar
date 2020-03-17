@@ -173,6 +173,8 @@ public class PatientController : MonoBehaviour
 
     public void TableLoad()
     {
+        Debug.Log("Quantidade btns: " + btns.Count);
+        Debug.Log("rowsClone: " + rowsClone);
         Patient pat;
         List<Patient> patients;
         Button newRow;

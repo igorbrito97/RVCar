@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System;
+using MySql.Data.MySqlClient;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,6 @@ public class StageControlller : MonoBehaviour
     [SerializeField] private InputField inputFieldDescription;
     [SerializeField] private Dropdown dropdownScenario;
     [SerializeField] private Dropdown dropdownWeather;
-    [SerializeField] private Dropdown dropdownElements;
     [SerializeField] private Slider sliderTime;
     [SerializeField] private Text HourText;
     [SerializeField] private Button buttonAdd;
@@ -35,11 +35,22 @@ public class StageControlller : MonoBehaviour
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
 
+    //tabela para componente
+    [SerializeField] private Dropdown dropdownComponents;
+    [SerializeField] private Button deleteComponentButton;
+    [SerializeField] private Text textIDBComponent;
+    [SerializeField] private Text textNameBComponent;
+    [SerializeField] private Text textInfoBComponent;
+    [SerializeField] private Button rowComponent;
+    [SerializeField] private GameObject rows2;
+
     //lista de objetos
     private List<Button> btns = new List<Button>();
-    private List<Configuration> scenarioList = new List<Configuration>();
-    private List<Configuration> weatherList = new List<Configuration>();
-
+    private KeyValuePair<int,string>[] arrayAllScenarios;
+    private KeyValuePair<int,string>[] arrayAllWeathers;
+    private KeyValuePair<int,string>[] arrayAllComponents;
+    private List<KeyValuePair<int,string>> listComponents = new List<KeyValuePair<int, string>>();
+    private int selectedComponentIndex;
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
 
@@ -86,7 +97,10 @@ public class StageControlller : MonoBehaviour
 
 
     void Start () {
-        //inicializa inputs
+        inputFieldSearch.characterLimit = 60;
+        inputFieldName.characterLimit = 60;
+        inputFieldDescription.characterLimit = 350;
+
 		Begin();
 	}
 	
@@ -102,13 +116,28 @@ public class StageControlller : MonoBehaviour
         panelEdit.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
+        sliderTime.value = 12;
         Clear();
     }
 
     public void Clear()
     {
-        //inputs
+        inputFieldName.text = "";
+        inputFieldDescription.text = "";
         buttonDelete.gameObject.SetActive(false);
+        ClearTableComponent();        
+    }
+
+    private void ClearTableComponent()
+    {
+        listComponents.Clear();
+        selectedComponentIndex = -1;
+        var clones = new Transform[rows2.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows2.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
     }
     
     public void New()
@@ -119,31 +148,34 @@ public class StageControlller : MonoBehaviour
         LoadDropdowns();
     }
 
-    public void LoadDropdowns() //scenario e weather
+    public void LoadDropdowns() //scenario and weather
     {
         Clear();
         
         Configuration weather = new Configuration(0);
-        weatherList = weather.SearchAll("",false);
         dropdownWeather.ClearOptions();
+        List<Configuration> weatherList = weather.SearchAll("",false);
+        arrayAllWeathers = new KeyValuePair<int, string>[weatherList.Count];
         for(int i = 0; i < weatherList.Count; i++)
         {
-            dropdownWeather.options.Add(new Dropdown.OptionData(weatherList[i].Id.ToString()));
-            dropdownWeather.options[i].text = weatherList[i].Name;
+            arrayAllWeathers[i] = new KeyValuePair<int, string>(weatherList[i].Id,weatherList[i].Name);
+            dropdownWeather.options.Add(new Dropdown.OptionData(weatherList[i].Name));
         }
         dropdownWeather.value = -1;
         dropdownWeather.value = 0;
 
         Configuration scenario = new Configuration(1);
-        scenarioList = scenario.SearchAll("",false);
         dropdownScenario.ClearOptions();
+        List<Configuration> scenarioList = scenario.SearchAll("",false);
+        arrayAllScenarios = new KeyValuePair<int, string>[scenarioList.Count];
         for(int i = 0; i < scenarioList.Count; i++)
         {
-            dropdownScenario.options.Add(new Dropdown.OptionData(scenarioList[i].Id.ToString()));
-            dropdownScenario.options[i].text = scenarioList[i].Name;
+            arrayAllScenarios[i] = new KeyValuePair<int, string>(scenarioList[i].Id,scenarioList[i].Name);
+            dropdownScenario.options.Add(new Dropdown.OptionData(scenarioList[i].Name));
         }
         dropdownScenario.value = -1;
         dropdownScenario.value = 0;
+
     }
 
     public void OnChangeTimeSlider()
@@ -159,6 +191,106 @@ public class StageControlller : MonoBehaviour
 
     public void ConfirmClick()
     {
-        
+        string id = textConfigID.text;
+        string name = inputFieldName.text;
+        string description = inputFieldDescription.text;
+        int scenario_id,weather_id;
+        int time = sliderTime.value;
+        bool status = toggleStatus.isOn;
+        Session session;
+
+
+        if(name.Trim() == "")
+            Debug.Log("Erro no nome!");
+        else if(description.Trim() == "")
+            Debug.Log("Erro na descrição!");
+        else if(dropdownScenario.value < 0)
+            Debug.Log("Erro ao escolher cenário!");
+        else if(dropdownWeather.value < 0)
+            Debug.Log("Erro ao escolher clima!");
+        else if(time < 0 || time > 23)
+            Debug.Log("Erro ao escolher hora!");
+        else 
+        {
+            // criei uma confid com option e id, usar essas para inserir e alterar. Para buscar pega com todas as infos
+            session = new Session();
+            if(state == 1) //add
+            {
+                string returnMsg = session.Insert();
+                Debug.Log(returnMsg);
+            }
+            else if(state == 2)//alter
+            {
+                string returnMsg = session.Alter(Convert.ToInt32(id));
+                Debug.Log(returnMsg);
+            }
+        }
+    }
+
+    public void OnChangeScenarioDropdown() //load components
+    {
+        ClearTableComponent();
+        dropdownComponents.ClearOptions();
+        List<Configuration> componentsList = new Configuration(2).GetComponentsByScenario(arrayAllScenarios[dropdownScenario.value].Key);
+        arrayAllComponents = new KeyValuePair<int, string>[componentsList.Count];
+        for(int i = 0; i< componentsList.Count; i++)
+        {
+            arrayAllComponents[i] = new KeyValuePair<int, string>(componentsList[i].Id,componentsList[i].Name);
+            dropdownComponents.options.Add(new Dropdown.OptionData(componentsList[i].Name));
+        }
+        dropdownComponents.value = -1;
+        dropdownComponents.value = 0;
+    }
+
+    public void AddComponentClick() 
+    {
+        if(listComponents.Contains(arrayAllComponents[dropdownComponents.value])) {
+            Debug.Log("ja esta na lista. Não add!");
+            return;
+        }
+        else {
+            listComponents.Add(arrayAllComponents[dropdownComponents.value]);
+            AddTableComponentRow(arrayAllComponents[dropdownComponents.value]);
+        }
+    }
+
+    private void AddTableComponentRow(KeyValuePair<int,string> info)
+    {
+        Button newRow;
+        rowComponent.gameObject.SetActive(true);
+        textIDBComponent.text = info.Key.ToString();
+        textNameBComponent.text = info.Value;
+        //textInfoBComponent.text =  por enquanto sem info
+        newRow = Instantiate(rowComponent) as Button; 
+        newRow.transform.SetParent(rowComponent.transform.parent,false);
+        newRow.onClick.AddListener(() => RowClick2(newRow));
+        rowComponent.gameObject.SetActive(false);
+    }
+
+    private void RowClick2(Button br)
+    {
+        int selectedKey = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text);
+        int i=0;
+        foreach(KeyValuePair<int,string> par in listComponents)
+        {
+            if(par.Key == selectedKey)
+            {
+                selectedComponentIndex = i;
+                break;
+            }
+            i++;
+        }
+    }
+
+    public void DeleteComponentClick()
+    {
+         if(selectedComponentIndex < 0)
+            Debug.Log("Erro ao excluir!");
+        else {
+            var clone = rows2.transform.GetChild(selectedComponentIndex+1); //+1 porque o primeiro ta false
+            Destroy(clone.gameObject);
+            listComponents.RemoveAt(selectedComponentIndex);
+            selectedComponentIndex = -1;
+        }
     }
 }

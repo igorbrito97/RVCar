@@ -52,19 +52,14 @@ public class LoginController : MonoBehaviour {
             DatabaseController db = database.AddComponent<DatabaseController>();
             db.Connect();
             connection = db.GetConnection();
-            Debug.Log("conecção: ");
             connection.Open();
-            Debug.Log("abriuuuuuu");
             command = connection.CreateCommand();
-            command.Connection = connection;
+            //command.Connection = connection;
             command.CommandText = sql;
-            
-            Debug.Log("vamo le: " + sql);
             data = command.ExecuteReader();
+
             if (data.Read())
             {
-                
-                Debug.Log("leeeeeeeeeeeeeeu:");   
                 psyc = new Psychologist(Convert.ToInt32(data["psyc_id"]),
                 data["psyc_name"].ToString(),
                 data["psyc_cpf"].ToString(),
@@ -75,6 +70,9 @@ public class LoginController : MonoBehaviour {
                 Convert.ToInt32(data["psyc_status"]),
                 data["psyc_crp"].ToString(),
                 Convert.ToDateTime(data["psyc_birthday"]));
+
+                GameManager.instance.psychologist = psyc;
+                GameManager.instance.con = connection;
 
                 data.Close();
                 SceneManager.LoadScene("Menu");
@@ -90,7 +88,7 @@ public class LoginController : MonoBehaviour {
         }
         catch (Exception ex)
         {
-            Debug.Log(ex);
+            Debug.Log(ex.Message);
         }
     }
 

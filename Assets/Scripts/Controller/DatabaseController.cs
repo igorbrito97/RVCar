@@ -37,6 +37,6 @@ public class DatabaseController : MonoBehaviour {
 
     public MySqlConnection GetConnection()
     {
-        return connection;
+        return this.connection;
     }
 }

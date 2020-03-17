@@ -21,6 +21,17 @@ public class ConfigurationController : MonoBehaviour
     [SerializeField] private InputField inputFieldDescription;
     [SerializeField] private Toggle toggleStatus;  
     [SerializeField] private Button buttonDelete;
+    //tabela para componente
+    [SerializeField] private Dropdown dropdownScenario;
+    [SerializeField] private Button deleteScenarioButton;
+    [SerializeField] private Text textIDBScenario;
+    [SerializeField] private Text textNameBScenario;
+    [SerializeField] private Button rowScenario;
+    [SerializeField] private GameObject rows2;
+    //private List<Configuration> scenarioList;
+    private KeyValuePair<int,string>[] arrayAllScenarios;
+    private List<KeyValuePair<int,string>> listScenario = new List<KeyValuePair<int, string>>();
+    private int selectedScenarioIndex;
 
     // tabela da tela inicial
     [SerializeField] private Text textIDB;
@@ -34,6 +45,7 @@ public class ConfigurationController : MonoBehaviour
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
+    [SerializeField] private GameObject panelTableComponent;
 
     // banco de dados
     public MySqlConnection connection;
@@ -57,6 +69,7 @@ public class ConfigurationController : MonoBehaviour
         state = 0;
         textTitle.text = "Gerenciar Configuraçoes da Sessao";
         panelEdit.SetActive(false);
+        panelTableComponent.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
         Clear();
@@ -68,6 +81,15 @@ public class ConfigurationController : MonoBehaviour
         inputFieldDescription.text = "";
         toggleStatus.isOn = true;
         buttonDelete.gameObject.SetActive(false);
+        listScenario.Clear();
+        selectedScenarioIndex = -1;
+        //tableScenarioClear
+        var clones = new Transform[rows2.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows2.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
     }
 
     public void New()
@@ -80,7 +102,27 @@ public class ConfigurationController : MonoBehaviour
         else if(option == 1)
             textTitle.text = "Gerenciar Cenários - Novo";
         else 
+        {
             textTitle.text = "Gerenciar Componentes - Novo";
+            panelTableComponent.SetActive(true);
+            LoadDropdown();
+            //scenarioList = new List<Configuration>();
+        }
+    }
+
+    public void LoadDropdown()
+    {
+        Configuration scenario = new Configuration(1);
+        List<Configuration> lista = scenario.SearchAll("",false);
+        dropdownScenario.ClearOptions();
+        arrayAllScenarios = new KeyValuePair<int, string>[lista.Count];
+        for(int i = 0; i < lista.Count; i++)
+        {
+            arrayAllScenarios[i] = new KeyValuePair<int, string>(lista[i].Id,lista[i].Name);
+            dropdownScenario.options.Add(new Dropdown.OptionData(lista[i].Name));
+        }
+        dropdownScenario.value = -1;
+        dropdownScenario.value = 0;
     }
 
     public void ConfirmClick()
@@ -90,14 +132,20 @@ public class ConfigurationController : MonoBehaviour
         string name = inputFieldName.text;
         string description = inputFieldDescription.text;
         bool status = toggleStatus.isOn;
+        Configuration config;
 
         if(name.Trim() == "")
             Debug.Log("Erro no nome!");
         else if(description.Trim() == "")
             Debug.Log("Erro na descrição!");
+        else if(option == 2 && listScenario.Count == 0)
+            Debug.Log("Erro nos cenários. É necessário pelo menos 1!");
         else 
         {
-            Configuration config = new Configuration(option,name,description,status ? 1 : 0);
+            if(option == 2) //component
+                config = new Configuration(option,name,description,status ? 1 : 0,listScenario);
+            else //others
+                config = new Configuration(option,name,description,status ? 1 : 0);
             if(state == 1) //add
             {
                 string returnMsg = config.Insert();
@@ -181,13 +229,6 @@ public class ConfigurationController : MonoBehaviour
     public void RowClick(Button br,int opt)
     {
         state = 2;
-        if(opt == 0)
-            textTitle.text = "Gerenciar Climas - Alterar";
-        else if(opt == 1)
-            textTitle.text = "Gerenciar Cenários - Alterar";
-        else 
-            textTitle.text = "Gerenciar Componentes - Alterar";
-
         Configuration config = new Configuration(opt).Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
         buttonDelete.gameObject.SetActive(true);
 
@@ -196,5 +237,76 @@ public class ConfigurationController : MonoBehaviour
         inputFieldDescription.text = config.Description;
         
         toggleStatus.isOn = config.Status == 1;
+
+        if(opt == 0)
+            textTitle.text = "Gerenciar Climas - Alterar";
+        else if(opt == 1)
+            textTitle.text = "Gerenciar Cenários - Alterar";
+        else 
+        {
+            textTitle.text = "Gerenciar Componentes - Alterar";
+            panelTableComponent.SetActive(true);
+            LoadDropdown();
+            Debug.Log("cenariosCount " + config.ListScenarios.Count);
+            listScenario = config.ListScenarios;
+            foreach(KeyValuePair<int,string> par in listScenario)
+            {
+                AddRowTableScenario(par);
+            }
+        }
+
+        
+    }
+
+    public void AddScenarioClick()
+    {
+        if(listScenario.Contains(arrayAllScenarios[dropdownScenario.value])){
+            Debug.Log("ja existe na lista! Nao add");
+            return;
+        }
+        else {
+            listScenario.Add(arrayAllScenarios[dropdownScenario.value]);
+            AddRowTableScenario(arrayAllScenarios[dropdownScenario.value]);
+        }
+    }
+
+    private void AddRowTableScenario(KeyValuePair<int,string> info)
+    {
+        Button newRow;
+        rowScenario.gameObject.SetActive(true);
+        textIDBScenario.text = info.Key.ToString();
+        textNameBScenario.text = info.Value;
+        newRow = Instantiate(rowScenario) as Button; 
+        newRow.transform.SetParent(rowScenario.transform.parent,false);
+        newRow.onClick.AddListener(() => RowClick2(newRow));
+        rowScenario.gameObject.SetActive(false);
+    }
+
+    public void RowClick2(Button br)
+    {
+        //FAZER: QUANDO CLICAR DEIXAR A LINHA DE COR DIFERENTE, SE CLICAR NOVAMENTE TIRA
+        int selectedScenarioKey = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBScenario).text);
+        int i=0;
+        foreach(KeyValuePair<int,string> par in listScenario)
+        {
+            if(par.Key == selectedScenarioKey)
+            {
+                selectedScenarioIndex = i;
+                break;
+            }
+            i++;
+        }
+    }
+
+    public void DeleteScenarioClick()
+    {
+        if(selectedScenarioIndex < 0)
+            Debug.Log("Erro ao excluir!");
+        else {
+            var clone = rows2.transform.GetChild(selectedScenarioIndex+1); //+1 porque o primeiro ta false
+            Destroy(clone.gameObject);
+            listScenario.RemoveAt(selectedScenarioIndex);
+            selectedScenarioIndex = -1;
+        }
     }
 }

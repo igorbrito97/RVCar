@@ -614,6 +614,7 @@
      <Compile Include="Assets\Scripts\Model\Configuration.cs" />
      <Compile Include="Assets\Scripts\Model\Patient.cs" />
      <Compile Include="Assets\Scripts\Model\Psychologist.cs" />
+     <Compile Include="Assets\Scripts\Model\Session.cs" />
      <None Include="Assets\LeapMotion\Core\Version.txt" />
      <None Include="Assets\LeapMotion\Core\Shaders\RuntimeGizmos.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
