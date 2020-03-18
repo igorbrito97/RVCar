@@ -37,7 +37,6 @@ public class PsychologistController : MonoBehaviour {
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
-    private List<Button> btns = new List<Button>();
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
@@ -205,6 +204,8 @@ public class PsychologistController : MonoBehaviour {
             row.gameObject.SetActive(true);
         }
 
+
+        List<Button> btns = new List<Button>();
         psyc = new Psychologist();
         psychologists = psyc.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
         Debug.Log("contagem psicologs: " + psychologists.Count);
@@ -222,10 +223,10 @@ public class PsychologistController : MonoBehaviour {
 
         rowsClone = rows;
         row.gameObject.SetActive(false);
-        AddListener();
+        AddListener(btns);
 
     }
-    public void AddListener()
+    public void AddListener(List<Button> btns)
     {
         foreach (Button btn in btns)
         {

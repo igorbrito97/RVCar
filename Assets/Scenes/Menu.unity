@@ -601,6 +601,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4316069}
   m_CullTransparentMesh: 0
+--- !u!1 &4888501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4888502}
+  - component: {fileID: 4888504}
+  - component: {fileID: 4888503}
+  m_Layer: 5
+  m_Name: 'TextTimeH '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4888502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4888501}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0000046, y: 1.0000046, z: 1.0000046}
+  m_Children: []
+  m_Father: {fileID: 1598979631}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 30}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &4888503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4888501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 12
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Hora
+--- !u!222 &4888504
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4888501}
+  m_CullTransparentMesh: 0
 --- !u!1 &7473156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2570,6 +2647,7 @@ RectTransform:
   - {fileID: 1556535611}
   - {fileID: 823567167}
   - {fileID: 1623725004}
+  - {fileID: 52615919}
   m_Father: {fileID: 1758784719}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3410,6 +3488,83 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51705380}
+  m_CullTransparentMesh: 0
+--- !u!1 &52615918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 52615919}
+  - component: {fileID: 52615921}
+  - component: {fileID: 52615920}
+  m_Layer: 5
+  m_Name: TextStatusB
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &52615919
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52615918}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0000046, y: 1.0000046, z: 1.0000046}
+  m_Children: []
+  m_Father: {fileID: 36829884}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 40}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &52615920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52615918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 12
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &52615921
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52615918}
   m_CullTransparentMesh: 0
 --- !u!1 &53197218
 GameObject:
@@ -6760,7 +6915,7 @@ GameObject:
   - component: {fileID: 109801468}
   - component: {fileID: 109801467}
   m_Layer: 5
-  m_Name: TextStageID
+  m_Name: TextSessionID
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7338,7 +7493,7 @@ GameObject:
   - component: {fileID: 131226604}
   - component: {fileID: 131226603}
   m_Layer: 5
-  m_Name: PanelStage
+  m_Name: PanelSession
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7387,7 +7542,7 @@ MonoBehaviour:
   textTitle: {fileID: 318013410}
   toggleStatusSearch: {fileID: 864308071}
   inputFieldSearch: {fileID: 1561920836}
-  textStageID: {fileID: 109801467}
+  textSessionID: {fileID: 109801467}
   inputFieldName: {fileID: 565636630}
   toggleStatus: {fileID: 1231086629}
   inputFieldDescription: {fileID: 1743036693}
@@ -7396,14 +7551,15 @@ MonoBehaviour:
   sliderTime: {fileID: 518038119}
   HourText: {fileID: 116779106}
   buttonAdd: {fileID: 1433406598}
-  textID: {fileID: 0}
-  textNameB: {fileID: 0}
-  textTypeB: {fileID: 0}
-  textDescriptionB: {fileID: 0}
-  textStatusB: {fileID: 0}
+  textIDB: {fileID: 104510995}
+  textNameB: {fileID: 650948426}
+  textScenarioB: {fileID: 1556535612}
+  textWeatherB: {fileID: 823567168}
+  textTimeB: {fileID: 1623725005}
+  textStatusB: {fileID: 52615920}
   buttonDelete: {fileID: 1498946013}
-  row: {fileID: 0}
-  rows: {fileID: 0}
+  row: {fileID: 36829886}
+  rows: {fileID: 1758784718}
   dropdownComponents: {fileID: 1479616742}
   deleteComponentButton: {fileID: 1178454615}
   textIDBComponent: {fileID: 1532110220}
@@ -30898,7 +31054,7 @@ GameObject:
   - component: {fileID: 480785747}
   - component: {fileID: 480785746}
   m_Layer: 5
-  m_Name: TextTypeH
+  m_Name: TextScenarioH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30914,7 +31070,7 @@ RectTransform:
   m_GameObject: {fileID: 480785744}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000046, y: 1.0000046, z: 1.0000046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1598979631}
   m_RootOrder: 1
@@ -30956,7 +31112,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Type
+  m_Text: Cenario
 --- !u!222 &480785747
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -40981,7 +41137,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: Nome
 --- !u!222 &614555191
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -54495,7 +54651,7 @@ GameObject:
   - component: {fileID: 823567169}
   - component: {fileID: 823567168}
   m_Layer: 5
-  m_Name: TextDescriptionB
+  m_Name: TextWeatherB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54519,7 +54675,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 40}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &823567168
 MonoBehaviour:
@@ -65298,7 +65454,7 @@ GameObject:
   - component: {fileID: 980213841}
   - component: {fileID: 980213840}
   m_Layer: 5
-  m_Name: TextDescriptionH
+  m_Name: TextWeatherH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65322,7 +65478,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 30}
+  m_SizeDelta: {x: 200, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &980213840
 MonoBehaviour:
@@ -65356,7 +65512,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Description
+  m_Text: Clima
 --- !u!222 &980213841
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -98818,7 +98974,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 131226603}
         m_MethodName: DeleteClick
         m_Mode: 1
         m_Arguments:
@@ -102665,7 +102821,7 @@ GameObject:
   - component: {fileID: 1556535613}
   - component: {fileID: 1556535612}
   m_Layer: 5
-  m_Name: TextTypeB
+  m_Name: TextScenarioB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105383,6 +105539,7 @@ RectTransform:
   - {fileID: 614555189}
   - {fileID: 480785745}
   - {fileID: 980213839}
+  - {fileID: 4888502}
   - {fileID: 1964097727}
   m_Father: {fileID: 50174746}
   m_RootOrder: 0
@@ -106348,7 +106505,7 @@ GameObject:
   - component: {fileID: 1623725006}
   - component: {fileID: 1623725005}
   m_Layer: 5
-  m_Name: TextStatusB
+  m_Name: TextTimeB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127040,10 +127197,10 @@ RectTransform:
   m_GameObject: {fileID: 1964097726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000046, y: 1.0000046, z: 1.0000046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1598979631}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

@@ -180,16 +180,15 @@ public class Configuration : MonoBehaviour
 
     private bool InsertListComponentScenarios(int id)
     {
-        Debug.Log("inserindo componentSccenario. ID: " + id);
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         bool success = true;
-        for (int i = 0; i < listScenarios.Count && success; i++)
+        for (int i = 0; i < this.listScenarios.Count && success; i++)
         {
             string sql = @"insert into component_scenario
                     (component_id, scenario_id)
                     values ($c,$s);";
             sql = sql.Replace("$c", id + "");
-            sql = sql.Replace("$s", listScenarios[i].Key + "");
+            sql = sql.Replace("$s", this.listScenarios[i].Key + "");
 
             try
             {

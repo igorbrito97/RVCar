@@ -37,7 +37,6 @@ public class PatientController : MonoBehaviour
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
-    private List<Button> btns = new List<Button>();
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
@@ -173,8 +172,6 @@ public class PatientController : MonoBehaviour
 
     public void TableLoad()
     {
-        Debug.Log("Quantidade btns: " + btns.Count);
-        Debug.Log("rowsClone: " + rowsClone);
         Patient pat;
         List<Patient> patients;
         Button newRow;
@@ -189,7 +186,7 @@ public class PatientController : MonoBehaviour
             }
             row.gameObject.SetActive(true);
         }
-
+        List<Button> btns = new List<Button>();
         pat = new Patient();
         patients = pat.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
         
@@ -207,9 +204,9 @@ public class PatientController : MonoBehaviour
 
         rowsClone = rows;
         row.gameObject.SetActive(false);
-        AddListener();
+        AddListener(btns);
     }
-    public void AddListener()
+    public void AddListener(List<Button> btns)
     {
         foreach (Button btn in btns)
         {

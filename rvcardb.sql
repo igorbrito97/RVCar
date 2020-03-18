@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 17/03/2020 às 02:31
+-- Tempo de geração: 18/03/2020 às 23:31
 -- Versão do servidor: 10.4.11-MariaDB
 -- Versão do PHP: 7.4.2
 
@@ -168,6 +168,14 @@ CREATE TABLE `session` (
   `session_name` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Despejando dados para a tabela `session`
+--
+
+INSERT INTO `session` (`session_id`, `session_description`, `session_scenario`, `session_time`, `session_weather`, `session_status`, `session_name`) VALUES
+(3, 'decricao sessao \nagora ja foi fio\nsucesso', 3, 20, 1, 1, 'sessao pronta'),
+(4, 'cena para se ambientar a ambientes rurais com muita ilumiacao', 2, 12, 2, 1, 'cena rural');
+
 -- --------------------------------------------------------
 
 --
@@ -178,6 +186,15 @@ CREATE TABLE `session_component` (
   `session_id` int(11) NOT NULL,
   `component_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `session_component`
+--
+
+INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
+(3, 5),
+(4, 2),
+(4, 3);
 
 -- --------------------------------------------------------
 
@@ -290,7 +307,7 @@ ALTER TABLE `scenario`
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `weather`

@@ -41,7 +41,6 @@ public class ConfigurationController : MonoBehaviour
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
-    private List<Button> btns = new List<Button>();
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
@@ -199,7 +198,7 @@ public class ConfigurationController : MonoBehaviour
             }
             row.gameObject.SetActive(true);
         }
-
+        List<Button> btns = new List<Button>();
         config = new Configuration(option);
         configurations = config.SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
         for(int i = 0; i < configurations.Count; i++)
@@ -215,10 +214,10 @@ public class ConfigurationController : MonoBehaviour
 
         rowsClone = rows;
         row.gameObject.SetActive(false);
-        AddListener(option);
+        AddListener(btns,option);
 
     }
-    public void AddListener(int opt)
+    public void AddListener(List<Button> btns,int opt)
     {
         foreach (Button btn in btns)
         {

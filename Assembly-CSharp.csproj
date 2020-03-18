@@ -599,8 +599,8 @@
      <Compile Include="Assets\Scripts\Controller\PatientController.cs" />
      <Compile Include="Assets\Scripts\Controller\PsychologistController.cs" />
      <Compile Include="Assets\Scripts\Controller\RunSessionController.cs" />
+     <Compile Include="Assets\Scripts\Controller\SessionControlller.cs" />
      <Compile Include="Assets\Scripts\Controller\SettingsController.cs" />
-     <Compile Include="Assets\Scripts\Controller\StageControlller.cs" />
      <Compile Include="Assets\Scripts\Controller\VideoPlayerController.cs" />
      <Compile Include="Assets\Scripts\Driving\CarAudio.cs" />
      <Compile Include="Assets\Scripts\Driving\CarController.cs" />
