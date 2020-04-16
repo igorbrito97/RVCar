@@ -611,6 +611,7 @@
      <Compile Include="Assets\Scripts\Controller\RunSessionController.cs" />
      <Compile Include="Assets\Scripts\Controller\SessionControlller.cs" />
      <Compile Include="Assets\Scripts\Controller\SettingsController.cs" />
+     <Compile Include="Assets\Scripts\Controller\StageController.cs" />
      <Compile Include="Assets\Scripts\Controller\VideoPlayerController.cs" />
      <Compile Include="Assets\Scripts\Driving\CarAudio.cs" />
      <Compile Include="Assets\Scripts\Driving\CarController.cs" />
@@ -625,6 +626,7 @@
      <Compile Include="Assets\Scripts\Model\Patient.cs" />
      <Compile Include="Assets\Scripts\Model\Psychologist.cs" />
      <Compile Include="Assets\Scripts\Model\Session.cs" />
+     <Compile Include="Assets\Scripts\Model\Stage.cs" />
      <None Include="Assets\LeapMotion\Core\Version.txt" />
      <None Include="Assets\LeapMotion\Core\Shaders\RuntimeGizmos.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
