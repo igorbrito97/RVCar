@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 18/03/2020 às 23:31
+-- Tempo de geração: 29/04/2020 às 19:37
 -- Versão do servidor: 10.4.11-MariaDB
--- Versão do PHP: 7.4.2
+-- Versão do PHP: 7.4.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -160,41 +159,61 @@ INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, 
 
 CREATE TABLE `session` (
   `session_id` int(11) NOT NULL,
-  `session_description` varchar(350) NOT NULL,
-  `session_scenario` int(11) NOT NULL,
-  `session_time` int(11) NOT NULL,
-  `session_weather` int(11) NOT NULL,
-  `session_status` tinyint(1) NOT NULL,
-  `session_name` varchar(60) NOT NULL
+  `psychologist_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `stage_id` int(11) NOT NULL,
+  `session_name` varchar(60) NOT NULL,
+  `sessioon_description` varchar(450) NOT NULL,
+  `session_status` tinyint(4) NOT NULL,
+  `session_public` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Despejando dados para a tabela `session`
---
-
-INSERT INTO `session` (`session_id`, `session_description`, `session_scenario`, `session_time`, `session_weather`, `session_status`, `session_name`) VALUES
-(3, 'decricao sessao \nagora ja foi fio\nsucesso', 3, 20, 1, 1, 'sessao pronta'),
-(4, 'cena para se ambientar a ambientes rurais com muita ilumiacao', 2, 12, 2, 1, 'cena rural');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `session_component`
+-- Estrutura para tabela `stage`
 --
 
-CREATE TABLE `session_component` (
-  `session_id` int(11) NOT NULL,
+CREATE TABLE `stage` (
+  `stage_id` int(11) NOT NULL,
+  `scenario_id` int(11) NOT NULL,
+  `weather_id` int(11) NOT NULL,
+  `stage_description` varchar(350) NOT NULL,
+  `stage_time` int(11) NOT NULL,
+  `stage_status` tinyint(1) NOT NULL,
+  `stage_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `stage`
+--
+
+INSERT INTO `stage` (`stage_id`, `scenario_id`, `weather_id`, `stage_description`, `stage_time`, `stage_status`, `stage_name`) VALUES
+(3, 3, 1, 'decricao sessao \nagora ja foi fio\nsucesso', 20, 0, 'sessao pronta'),
+(4, 2, 2, 'cena para se ambientar a ambientes rurais com muita ilumiacao', 12, 1, 'cena rural'),
+(5, 3, 2, 'description do stage gogo', 2, 1, 'Stage');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `stage_component`
+--
+
+CREATE TABLE `stage_component` (
+  `stage_id` int(11) NOT NULL,
   `component_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `session_component`
+-- Despejando dados para a tabela `stage_component`
 --
 
-INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
+INSERT INTO `stage_component` (`stage_id`, `component_id`) VALUES
 (3, 5),
+(4, 1),
 (4, 2),
-(4, 3);
+(5, 3),
+(5, 4);
 
 -- --------------------------------------------------------
 
@@ -260,14 +279,23 @@ ALTER TABLE `scenario`
 --
 ALTER TABLE `session`
   ADD PRIMARY KEY (`session_id`),
-  ADD KEY `fk_session_scenario` (`session_scenario`),
-  ADD KEY `fk_session_weather` (`session_weather`);
+  ADD KEY `fk_psyc` (`psychologist_id`),
+  ADD KEY `fk_patient` (`patient_id`),
+  ADD KEY `fk_stage` (`stage_id`);
 
 --
--- Índices de tabela `session_component`
+-- Índices de tabela `stage`
 --
-ALTER TABLE `session_component`
-  ADD PRIMARY KEY (`session_id`,`component_id`);
+ALTER TABLE `stage`
+  ADD PRIMARY KEY (`stage_id`),
+  ADD KEY `fk_stage_scenario` (`scenario_id`) USING BTREE,
+  ADD KEY `fk_stage_weather` (`weather_id`) USING BTREE;
+
+--
+-- Índices de tabela `stage_component`
+--
+ALTER TABLE `stage_component`
+  ADD PRIMARY KEY (`stage_id`,`component_id`) USING BTREE;
 
 --
 -- Índices de tabela `weather`
@@ -307,7 +335,13 @@ ALTER TABLE `scenario`
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `stage`
+--
+ALTER TABLE `stage`
+  MODIFY `stage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `weather`
