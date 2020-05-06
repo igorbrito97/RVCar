@@ -17,7 +17,18 @@ public class Stage : MonoBehaviour
 
     public Stage()
     {
+    }
 
+    public Stage(int id)
+    {
+        this.id = id;
+    }
+
+    public Stage(int id, string name, string description)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Stage(string name, string description, Configuration weather, int time, Configuration scenario, List<Configuration> components, int status)

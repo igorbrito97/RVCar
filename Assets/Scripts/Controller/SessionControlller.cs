@@ -24,6 +24,7 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private InputField inputFieldStage;
     [SerializeField] private Button buttonSelectPatient;
     [SerializeField] private Button buttonSelectStage;
+    [SerializeField] private Button buttonConfirm;
     [SerializeField] private Button buttonAlter;
     [SerializeField] private Button buttonDuplicate;
     [SerializeField] private Button buttonDelete;
@@ -127,6 +128,7 @@ public class SessionControlller : MonoBehaviour
         toggleStatusSearch.isOn = false;
         Clear();
         changePanelEditInteractable(false);
+        buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(true);
         buttonDelete.gameObject.SetActive(true);
         buttonDuplicate.gameObject.SetActive(true);
@@ -185,12 +187,13 @@ public class SessionControlller : MonoBehaviour
         }
 
         List<Button> bts = new List<Button>();
-        sessoes = new Session().SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
+        sessoes = new Session(GameManager.instance.Psychologist).SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
+        Debug.Log("sessoes encontradas:" + sessoes.Count);
         for(int i = 0; i< sessoes.Count; i++)
         {
             textIDB.text = sessoes[i].Id.ToString();
             textNameB.text = sessoes[i].Name;
-            textPsychologistB.text = sessoes[i].Name;
+            textPsychologistB.text = sessoes[i].Psychologist.Name;
             textPublicB.text = sessoes[i].IsPublic == 1 ? "Sim" : "Não";
             textStatusB.text = sessoes[i].Status == 1 ? "Ativo" : "Desativado";
             newRow = Instantiate(row) as Button;
@@ -212,16 +215,26 @@ public class SessionControlller : MonoBehaviour
 
     public void RowClick(Button br)
     {
-        state = 2;
         Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
-        buttonDelete.gameObject.SetActive(true);
-        textTitle.text = "Gerenciar Sessão - Alterar";
 
         textSessionID.text = session.Id.ToString();
         inputFieldName.text = session.Name;
         inputFieldDescription.text = session.Description;
+        inputFieldPsychologist.text = session.Psychologist.Name;
+        inputFieldStage.text = session.Stage.Name;
+        inputFieldPatient.text = session.Patient.Name;
         toggleStatus.isOn = session.Status == 1;
+        toggleIsPublic.isOn = session.IsPublic == 1;
         
+        currentPatient = session.Patient;
+        currentStage = session.Stage;
+
+        //se nao for seu nao pode alterar nem deletar
+        if(session.Psychologist.Id != GameManager.instance.Psychologist.Id){
+            buttonAlter.gameObject.SetActive(false);
+            buttonDelete.gameObject.SetActive(false);
+        }
+        buttonConfirm.gameObject.SetActive(false);
     }
 
     public void ConfirmClick()
@@ -282,9 +295,29 @@ public class SessionControlller : MonoBehaviour
         }
     }
 
+    public void CancelClick()
+    {
+        if(state == 2)
+        {
+            textTitle.text = "Gerenciar Sessão";
+            changePanelEditInteractable(false);//habilita os campos
+            buttonConfirm.gameObject.SetActive(false);
+            buttonAlter.gameObject.SetActive(true);
+            buttonDuplicate.gameObject.SetActive(true);
+            state = 0;
+        }
+        else
+            Begin();
+    }
+
     public void AlterClick()
     {
-
+        state = 2;
+        textTitle.text = "Gerenciar Sessão - Alterar";
+        changePanelEditInteractable(true);//habilita os campos
+        buttonConfirm.gameObject.SetActive(true);
+        buttonAlter.gameObject.SetActive(false);
+        buttonDuplicate.gameObject.SetActive(false);
     }
 
     public void DuplicateClick()

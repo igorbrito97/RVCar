@@ -21,6 +21,11 @@ public class Psychologist : MonoBehaviour {
     {
     }
 
+    public Psychologist(int id)
+    {
+        this.id = id;
+    }
+
     public Psychologist(string name, string cpf, string phone, string email, char gender, string password, int status, string crp, DateTime birthday)
     {
         this.name = name;

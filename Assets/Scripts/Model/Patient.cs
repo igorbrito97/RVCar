@@ -20,6 +20,11 @@ public class Patient : MonoBehaviour
     public Patient()
     {
     }
+    
+    public Patient(int id)
+    {
+        this.id = id;
+    }
 
     public Patient(string name, string cpf, DateTime birthday, string phone, string email, string note, char gender, int status)
     {
