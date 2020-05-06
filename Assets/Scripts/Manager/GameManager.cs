@@ -8,20 +8,21 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;
-    public MySqlConnection con;
-    public Psychologist psychologist;
+    public static MySqlConnection con;
+    public static Psychologist psychologist;
     
     void Start () {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
-            //para teste conecta aqui, porem na versão final conecta ao logar e la faz isso e da set na conexão            
+            DontDestroyOnLoad(this.gameObject);
+            //para teste conecta aqui, porem na versão final: não tem GameManager no Menu, só no Login - conecta ao logar e la faz isso e da set na conexão       
             GameObject database = new GameObject();    
             DatabaseController db = database.AddComponent<DatabaseController>();
             db.Connect();
             con = db.GetConnection();
             con.Open();
+            psychologist = new Psychologist().Search(1);
         }
         else
         {
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		//Debug.Log("UPdate GM v: " + v);
 	}
 
     public int GetMaxPK(string table, string key)

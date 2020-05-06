@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 29/04/2020 às 19:37
+-- Tempo de geração: 06/05/2020 às 19:49
 -- Versão do servidor: 10.4.11-MariaDB
 -- Versão do PHP: 7.4.4
 
@@ -163,10 +163,17 @@ CREATE TABLE `session` (
   `patient_id` int(11) NOT NULL,
   `stage_id` int(11) NOT NULL,
   `session_name` varchar(60) NOT NULL,
-  `sessioon_description` varchar(450) NOT NULL,
+  `session_description` varchar(450) NOT NULL,
   `session_status` tinyint(4) NOT NULL,
   `session_public` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `session`
+--
+
+INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `stage_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
+(1, 1, 4, 3, 'sesss', 'descptttt', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -189,9 +196,9 @@ CREATE TABLE `stage` (
 --
 
 INSERT INTO `stage` (`stage_id`, `scenario_id`, `weather_id`, `stage_description`, `stage_time`, `stage_status`, `stage_name`) VALUES
-(3, 3, 1, 'decricao sessao \nagora ja foi fio\nsucesso', 20, 0, 'sessao pronta'),
+(3, 3, 1, 'decricao sessao \nagora ja foi fio\nsucesso', 20, 1, 'sessao pronta'),
 (4, 2, 2, 'cena para se ambientar a ambientes rurais com muita ilumiacao', 12, 1, 'cena rural'),
-(5, 3, 2, 'description do stage gogo', 2, 1, 'Stage');
+(5, 3, 2, 'description do stage gogo', 2, 0, 'Stage');
 
 -- --------------------------------------------------------
 
@@ -335,7 +342,7 @@ ALTER TABLE `scenario`
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `stage`

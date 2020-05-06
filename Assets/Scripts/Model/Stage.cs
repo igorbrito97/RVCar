@@ -220,7 +220,7 @@ public class Stage : MonoBehaviour
                 st.weather_id = wea.weather_id ";
         if(!filter.Trim().Equals(""))
         {
-            sql+="and stage_name like '%f%'";
+            sql+="and stage_name like '%%f%'";
             sql = sql.Replace("%f",filter);
             if(!status)
                 sql +=" and stage_status = 1";

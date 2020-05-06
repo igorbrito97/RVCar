@@ -8,6 +8,7 @@ public class Session : MonoBehaviour {
     int id;
     string name;
     string description;
+    Psychologist psychologist;
     Stage stage;
     Patient patient;
     int status;
@@ -18,21 +19,23 @@ public class Session : MonoBehaviour {
 
     }
 
-    public Session(string name, string description, Stage stage, Patient patient, int status, int isPublic)
+    public Session(string name, string description, Psychologist psychologist, Stage stage, Patient patient, int status, int isPublic)
     {
         this.name = name;
         this.description = description;
+        this.psychologist = psychologist;
         this.stage = stage;
         this.patient = patient;
         this.status = status;
         this.isPublic = isPublic;
     }
 
-    public Session(int id, string name, string description, Stage stage, Patient patient, int status, int isPublic)
+    public Session(int id, string name, string description, Psychologist psychologist, Stage stage, Patient patient, int status, int isPublic)
     {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.psychologist = psychologist;
         this.stage = stage;
         this.patient = patient;
         this.status = status;
@@ -41,103 +44,69 @@ public class Session : MonoBehaviour {
 
     public string Insert()
     {
-        // MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        // int result;
-        // string sql = @"insert into session 
-        //                     (session_name,
-        //                     session_description,
-        //                     session_time,
-        //                     session_scenario,
-        //                     session_weather,
-        //                     session_status)
-        //             values ('$n','$d',$t,$s,$w,$i);";
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        int result;
+        string sql = @"insert into session 
+                            (psychologist_id,
+                            patient_id,
+                            stage_id,
+                            session_name,
+                            session_description,
+                            session_status,
+                            session_public)
+                    values ($ps,$pt,$stage,'$n','$d',$status,$ip);";
 
-        // sql = sql.Replace("$n", this.name);
-        // sql = sql.Replace("$d", this.description);
-        // sql = sql.Replace("$t", this.time + "");
-        // sql = sql.Replace("$s", this.scenario.Id + "");
-        // sql = sql.Replace("$w", this.weather.Id + "");
-        // sql = sql.Replace("$i", this.status + "");
+        sql = sql.Replace("$ps", this.psychologist.Id + "");
+        sql = sql.Replace("$pt", this.patient.Id + "");
+        sql = sql.Replace("$stage", this.stage.Id + "");
+        sql = sql.Replace("$n", this.name);
+        sql = sql.Replace("$d", this.description);
+        sql = sql.Replace("$status", this.status + "");
+        sql = sql.Replace("$ip", this.isPublic + "");
 
-        // Debug.Log("inserting, sql:" + sql);
-        // command.CommandText = sql;
-        // result = command.ExecuteNonQuery();
-        // Debug.Log("resultado query: " + result);
-        // if(result == 1)
-        // {
-        //     if(this.components.Count > 0)
-        //     {
-        //         int lastPk = GameManager.instance.GetMaxPK("session","session_id");
-        //         return InsertListSessionComponent(lastPk) ? "Ok" : "Erro ao inserir componentes na sessão!";
-        //     }
-        //     else
-        //         return "Ok";
-        // }
-
-
+        Debug.Log("inserting, sql:" + sql);
+        command.CommandText = sql;
+        result = command.ExecuteNonQuery();
+        Debug.Log("resultado query: " + result);
+        if(result == 1)
+        {
+            return "Ok";
+        }
         return "Erro ao inserir!";
     }
 
-    private bool InsertListSessionComponent(int id)
-    {
-        MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        bool success = true;
-    //     for (int i = 0; i < this.components.Count && success; i++)
-    //     {
-    //         string sql = @"insert into session_component
-    //                 (session_id, component_id)
-    //                 values ($s,$c);";
-    //         sql = sql.Replace("$s", id + "");
-    //         sql = sql.Replace("$c",  this.components[i].Id + "");
-
-    //         try
-    //         {
-    //             command.CommandText = sql;
-    //             success = command.ExecuteNonQuery() == 1;
-    //         }
-    //         catch (MySqlException ex)
-    //         {
-    //             return false;
-    //         }
-    //     }
-        return success;
-    }
 
     public string Alter(int id)
     {
-    //     MySqlCommand command = GameManager.instance.Con.CreateCommand();
-    //     MySqlDataReader data;
-    //     int result;
-    //     string sql = @"update session set 
-    //                     session_name = '$n',
-    //                     session_description = '$d',
-    //                     session_time = $t,
-    //                     session_scenario = $s,
-    //                     session_weather = $w,
-    //                     session_status = $i
-    //                     where session_id = " + id;
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        int result;
+        string sql = @"update session set 
+                        psychologist_id = $ps,
+                        patient_id = $pt,
+                        stage_id = $stage,
+                        session_name = '$n',
+                        session_description = '$d',
+                        session_status = $status,
+                        session_public = $ip
+                        where session_id = " + id;
 
-    //     sql = sql.Replace("$n", this.name);
-    //     sql = sql.Replace("$d", this.description);
-    //     sql = sql.Replace("$t", this.time + "");
-    //     sql = sql.Replace("$s", this.scenario.Id + "");
-    //     sql = sql.Replace("$w", this.weather.Id + "");
-    //     sql = sql.Replace("$i", this.status + "");
+        sql = sql.Replace("$ps", this.psychologist.Id + "");
+        sql = sql.Replace("$pt", this.patient.Id + "");
+        sql = sql.Replace("$stage", this.stage.Id + "");
+        sql = sql.Replace("$n", this.name);
+        sql = sql.Replace("$d", this.description);
+        sql = sql.Replace("$status", this.status + "");
+        sql = sql.Replace("$ip", this.isPublic + "");
 
-    //     Debug.Log("altering. " + sql);
-    //     command.CommandText = sql;
-    //     result = command.ExecuteNonQuery();
-    //     Debug.Log("resultado query: " + result);
-    //     if(result == 1)
-    //     {
-    //         sql = @"delete from session_component where session_id = " + id;
-    //         command.CommandText = sql;
-    //         command.ExecuteNonQuery();
-    //         if(this.components.Count > 0)
-    //             return InsertListSessionComponent(id) ? "Ok" : "Erro ao alterar componentes da sessão!";
-
-    //         return "Ok";
-    //     }
+        Debug.Log("altering. " + sql);
+        command.CommandText = sql;
+        result = command.ExecuteNonQuery();
+        Debug.Log("resultado query: " + result);
+        if(result == 1)
+        {
+            return "Ok";
+        }
 
         return "Erro ao alterar!";
     }
@@ -145,11 +114,11 @@ public class Session : MonoBehaviour {
     public bool Delete(int id)
     {
         int result = 1;
-        // MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        // string sql = @"update session set session_status = 0 where session_id = " + id;
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        string sql = @"update session set session_status = 0 where session_id = " + id;
 
-        // command.CommandText = sql;
-        // result = command.ExecuteNonQuery();
+        command.CommandText = sql;
+        result = command.ExecuteNonQuery();
 
         return result == 1;
     }
@@ -255,6 +224,7 @@ public class Session : MonoBehaviour {
     public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
     public string Description { get => description; set => description = value; }
+    public Psychologist Psychologist { get => psychologist; set => psychologist = value; }
     public Stage Stage { get => stage; set => stage = value; }
     public Patient Patient { get => patient; set => patient = value; }
     public int Status { get => status; set => status = value; }

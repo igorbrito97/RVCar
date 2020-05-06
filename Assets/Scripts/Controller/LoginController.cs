@@ -71,8 +71,8 @@ public class LoginController : MonoBehaviour {
                 data["psyc_crp"].ToString(),
                 Convert.ToDateTime(data["psyc_birthday"]));
 
-                GameManager.instance.psychologist = psyc;
-                GameManager.instance.con = connection;
+                GameManager.instance.Psychologist = psyc;
+                GameManager.instance.Con = connection;
 
                 data.Close();
                 SceneManager.LoadScene("Menu");
