@@ -175,19 +175,18 @@ public class Session : MonoBehaviour {
         return session;
     }
 
-    //buscar todos nao precisa do join com stage/pat porque nao aparece na tabela, só a psyc, no search ele pega todas as infos
+    //buscar todos nao precisa do join com stage porque nao aparece na tabela, só a psyc/pat, no search ele pega todas as infos
     public List<Session> SearchAll(string filter, bool status)
     {
-        Debug.Log("buscando: "+ this.psychologist.Id);
         List<Session> lista = new List<Session>();
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         //pego todas as sessoes que forem publicas ou que forem privadas e minhas (com o filtro e desativadas) 
-        string sql = @"select * from session inner join psychologist where (session_public = 1 or psychologist_id = " + this.psychologist.Id + 
-            ") and psychologist_id = psyc_id";
+        string sql = @"select * from session inner join psychologist inner join patient where (session_public = 1 or psychologist_id = " + this.psychologist.Id + 
+            ") and psychologist_id = psyc_id and patient_id = pat_id";
         if(!filter.Trim().Equals(""))
         {
-            sql+=" and session_name like '%f%'";
+            sql+=" and session_name like '%%f%'";
             sql = sql.Replace("%f",filter);
             if(!status)
                 sql +=" and session_status = 1";
@@ -213,7 +212,57 @@ public class Session : MonoBehaviour {
                     data["psyc_crp"].ToString(),
                     Convert.ToDateTime(data["psyc_birthday"])),
                 new Stage(Convert.ToInt32(data["stage_id"])),
-                new Patient(Convert.ToInt32(data["patient_id"])),
+                new Patient(Convert.ToInt32(data["pat_id"]),
+                    data["pat_name"].ToString(),
+                    data["pat_cpf"].ToString(),
+                    Convert.ToDateTime(data["pat_birthday"].ToString()),
+                    data["pat_phone"].ToString(),
+                    data["pat_email"].ToString(),
+                    data["pat_note"].ToString(),
+                    Convert.ToChar(data["pat_gender"]),
+                    Convert.ToInt32(data["pat_status"])
+                ),
+                Convert.ToInt32(data["session_status"]),
+                Convert.ToInt32(data["session_public"])
+            ));
+        }
+        data.Close();
+        return lista;
+    }
+
+    public List<Session> SearchAllByPat(string filter) //buscar pelo paciente na hora da execução
+    {
+        List<Session> lista = new List<Session>();
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        //pego todas as sessoes que forem publicas ou que forem privadas e minhas
+        string sql = @"select * from session inner join patient where (session_public = 1 or psychologist_id = " + this.psychologist.Id + 
+            ") and patient_id = pat_id and session_status = 1";
+        if(!filter.Trim().Equals(""))
+        {
+            sql+=" and pat_name like '%%f%'";
+            sql = sql.Replace("%f",filter);
+        }
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+        while(data.Read())
+        {
+            lista.Add(new Session(Convert.ToInt32(data["session_id"]),
+                data["session_name"].ToString(),
+                data["session_description"].ToString(),
+                new Psychologist(Convert.ToInt32(data["psyc_id"])),
+                new Stage(Convert.ToInt32(data["stage_id"])),
+                new Patient(Convert.ToInt32(data["pat_id"]),
+                    data["pat_name"].ToString(),
+                    data["pat_cpf"].ToString(),
+                    Convert.ToDateTime(data["pat_birthday"].ToString()),
+                    data["pat_phone"].ToString(),
+                    data["pat_email"].ToString(),
+                    data["pat_note"].ToString(),
+                    Convert.ToChar(data["pat_gender"]),
+                    Convert.ToInt32(data["pat_status"])
+                ),
                 Convert.ToInt32(data["session_status"]),
                 Convert.ToInt32(data["session_public"])
             ));

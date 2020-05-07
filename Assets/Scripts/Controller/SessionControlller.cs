@@ -100,14 +100,13 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private GameObject panelPatient2;
     [SerializeField] private GameObject panelPatient3;
 
-    // banco de dados
-    public MySqlConnection connection;
-
     void Start () {
         inputFieldSearch.characterLimit = 60;
         inputFieldName.characterLimit = 60;
         inputFieldDescription.characterLimit = 450;
         inputFieldPsychologist.interactable = false;
+        inputFieldPatSearch.characterLimit = 60;
+        inputFieldStageSearch.characterLimit = 60;
 
 		Begin();
 	}
@@ -157,7 +156,6 @@ public class SessionControlller : MonoBehaviour
         buttonAlter.gameObject.SetActive(false);
         buttonDelete.gameObject.SetActive(false);
         buttonDuplicate.gameObject.SetActive(false);
-        
     }
 
     private void changePanelEditInteractable(bool flag)
@@ -269,6 +267,8 @@ public class SessionControlller : MonoBehaviour
             {
                 string returnMsg = session.Alter(Convert.ToInt32(id));
                 Debug.Log(returnMsg);
+                if(returnMsg == "Ok")
+                    state = 0;
             }
         }
     }
@@ -322,7 +322,15 @@ public class SessionControlller : MonoBehaviour
 
     public void DuplicateClick()
     {
-
+        // setar como novo, habilitar os campos e tirar o paciente
+        state = 1;
+        textTitle.text = "Gerenciar Sessão - Novo";
+        changePanelEditInteractable(true);
+        inputFieldPsychologist.text = GameManager.instance.Psychologist.Name;
+        buttonConfirm.gameObject.SetActive(true);
+        buttonDuplicate.gameObject.SetActive(false);
+        currentPatient = new Patient();
+        inputFieldPatient.text = "";
     }
 
     public void TableLoadPatient()
