@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Configuration : MonoBehaviour
 {
-
     private int id;
     private int option; // 0 - weather, 1 - scenario, 2 - component 
     private string name;

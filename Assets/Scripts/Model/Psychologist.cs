@@ -96,7 +96,6 @@ public class Psychologist : MonoBehaviour {
     public string Alter(int id)
     {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        MySqlDataReader data;
         int result;
         string sql = @"update psychologist set 
                         psyc_name = '$n',

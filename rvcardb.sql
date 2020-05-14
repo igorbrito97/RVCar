@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 06/05/2020 às 19:49
+-- Tempo de geração: 15/05/2020 às 01:41
 -- Versão do servidor: 10.4.11-MariaDB
 -- Versão do PHP: 7.4.4
 
@@ -31,19 +31,20 @@ CREATE TABLE `component` (
   `component_id` int(11) NOT NULL,
   `component_name` varchar(60) NOT NULL,
   `component_description` varchar(350) NOT NULL,
-  `component_status` tinyint(1) NOT NULL
+  `component_status` tinyint(1) NOT NULL,
+  `component_file` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `component`
 --
 
-INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`) VALUES
-(1, 'Semaforo', 'Semaforo simples ', 1),
-(2, 'Estrada de terra', 'Simlua uma estrada rural', 1),
-(3, 'Ruas ', 'Rua simples que tem em todo lugar', 1),
-(4, 'TesteZao', 'vamos ver', 1),
-(5, 'TestezZZIn', 'gogogogogogogogoo', 1);
+INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`, `component_file`) VALUES
+(1, 'Semaforo', 'Semaforo simples ', 1, ''),
+(2, 'Estrada de terra', 'Simlua uma estrada rural', 1, ''),
+(3, 'Ruas ', 'Rua simples que tem em todo lugar', 1, ''),
+(4, 'TesteZao', 'vamos ver', 1, ''),
+(5, 'TestezZZIn', 'gogogogogogogogoo', 1, '');
 
 -- --------------------------------------------------------
 
@@ -71,6 +72,28 @@ INSERT INTO `component_scenario` (`component_id`, `scenario_id`) VALUES
 (4, 1),
 (4, 3),
 (5, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `environmentType`
+--
+
+CREATE TABLE `environmentType` (
+  `env_id` int(11) NOT NULL,
+  `env_name` varchar(60) NOT NULL,
+  `env_description` varchar(350) NOT NULL,
+  `env_status` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `environmentType`
+--
+
+INSERT INTO `environmentType` (`env_id`, `env_name`, `env_description`, `env_status`) VALUES
+(1, 'Urbano', 'Simulaçao de ambientes dentro de um perimetro urbano', 1),
+(2, 'Garagem', 'Cenario com uma garagem simples para entrar e sair', 1),
+(3, 'Rural', 'Cenario para estradas de terra e campos afastados da cidade', 1);
 
 -- --------------------------------------------------------
 
@@ -139,17 +162,21 @@ CREATE TABLE `scenario` (
   `scenario_id` int(11) NOT NULL,
   `scenario_name` varchar(60) NOT NULL,
   `scenario_description` varchar(350) NOT NULL,
-  `scenario_status` tinyint(1) NOT NULL
+  `scenario_status` tinyint(1) NOT NULL,
+  `scenario_file` varchar(80) NOT NULL,
+  `env_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `scenario`
 --
 
-INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `scenario_status`) VALUES
-(1, 'Teste', 'Cenario inicial', 1),
-(2, 'Rural', 'Simular uma estrada no meio rural', 1),
-(3, 'Residencial', 'casas e mais caasas', 1);
+INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `scenario_status`, `scenario_file`, `env_id`) VALUES
+(1, 'Teste', 'Cenario inicial', 0, '', 0),
+(2, 'Rural', 'Simular uma estrada no meio rural', 0, '', 0),
+(3, 'Residencial', 'casas e mais caasas', 0, '', 0),
+(5, 'Cidade com movimentaçao', 'Simulaçao de cidade com movimentaçao de carros e de pessoas', 1, 'arqqq', 1),
+(6, 'Rua com garagem', 'Simulaçao de uma rua com a possibilidade de estacionar em uma garagem', 1, 'arq1', 2);
 
 -- --------------------------------------------------------
 
@@ -173,7 +200,10 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `stage_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
-(1, 1, 4, 3, 'sesss', 'descptttt', 1, 1);
+(1, 1, 4, 4, 'sessaozinho alterado', 'vamos la\namigos', 1, 1),
+(2, 2, 1, 4, 'Sessao Publiccc', 'Descricao da publica sessao aqui vamos \nnos\nvamos', 1, 1),
+(3, 2, 4, 3, 'Sessao desativada e restritva', 'sessao so pra mim', 0, 0),
+(4, 1, 1, 4, 'Sessao Publiccc', 'Descricao da publica sessao aqui vamos \nnos\nvamos', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -232,16 +262,39 @@ CREATE TABLE `weather` (
   `weather_id` int(11) NOT NULL,
   `weather_name` varchar(60) NOT NULL,
   `weather_description` varchar(350) NOT NULL,
-  `weather_status` tinyint(1) NOT NULL
+  `weather_status` tinyint(1) NOT NULL,
+  `weatherType_id` int(11) NOT NULL,
+  `weather_info` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `weather`
 --
 
-INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `weather_status`) VALUES
-(1, 'Sol', 'Verao zao fera sol churrasco cerveja', 1),
-(2, 'Chuva', 'Chuvas e pingos de alegria', 1);
+INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `weather_status`, `weatherType_id`, `weather_info`) VALUES
+(3, 'Chuva leve', 'Pequena quantidade de chuva', 1, 2, 100),
+(4, 'Dia nublado', 'Dia muito nublado, dificultando a visao', 1, 4, 800);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `weatherType`
+--
+
+CREATE TABLE `weatherType` (
+  `weatherType_id` int(11) NOT NULL,
+  `weatherType_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Despejando dados para a tabela `weatherType`
+--
+
+INSERT INTO `weatherType` (`weatherType_id`, `weatherType_name`) VALUES
+(1, 'Sol'),
+(2, 'Chuva'),
+(3, 'Tempestade'),
+(4, 'Nublado');
 
 --
 -- Índices de tabelas apagadas
@@ -260,6 +313,12 @@ ALTER TABLE `component_scenario`
   ADD PRIMARY KEY (`component_id`,`scenario_id`),
   ADD KEY `fk_scenario_id` (`scenario_id`),
   ADD KEY `fk_component_id` (`component_id`) USING BTREE;
+
+--
+-- Índices de tabela `environmentType`
+--
+ALTER TABLE `environmentType`
+  ADD PRIMARY KEY (`env_id`);
 
 --
 -- Índices de tabela `patient`
@@ -311,6 +370,12 @@ ALTER TABLE `weather`
   ADD PRIMARY KEY (`weather_id`);
 
 --
+-- Índices de tabela `weatherType`
+--
+ALTER TABLE `weatherType`
+  ADD PRIMARY KEY (`weatherType_id`);
+
+--
 -- AUTO_INCREMENT de tabelas apagadas
 --
 
@@ -319,6 +384,12 @@ ALTER TABLE `weather`
 --
 ALTER TABLE `component`
   MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de tabela `environmentType`
+--
+ALTER TABLE `environmentType`
+  MODIFY `env_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `patient`
@@ -336,13 +407,13 @@ ALTER TABLE `psychologist`
 -- AUTO_INCREMENT de tabela `scenario`
 --
 ALTER TABLE `scenario`
-  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `stage`
@@ -354,7 +425,13 @@ ALTER TABLE `stage`
 -- AUTO_INCREMENT de tabela `weather`
 --
 ALTER TABLE `weather`
-  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `weatherType`
+--
+ALTER TABLE `weatherType`
+  MODIFY `weatherType_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restrições para dumps de tabelas

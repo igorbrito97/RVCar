@@ -253,8 +253,6 @@ public class ConfigurationController : MonoBehaviour
                 AddRowTableScenario(par);
             }
         }
-
-        
     }
 
     public void AddScenarioClick()
