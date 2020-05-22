@@ -108,14 +108,11 @@ public class ScenarioComponent : MonoBehaviour
         Debug.Log("resultado query: " + result);
         if (result == 1)
         {
-            if (this.ListScenarios != null) // se component deleta todos os de component_scenario e insere novos
-            {
-                string sql2 = @"delete from component_scenario where component_id = " + id;
-                command.CommandText = sql2;
-                result = command.ExecuteNonQuery();
-                if(result > 0)
-                    return InsertListComponentScenarios(id) ? "Ok" : "Erro ao alterar!";
-            }
+            string sql2 = @"delete from component_scenario where component_id = " + id;
+            command.CommandText = sql2;
+            result = command.ExecuteNonQuery();
+            if (this.ListScenarios != null)
+                return InsertListComponentScenarios(id) ? "Ok" : "Erro ao alterar!";
             else
                 return "Ok";
         }

@@ -15,6 +15,11 @@ public class WeatherType : MonoBehaviour
 
     }
 
+    public WeatherType(int id)
+    {
+        this.id = id;
+    }
+
     public WeatherType(int id, string name)
     {
         this.id = id;

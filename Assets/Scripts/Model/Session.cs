@@ -5,14 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Session : MonoBehaviour {
-    int id;
-    string name;
+    private int id;
+    private string name;
     string description;
-    Psychologist psychologist;
-    Stage stage;
-    Patient patient;
-    int status;
-    int isPublic;
+    private Psychologist psychologist;
+    private Patient patient;
+    private Scenario scenario;
+    private Weather weather;
+    private List<KeyValuePair<int, string>> listComponents;
+    private int status;
+    private int isPublic;
+
 
     public Session()
     {
@@ -22,27 +25,56 @@ public class Session : MonoBehaviour {
         this.psychologist = psychologist;
     }
 
-    public Session(string name, string description, Psychologist psychologist, Stage stage, Patient patient, int status, int isPublic)
+    public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic)
     {
         this.name = name;
         this.description = description;
         this.psychologist = psychologist;
-        this.stage = stage;
         this.patient = patient;
+        this.scenario = scenario;
+        this.weather = weather;
         this.status = status;
         this.isPublic = isPublic;
+        this.listComponents = null;
     }
 
-    public Session(int id, string name, string description, Psychologist psychologist, Stage stage, Patient patient, int status, int isPublic)
+    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.psychologist = psychologist;
-        this.stage = stage;
         this.patient = patient;
+        this.scenario = scenario;
+        this.weather = weather;
         this.status = status;
         this.isPublic = isPublic;
+        this.listComponents = null;
+    }public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic, List<KeyValuePair<int, string>> listComponents)
+    {
+        this.name = name;
+        this.description = description;
+        this.psychologist = psychologist;
+        this.patient = patient;
+        this.scenario = scenario;
+        this.weather = weather;
+        this.status = status;
+        this.isPublic = isPublic;
+        this.listComponents = listComponents;
+    }
+
+    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic, List<KeyValuePair<int, string>> listComponents)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.psychologist = psychologist;
+        this.patient = patient;
+        this.scenario = scenario;
+        this.weather = weather;
+        this.status = status;
+        this.isPublic = isPublic;
+        this.listComponents = listComponents;
     }
 
     public string Insert()
@@ -52,19 +84,21 @@ public class Session : MonoBehaviour {
         string sql = @"insert into session 
                             (psychologist_id,
                             patient_id,
-                            stage_id,
+                            weather_id,
+                            scenario_id,
                             session_name,
                             session_description,
                             session_status,
                             session_public)
-                    values ($ps,$pt,$stage,'$n','$d',$status,$ip);";
+                    values ($ps,$pt,$we,$sce,'$n','$d',$st,$ip);";
 
         sql = sql.Replace("$ps", this.psychologist.Id + "");
         sql = sql.Replace("$pt", this.patient.Id + "");
-        sql = sql.Replace("$stage", this.stage.Id + "");
+        sql = sql.Replace("$we", this.weather.Id + "");
+        sql = sql.Replace("$sce", this.scenario.Id + "");
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
-        sql = sql.Replace("$status", this.status + "");
+        sql = sql.Replace("$st", this.status + "");
         sql = sql.Replace("$ip", this.isPublic + "");
 
         Debug.Log("inserting, sql:" + sql);
@@ -73,7 +107,13 @@ public class Session : MonoBehaviour {
         Debug.Log("resultado query: " + result);
         if(result == 1)
         {
-            return "Ok";
+            if (this.ListComponents != null)
+            {
+                int lastPk = GameManager.instance.GetMaxPK("session", "session_id");
+                return InsertListSessionComponent(lastPk) ? "Ok" : "Erro ao inserir!";
+            }
+            else
+                return "Ok";
         }
         return "Erro ao inserir!";
     }
@@ -87,7 +127,8 @@ public class Session : MonoBehaviour {
         string sql = @"update session set 
                         psychologist_id = $ps,
                         patient_id = $pt,
-                        stage_id = $stage,
+                        weather_id = $we,
+                        scenario_id = $sce,
                         session_name = '$n',
                         session_description = '$d',
                         session_status = $status,
@@ -96,7 +137,8 @@ public class Session : MonoBehaviour {
 
         sql = sql.Replace("$ps", this.psychologist.Id + "");
         sql = sql.Replace("$pt", this.patient.Id + "");
-        sql = sql.Replace("$stage", this.stage.Id + "");
+        sql = sql.Replace("$we", this.weather.Id + "");
+        sql = sql.Replace("$sce", this.scenario.Id + "");
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$status", this.status + "");
@@ -108,7 +150,13 @@ public class Session : MonoBehaviour {
         Debug.Log("resultado query: " + result);
         if(result == 1)
         {
-            return "Ok";
+            string sql2 = @"delete from session_component where session_id = " + id;
+            command.CommandText = sql2;
+            result = command.ExecuteNonQuery();
+            if (this.ListComponents != null)
+                return InsertListSessionComponent(id) ? "Ok" : "Erro ao alterar!";
+            else
+                return "Ok";
         }
 
         return "Erro ao alterar!";
@@ -126,13 +174,39 @@ public class Session : MonoBehaviour {
         return result == 1;
     }
 
+    private bool InsertListSessionComponent(int id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        bool success = true;
+        for (int i = 0; i < this.ListComponents.Count && success; i++)
+        {
+            string sql = @"insert into session_component
+                    (session_id, component_id)
+                    values ($s,$c);";
+            sql = sql.Replace("$s", id + "");
+            sql = sql.Replace("$c", this.ListComponents[i].Key + "");
+
+            try
+            {
+                command.CommandText = sql;
+                success = command.ExecuteNonQuery() == 1;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+        }
+        return success;
+    }
+
     public Session Search(int id) //nao busca tudo do stage porque tem scenario, weather
     {
         Session session = null;
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        string sql = @"select * from session as ses inner join psychologist inner join stage as sta inner join patient where psychologist_id = psyc_id 
-            and ses.stage_id = sta.stage_id and patient_id = pat_id and session_id = " + id;
+        string sql = @"select * from session as ses inner join psychologist inner join weather wea inner join patient inner join scenario as sce where
+                psychologist_id = psyc_id and ses.weather_id = wea.weather_id and patient_id = pat_id and 
+                sce.scenario_id = ses.scenario_id and session_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -153,10 +227,6 @@ public class Session : MonoBehaviour {
                     data["psyc_crp"].ToString(),
                     Convert.ToDateTime(data["psyc_birthday"])
                 ),
-                new Stage(Convert.ToInt32(data["stage_id"]),
-                    data["stage_name"].ToString(),
-                    data["stage_description"].ToString()
-                ),
                 new Patient(Convert.ToInt32(data["pat_id"]),
                     data["pat_name"].ToString(),
                     data["pat_cpf"].ToString(),
@@ -167,11 +237,40 @@ public class Session : MonoBehaviour {
                     Convert.ToChar(data["pat_gender"]),
                     Convert.ToInt32(data["pat_status"])
                 ),
+                new Scenario(
+                    Convert.ToInt32(data["scenario_id"]),
+                    data["scenario_name"].ToString(),
+                    new EnvironmentType(Convert.ToInt32(data["env_id"])),
+                    data["scenario_description"].ToString(),
+                    Convert.ToInt32(data["scenario_status"])
+                ),
+                new Weather(
+                    Convert.ToInt32(data["weather_id"]),
+                    data["weather_name"].ToString(),
+                    Convert.ToInt32(data["weather_info"]),
+                    new WeatherType(Convert.ToInt32(data["weatherType_id"])),
+                    data["weather_description"].ToString(),
+                    Convert.ToInt32(data["weather_status"])
+                ),
                 Convert.ToInt32(data["session_status"]),
                 Convert.ToInt32(data["session_public"])
             );
+            data.Close();
+
+            List<KeyValuePair<int, string>> lista = new List<KeyValuePair<int, string>>();
+            string sql2 =
+                @"select comp.component_id, comp.component_name from session_component as ses inner join
+                component as comp where comp.component_id = ses.component_id and session_id = " + id;
+            command.CommandText = sql2;
+            data = command.ExecuteReader();
+            while (data.Read())
+            {
+                lista.Add(new KeyValuePair<int, string>(Convert.ToInt32(data["component_id"]), data["component_name"].ToString()));
+            }
+            session.ListComponents = lista;
         }
         data.Close();
+        
         return session;
     }
 
@@ -211,7 +310,6 @@ public class Session : MonoBehaviour {
                     Convert.ToInt32(data["psyc_status"]),
                     data["psyc_crp"].ToString(),
                     Convert.ToDateTime(data["psyc_birthday"])),
-                new Stage(Convert.ToInt32(data["stage_id"])),
                 new Patient(Convert.ToInt32(data["pat_id"]),
                     data["pat_name"].ToString(),
                     data["pat_cpf"].ToString(),
@@ -222,6 +320,8 @@ public class Session : MonoBehaviour {
                     Convert.ToChar(data["pat_gender"]),
                     Convert.ToInt32(data["pat_status"])
                 ),
+                new Scenario(Convert.ToInt32(data["scenario_id"])),
+                new Weather(Convert.ToInt32(data["weather_id"])),
                 Convert.ToInt32(data["session_status"]),
                 Convert.ToInt32(data["session_public"])
             ));
@@ -252,7 +352,6 @@ public class Session : MonoBehaviour {
                 data["session_name"].ToString(),
                 data["session_description"].ToString(),
                 new Psychologist(Convert.ToInt32(data["psyc_id"])),
-                new Stage(Convert.ToInt32(data["stage_id"])),
                 new Patient(Convert.ToInt32(data["pat_id"]),
                     data["pat_name"].ToString(),
                     data["pat_cpf"].ToString(),
@@ -263,6 +362,8 @@ public class Session : MonoBehaviour {
                     Convert.ToChar(data["pat_gender"]),
                     Convert.ToInt32(data["pat_status"])
                 ),
+                new Scenario(Convert.ToInt32(data["scenario_id"])),
+                new Weather(Convert.ToInt32(data["weather_id"])),
                 Convert.ToInt32(data["session_status"]),
                 Convert.ToInt32(data["session_public"])
             ));
@@ -270,13 +371,14 @@ public class Session : MonoBehaviour {
         data.Close();
         return lista;
     }
-
     public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
     public string Description { get => description; set => description = value; }
     public Psychologist Psychologist { get => psychologist; set => psychologist = value; }
-    public Stage Stage { get => stage; set => stage = value; }
     public Patient Patient { get => patient; set => patient = value; }
+    public Scenario Scenario { get => scenario; set => scenario = value; }
+    public Weather Weather { get => weather; set => weather = value; }
     public int Status { get => status; set => status = value; }
     public int IsPublic { get => isPublic; set => isPublic = value; }
+    public List<KeyValuePair<int, string>> ListComponents { get => listComponents; set => listComponents = value; }
 }

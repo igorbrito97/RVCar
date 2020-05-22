@@ -19,6 +19,11 @@ public class Weather : MonoBehaviour
 
     }
 
+    public Weather(int id)
+    {
+        this.id = id;
+    }
+
     public Weather(string name, int info, WeatherType type, string description, int status)
     {
         this.name = name;

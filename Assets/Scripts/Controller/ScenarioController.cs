@@ -15,11 +15,9 @@ public class ScenarioController : MonoBehaviour
     // campos da tela de edição
     [SerializeField] private Text textScenarioID;
     [SerializeField] private InputField inputFieldName;
-    [SerializeField] private InputField inputFieldFile;
-    [SerializeField] private Button buttonSelectFile;
     [SerializeField] private Dropdown dropdownEnvironmentType;
     [SerializeField] private InputField inputFieldDescription;
-    [SerializeField] private Toggle toggleStatus;  
+    [SerializeField] private Toggle toggleStatus; 
     [SerializeField] private Button buttonDelete;
     
     // tabela da tela inicial
@@ -30,12 +28,25 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
+    
+    //tabela para componente
+    [SerializeField] private Dropdown dropdownComponent;
+    [SerializeField] private Button deleteComponentButton;
+    [SerializeField] private Text textIDBComponent;
+    [SerializeField] private Text textNameBComponent;
+    [SerializeField] private Button rowComponent;
+    [SerializeField] private GameObject rowsComp;
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
+    [SerializeField] private GameObject panelTableComponent;
+    [SerializeField] private GameObject panelVirtualObj;
 
     //listas 
     private KeyValuePair<int,string>[] arrayAllEnvType;
+    private KeyValuePair<int,string>[] arrayAllComponent;
+    private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
+    private int selectedComponentIndex;
 
     void Start()
     {
@@ -56,6 +67,8 @@ public class ScenarioController : MonoBehaviour
         state = 0;
         textTitle.text = "Gerenciar Cenário";
         panelEdit.SetActive(false);
+        panelTableComponent.SetActive(false);
+        panelVirtualObj.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
         Clear();
@@ -65,38 +78,58 @@ public class ScenarioController : MonoBehaviour
     {
         inputFieldName.text = "";
         inputFieldDescription.text = "";
-        inputFieldFile.text = "";
         toggleStatus.isOn = true;
         buttonDelete.gameObject.SetActive(false);
+        listComponent.Clear();
+        selectedComponentIndex = -1;
+        //tableClear
+        var clones = new Transform[rowsComp.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rowsComp.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
     }
 
     public void NewClick()
     {
         state = 1;
         panelEdit.gameObject.SetActive(true);
+        panelTableComponent.SetActive(true);
+        panelVirtualObj.SetActive(true);
         textTitle.text = "Gerenciar Cenário - Novo";
         LoadDropdown();
     }
 
     private void LoadDropdown()
     {
-        List<EnvironmentType> lista = new EnvironmentType().SearchAll("",false);
+        List<EnvironmentType> listaET = new EnvironmentType().SearchAll("",false);
         dropdownEnvironmentType.ClearOptions();
-        arrayAllEnvType = new KeyValuePair<int, string>[lista.Count];
-        for(int i = 0; i < lista.Count; i++)
+        arrayAllEnvType = new KeyValuePair<int, string>[listaET.Count];
+        for(int i = 0; i < listaET.Count; i++)
         {
-            arrayAllEnvType[i] = new KeyValuePair<int, string>(lista[i].Id,lista[i].Name);
-            dropdownEnvironmentType.options.Add(new Dropdown.OptionData(lista[i].Name));
+            arrayAllEnvType[i] = new KeyValuePair<int, string>(listaET[i].Id,listaET[i].Name);
+            dropdownEnvironmentType.options.Add(new Dropdown.OptionData(listaET[i].Name));
         }
         dropdownEnvironmentType.value = -1;
         dropdownEnvironmentType.value = 0;
+
+        List<ScenarioComponent> listaC = new ScenarioComponent().SearchAll("",false);
+        dropdownComponent.ClearOptions();
+        arrayAllComponent = new KeyValuePair<int, string>[listaC.Count];
+        for(int i = 0; i < listaC.Count; i++)
+        {
+            arrayAllComponent[i] = new KeyValuePair<int, string>(listaC[i].Id,listaC[i].Name);
+            dropdownComponent.options.Add(new Dropdown.OptionData(listaC[i].Name));
+        }
+        dropdownComponent.value = -1;
+        dropdownComponent.value = 0;
     }
 
     public void ConfirmClick()
     {
         string id = textScenarioID.text;
         string name = inputFieldName.text;
-        string file = inputFieldFile.text;
         string description = inputFieldDescription.text;
         bool status = toggleStatus.isOn;
         int envType_id = arrayAllEnvType[dropdownEnvironmentType.value].Key;
@@ -106,11 +139,9 @@ public class ScenarioController : MonoBehaviour
             Debug.Log("Erro no nome!");
         else if(description.Trim() == "")
             Debug.Log("Erro na descrição!");
-        else if(file.Trim() == "")  
-            Debug.Log("Erro no arquivo!");
         else
         {
-            scenario = new Scenario(name,file,new EnvironmentType(envType_id),description,status ? 1 : 0);
+            scenario = new Scenario(name,new EnvironmentType(envType_id),description,status ? 1 : 0,listComponent.Count > 0 ? listComponent : null);
             if(state == 1)
             {
                 string returnMsg = scenario.Insert();
@@ -193,13 +224,14 @@ public class ScenarioController : MonoBehaviour
         state = 2;
         Scenario scenario = new Scenario().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
         buttonDelete.gameObject.SetActive(true);
+        panelTableComponent.SetActive(true);
+        panelVirtualObj.SetActive(true);
         LoadDropdown();
         textTitle.text = "Gerenciar Cenário - Alterar";
 
         textScenarioID.text = scenario.Id.ToString();
         inputFieldName.text = scenario.Name;
         inputFieldDescription.text = scenario.Description;
-        inputFieldFile.text = scenario.File;
         toggleStatus.isOn = scenario.Status == 1;
 
         int i=0;
@@ -207,5 +239,64 @@ public class ScenarioController : MonoBehaviour
             arrayAllEnvType[i].Key != scenario.Environment.Id)
             i++;
         dropdownEnvironmentType.value = i;
+
+        listComponent = scenario.ListComponents;
+        foreach(KeyValuePair<int,string> par in listComponent)
+        {
+            AddRowTableComponent(par);
+        }
+    }
+
+    public void AddComponentClick()
+    {
+        if(listComponent.Contains(arrayAllComponent[dropdownComponent.value])){
+            Debug.Log("ja existe na lista! Nao add");
+            return;
+        }
+        else {
+            listComponent.Add(arrayAllComponent[dropdownComponent.value]);
+            AddRowTableComponent(arrayAllComponent[dropdownComponent.value]);
+        }
+    }
+
+    private void AddRowTableComponent(KeyValuePair<int,string> info)
+    {
+        Button newRow;
+        rowComponent.gameObject.SetActive(true);
+        textIDBComponent.text = info.Key.ToString();
+        textNameBComponent.text = info.Value;
+        newRow = Instantiate(rowComponent) as Button; 
+        newRow.transform.SetParent(rowComponent.transform.parent,false);
+        newRow.onClick.AddListener(() => RowClick2(newRow));
+        rowComponent.gameObject.SetActive(false);
+    }
+
+    public void RowClick2(Button br)
+    {
+        //FAZER: QUANDO CLICAR DEIXAR A LINHA DE COR DIFERENTE, SE CLICAR NOVAMENTE TIRA
+        int selectedComponentKey = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text);
+        int i=0;
+        foreach(KeyValuePair<int,string> par in listComponent)
+        {
+            if(par.Key == selectedComponentKey)
+            {
+                selectedComponentIndex = i;
+                break;
+            }
+            i++;
+        }
+    }
+
+    public void DeleteComponentClick()
+    {
+        Debug.Log("DELETECLICK: " + selectedComponentIndex);
+        if(selectedComponentIndex < 0)
+            Debug.Log("Erro ao excluir!");
+        else {
+            var clone = rowsComp.transform.GetChild(selectedComponentIndex+1); //+1 porque o primeiro ta false
+            Destroy(clone.gameObject);
+            listComponent.RemoveAt(selectedComponentIndex);
+            selectedComponentIndex = -1;
+        }
     }
 }

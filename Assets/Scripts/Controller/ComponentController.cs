@@ -42,6 +42,7 @@ public class ComponentController : MonoBehaviour
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
     [SerializeField] private GameObject panelTableComponent;
+    [SerializeField] private GameObject panelVirtualObj;
 
     void Start()
     {
@@ -63,6 +64,7 @@ public class ComponentController : MonoBehaviour
         textTitle.text = "Gerenciar Componente";
         panelEdit.SetActive(false);
         panelTableComponent.SetActive(false);
+        panelVirtualObj.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
         Clear();
@@ -91,6 +93,7 @@ public class ComponentController : MonoBehaviour
         panelEdit.gameObject.SetActive(true);
         textTitle.text = "Gerenciar Componente - Novo";
         panelTableComponent.SetActive(true);
+        panelVirtualObj.SetActive(true);
         LoadDropdown();
     }
 
@@ -121,11 +124,11 @@ public class ComponentController : MonoBehaviour
             Debug.Log("Erro no nome!");
         else if(description.Trim() == "")
             Debug.Log("Erro na descrição!");
-        else if(listScenario.Count == 0)
-            Debug.Log("Erro nos cenários. É necessário pelo menos 1!");
+        // else if(listScenario.Count == 0)
+        //     Debug.Log("Erro nos cenários. É necessário pelo menos 1!");
         else 
         {
-            comp = new ScenarioComponent();
+            comp = new ScenarioComponent(name,description,status ? 1 : 0,listScenario.Count > 0 ? listScenario : null);
             if(state == 1) //add
             {
                 string returnMsg = comp.Insert();
@@ -217,6 +220,7 @@ public class ComponentController : MonoBehaviour
 
         textTitle.text = "Gerenciar Componente - Alterar";
         panelTableComponent.SetActive(true);
+        panelVirtualObj.SetActive(true);
         LoadDropdown();     
         listScenario = comp.ListScenarios;
         foreach(KeyValuePair<int,string> par in listScenario)

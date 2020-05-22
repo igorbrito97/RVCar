@@ -21,9 +21,13 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private Toggle toggleIsPublic;
     [SerializeField] private InputField inputFieldDescription;
     [SerializeField] private InputField inputFieldPatient;
-    [SerializeField] private InputField inputFieldStage;
+    [SerializeField] private InputField inputFieldScenario;
+    [SerializeField] private InputField inputFieldWeather;
     [SerializeField] private Button buttonSelectPatient;
-    [SerializeField] private Button buttonSelectStage;
+    [SerializeField] private Button buttonSelectScenario;
+    [SerializeField] private Button buttonSelectWeather;
+    [SerializeField] private Button buttonAddComponent;
+    [SerializeField] private Button buttonDeleteComponent;
     [SerializeField] private Button buttonConfirm;
     [SerializeField] private Button buttonAlter;
     [SerializeField] private Button buttonDuplicate;
@@ -37,34 +41,17 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private Text textStatusB;
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
-    private GameObject rowsClone = null;
+    private GameObject rowsClone = null;   
 
-    //tabela de fases
-    private int selectedStageId = 0;
-    [SerializeField] private InputField inputFieldStageSearch;
-    [SerializeField] private Text textStageIDB;
-    [SerializeField] private Text textStageNameB;
-    [SerializeField] private Text textStageScenarioB;
-    [SerializeField] private Text textStageWeatherB;
-    [SerializeField] private Text textStageTimeB;
-    [SerializeField] private Button rowSt;
-    [SerializeField] GameObject rowsStage;
-    private GameObject rowsCloneSt = null;
-
-    //campos tela de fases
-    [SerializeField] private InputField inputFieldStageName;
-    [SerializeField] private InputField inputFieldStageScenario;
-    [SerializeField] private InputField inputFieldStageWeather;
-    [SerializeField] private InputField inputFieldStageHour;
-    [SerializeField] private InputField inputFieldStageDescription;
-    //tabela componente
+    //tabela para componente (panelEdit)
+    [SerializeField] private Dropdown dropdownComponent;
     [SerializeField] private Text textComponentIDB;
     [SerializeField] private Text textComponentNameB;
-    [SerializeField] private Text textComponenetInfoB;
-    [SerializeField] private Button rowStComp;
-    [SerializeField] GameObject rowsStComp;
-    
-
+    [SerializeField] private Button rowComponent;
+    [SerializeField] private GameObject rowsComp;
+    private KeyValuePair<int,string>[] arrayAllComponents;
+    private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
+    private int selectedComponentIndex;
 
     //tabela de pacientes
     private int selectedPatId = 0;
@@ -86,19 +73,53 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private InputField inputFieldPatGender;
     [SerializeField] private InputField inputFieldPatBirthday;
 
+    //tabela de cenario
+    private int selectedScenarioId = 0;
+    [SerializeField] private InputField inputFieldScenarioSearch;
+    [SerializeField] private Text textScenarioIDB;
+    [SerializeField] private Text textScenarioNameB;
+    [SerializeField] private Text textScenarioEnvTypeB;
+    [SerializeField] private Button rowSce;
+    [SerializeField] GameObject rowsScenario;
+    private GameObject rowsCloneSce = null;
+
+    //campos tela de fases
+    [SerializeField] private InputField inputFieldScenarioName;
+    [SerializeField] private InputField inputFieldScenarioEnvType;
+    [SerializeField] private InputField inputFieldScenarioDescription;
+
+    //tabela de clima
+    private int selectedWeatherId = 0;
+    [SerializeField] private InputField inputFieldWeatherSearch;
+    [SerializeField] private Text textWeatherIDB;
+    [SerializeField] private Text textWeatherNameB;
+    [SerializeField] private Text textWeatherTypeB;
+    [SerializeField] private Button rowWea;
+    [SerializeField] GameObject rowsWeather;
+    private GameObject rowsCloneWea = null;
+
+    //campos tela de fases
+    [SerializeField] private InputField inputFieldWeatherName;
+    [SerializeField] private InputField inputFieldWeatherType;
+    [SerializeField] private InputField inputFieldWeatherDescription;
+
     //lista de objetos
-    private Stage currentStage = null;
+    private Scenario currentScenario = null;
     private Patient currentPatient = null;
+    private Weather currentWeather = null;
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
-    [SerializeField] private GameObject panelSelectStage;
-    [SerializeField] private GameObject panelStage1;
-    [SerializeField] private GameObject panelStage2;
+    [SerializeField] private GameObject panelSelectScenario;
+    [SerializeField] private GameObject panelScenario1;
+    [SerializeField] private GameObject panelScenario2;
     [SerializeField] private GameObject panelSelectPatient;
     [SerializeField] private GameObject panelPatient1;
     [SerializeField] private GameObject panelPatient2;
     [SerializeField] private GameObject panelPatient3;
+    [SerializeField] private GameObject panelSelectWeather;
+    [SerializeField] private GameObject panelWeather1;
+    [SerializeField] private GameObject panelWeather2;
 
     void Start () {
         inputFieldSearch.characterLimit = 60;
@@ -106,7 +127,8 @@ public class SessionControlller : MonoBehaviour
         inputFieldDescription.characterLimit = 450;
         inputFieldPsychologist.interactable = false;
         inputFieldPatSearch.characterLimit = 60;
-        inputFieldStageSearch.characterLimit = 60;
+        inputFieldScenarioSearch.characterLimit = 60;
+        inputFieldWeatherSearch.characterLimit = 60;
 
 		Begin();
 	}
@@ -122,7 +144,8 @@ public class SessionControlller : MonoBehaviour
         textTitle.text = "Gerenciar Sessão";
         panelEdit.SetActive(false);
         panelSelectPatient.gameObject.SetActive(false);
-        panelSelectStage.gameObject.SetActive(false);
+        panelSelectScenario.gameObject.SetActive(false);
+        panelSelectWeather.gameObject.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
         Clear();
@@ -137,12 +160,16 @@ public class SessionControlller : MonoBehaviour
     {
         inputFieldName.text = "";
         inputFieldDescription.text = "";
-        currentStage = new Stage();
-        selectedStageId = 0;
         currentPatient = new Patient();
         selectedPatId = 0;
-        inputFieldStage.text = "";
+        currentScenario = new Scenario();
+        selectedScenarioId = 0;
+        currentWeather = new Weather();
+        selectedWeatherId = 0;
         inputFieldPatient.text = "";
+        inputFieldScenario.text = "";
+        inputFieldWeather.text = "";
+        ClearComponentTable();
     }
 
     public void New()
@@ -165,7 +192,10 @@ public class SessionControlller : MonoBehaviour
         toggleIsPublic.interactable = flag;
         toggleStatus.interactable = flag;
         buttonSelectPatient.interactable = flag;
-        buttonSelectStage.interactable = flag;
+        buttonSelectScenario.interactable = flag;
+        buttonSelectWeather.interactable = flag;
+        buttonAddComponent.interactable = flag;
+        buttonDeleteComponent.interactable = flag;
     }
 
     public void TableLoad()
@@ -186,7 +216,6 @@ public class SessionControlller : MonoBehaviour
 
         List<Button> bts = new List<Button>();
         sessoes = new Session(GameManager.instance.Psychologist).SearchAll(inputFieldSearch.text, toggleStatusSearch.isOn);
-        Debug.Log("sessoes encontradas:" + sessoes.Count);
         for(int i = 0; i< sessoes.Count; i++)
         {
             textIDB.text = sessoes[i].Id.ToString();
@@ -214,18 +243,30 @@ public class SessionControlller : MonoBehaviour
     public void RowClick(Button br)
     {
         Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
+        Debug.Log("SeSSAO: " + session.ListComponents.Count);
 
         textSessionID.text = session.Id.ToString();
         inputFieldName.text = session.Name;
         inputFieldDescription.text = session.Description;
         inputFieldPsychologist.text = session.Psychologist.Name;
-        inputFieldStage.text = session.Stage.Name;
+        inputFieldScenario.text = session.Scenario.Name;
         inputFieldPatient.text = session.Patient.Name;
+        inputFieldWeather.text = session.Weather.Name;
         toggleStatus.isOn = session.Status == 1;
         toggleIsPublic.isOn = session.IsPublic == 1;
         
         currentPatient = session.Patient;
-        currentStage = session.Stage;
+        currentScenario = session.Scenario;
+        currentWeather = session.Weather;
+
+
+        LoadComponentDropdown();
+        listComponent = session.ListComponents;
+        foreach(KeyValuePair<int,string> par in listComponent)
+        {
+            Debug.Log("FOREACH> KEY: " + par.Key + "VALUE: " + par.Value);
+            AddRowTableComponent(par);
+        }
 
         //se nao for seu nao pode alterar nem deletar
         if(session.Psychologist.Id != GameManager.instance.Psychologist.Id){
@@ -242,7 +283,7 @@ public class SessionControlller : MonoBehaviour
         string description = inputFieldDescription.text;
         bool status = toggleStatus.isOn;
         bool isPubic = toggleIsPublic.isOn;
-        string patName = currentPatient.Name, stageName = currentStage.Name;
+        string patName = currentPatient.Name, scenarioName = currentScenario.Name, weatherName = currentWeather.Name;
         Session session;
 
         if(inputFieldPsychologist.text.Trim() == "")
@@ -253,11 +294,14 @@ public class SessionControlller : MonoBehaviour
             Debug.Log("Erro na descrição!");
         else if(currentPatient.Id == 0)
             Debug.Log("Erro. Selecione um paciente!");
-        else if(currentStage.Id == 0)
-            Debug.Log("Erro. Selecione uma fase!");
+        else if(currentScenario.Id == 0)
+            Debug.Log("Erro. Selecione um cenário virtual!");
+        else if(currentWeather.Id == 0)
+            Debug.Log("Erro. Selecione um clima!");
         else 
         {
-            session = new Session(name,description,GameManager.instance.Psychologist,currentStage,currentPatient,status ? 1 : 0, isPubic ? 1 : 0);
+            session = new Session(name,description,GameManager.instance.Psychologist,currentPatient,currentScenario,currentWeather, 
+                status ? 1 : 0, isPubic ? 1 : 0, listComponent.Count > 0 ? listComponent : null);
             if(state == 1) //add
             {
                 string returnMsg = session.Insert();
@@ -331,6 +375,86 @@ public class SessionControlller : MonoBehaviour
         buttonDuplicate.gameObject.SetActive(false);
         currentPatient = new Patient();
         inputFieldPatient.text = "";
+    }
+
+    public void AddComponentClick()
+    {
+        if(listComponent.Contains(arrayAllComponents[dropdownComponent.value])){
+            Debug.Log("ja existe na lista! Nao add");
+            return;
+        }
+        else {
+            listComponent.Add(arrayAllComponents[dropdownComponent.value]);
+            AddRowTableComponent(arrayAllComponents[dropdownComponent.value]);
+        }
+    }
+
+    private void AddRowTableComponent(KeyValuePair<int,string> info)
+    {
+        Button newRow;
+        rowComponent.gameObject.SetActive(true);
+        textComponentIDB.text = info.Key.ToString();
+        textComponentNameB.text = info.Value;
+        newRow = Instantiate(rowComponent) as Button; 
+        newRow.transform.SetParent(rowComponent.transform.parent,false);
+        newRow.onClick.AddListener(() => RowClickComp(newRow));
+        rowComponent.gameObject.SetActive(false);
+    }
+
+    public void RowClickComp(Button br)
+    {
+        //FAZER: QUANDO CLICAR DEIXAR A LINHA DE COR DIFERENTE, SE CLICAR NOVAMENTE TIRA
+        int selectedComponentKey = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textComponentIDB).text);
+        int i=0;
+        foreach(KeyValuePair<int,string> par in listComponent)
+        {
+            if(par.Key == selectedComponentKey)
+            {
+                selectedComponentIndex = i;
+                break;
+            }
+            i++;
+        }
+    }
+
+    public void DeleteComponentClick()
+    {
+        if(selectedComponentIndex < 0)
+            Debug.Log("Erro ao excluir!");
+        else {
+            var clone = rowsComp.transform.GetChild(selectedComponentIndex+1); //+1 porque o primeiro ta false
+            Destroy(clone.gameObject);
+            listComponent.RemoveAt(selectedComponentIndex);
+            selectedComponentIndex = -1;
+        }
+    }
+
+    public void LoadComponentDropdown()
+    {
+        ClearComponentTable();
+        List<ScenarioComponent> lista = new ScenarioComponent().GetComponentsByScenario(currentScenario.Id);
+        arrayAllComponents = new KeyValuePair<int, string>[lista.Count];
+        for(int i = 0; i < lista.Count; i++)
+        {
+            arrayAllComponents[i] = new KeyValuePair<int, string>(lista[i].Id,lista[i].Name);
+            dropdownComponent.options.Add(new Dropdown.OptionData(lista[i].Name));
+        }
+        dropdownComponent.value = -1;
+        dropdownComponent.value = 0;
+    }
+
+    public void ClearComponentTable()
+    {
+        dropdownComponent.ClearOptions();
+        listComponent.Clear();
+        selectedComponentIndex = -1;
+        //tableComplear
+        var clones = new Transform[rowsComp.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rowsComp.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
     }
 
     public void TableLoadPatient()
@@ -410,106 +534,146 @@ public class SessionControlller : MonoBehaviour
         }
     }
 
-    public void TableLoadStage()
+    public void TableLoadScenario()
     {
-        List<Stage> stages;
+        List<Scenario> scenarios;
         Button newRow;
 
-         if (rowsCloneSt != null)
+         if (rowsCloneSce != null)
         {
-            var clones = new Transform[rowsStage.transform.childCount];
+            var clones = new Transform[rowsScenario.transform.childCount];
             for (var i = 1; i < clones.Length; i++)
             {
-                clones[i] = rowsStage.transform.GetChild(i);
+                clones[i] = rowsScenario.transform.GetChild(i);
                 Destroy(clones[i].gameObject);
             }
-            rowSt.gameObject.SetActive(true);
+            rowSce.gameObject.SetActive(true);
         }
         
         List<Button> bts = new List<Button>();
-        stages = new Stage().SearchAll(inputFieldStageSearch.text, false); 
-        Debug.Log("stages"+     stages.Count);
-        for(int i = 0; i< stages.Count; i++)
+        scenarios = new Scenario().SearchAll(inputFieldScenarioSearch.text, false);
+        for(int i = 0; i< scenarios.Count; i++)
         {
-            textStageIDB.text = stages[i].Id.ToString();
-            textStageNameB.text = stages[i].Name;
-            textStageScenarioB.text = stages[i].Scenario.Name;
-            textStageWeatherB.text = stages[i].Weather.Name;
-            textStageTimeB.text = stages[i].Time.ToString() + " h";
-            newRow = Instantiate(rowSt) as Button;
-            newRow.transform.SetParent(rowSt.transform.parent,false);
+            textScenarioIDB.text = scenarios[i].Id.ToString();
+            textScenarioNameB.text = scenarios[i].Name;
+            textScenarioEnvTypeB.text = scenarios[i].Environment.Name;
+            newRow = Instantiate(rowSce) as Button;
+            newRow.transform.SetParent(rowSce.transform.parent,false);
             bts.Add(newRow);
         }
-        rowsCloneSt = rowsStage;
-        rowSt.gameObject.SetActive(false);
-        AddListenerSt(bts);
+        rowsCloneSce = rowsScenario;
+        rowSce.gameObject.SetActive(false);
+        AddListenerSce(bts);
     }
 
-     public void AddListenerSt(List<Button> bts)
+     public void AddListenerSce(List<Button> bts)
     {
         foreach (Button btn in bts)
         {
-            btn.onClick.AddListener(() => RowClickSt(btn)); 
+            btn.onClick.AddListener(() => RowClickSce(btn)); 
         }
     }
 
-    public void RowClickSt(Button br)
+    public void RowClickSce(Button br)
     {
-        selectedStageId = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textStageIDB).text);
-        Stage stage = new Stage().Search(selectedStageId);
-        panelStage2.gameObject.SetActive(true);
+        selectedScenarioId = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textScenarioIDB).text);
+        Scenario scenario = new Scenario().Search(selectedScenarioId);
+        panelScenario2.gameObject.SetActive(true);
         
-        inputFieldStageName.text = stage.Name;
-        inputFieldStageScenario.text = stage.Scenario.Name;
-        inputFieldStageWeather.text = stage.Weather.Name;
-        inputFieldStageHour.text = stage.Time + "h";
-        inputFieldStageDescription.text = stage.Description;
-        //preencher tabela
-        foreach(Configuration config in stage.Components)
-        {
-            Button newRow;
-            rowStComp.gameObject.SetActive(true);
-            textComponentIDB.text = config.Id.ToString();
-            textComponentNameB.text = config.Name;
-            //textComponentInfoB.text =  por enquanto sem info
-            newRow = Instantiate(rowStComp) as Button; 
-            newRow.transform.SetParent(rowStComp.transform.parent,false);
-            //newRow.onClick.AddListener(() => RowClick2(newRow));
-            rowStComp.gameObject.SetActive(false);
-        }
-    }
-    public void ConfirmStageClick()
-    {
-        // add fase para currentStage
-        //fechar paneis
-        //colocar texto no inputdfied
-        currentStage = new Stage().Search(selectedStageId);
-        panelStage2.gameObject.SetActive(false);
-        panelStage1.gameObject.SetActive(false);
-        panelSelectStage.gameObject.SetActive(false);
-        inputFieldStage.text = currentStage.Name;
-        selectedStageId = 0;
+        inputFieldScenarioName.text = scenario.Name;
+        inputFieldScenarioEnvType.text = scenario.Environment.Name;
+        inputFieldScenarioDescription.text = scenario.Description;
     }
 
-    public void ClearStageComponentTable()//chamado ao sair da tela2
+    public void ConfirmScenarioClick()
     {
-        var clones = new Transform[rowsStComp.transform.childCount];
+        currentScenario = new Scenario().Search(selectedScenarioId);
+        panelScenario2.gameObject.SetActive(false);
+        panelScenario1.gameObject.SetActive(false);
+        panelSelectScenario.gameObject.SetActive(false);
+        inputFieldScenario.text = currentScenario.Name;
+        selectedScenarioId = 0;
+    }
+
+    public void ClearScenarioTable()//chamado ao confirmar ou sair da tela1
+    {
+        inputFieldScenarioSearch.text = "";
+        var clones = new Transform[rowsScenario.transform.childCount];
         for (var i = 1; i < clones.Length; i++)
         {
-            clones[i] = rowsStComp.transform.GetChild(i);
+            clones[i] = rowsScenario.transform.GetChild(i);
             Destroy(clones[i].gameObject);
         }
     }
 
-    public void ClearStageTable()//chamado ao confirmar ou sair da tela1
+    public void TableLoadWeather()
     {
-        inputFieldStageSearch.text = "";
-        var clones = new Transform[rowsStage.transform.childCount];
-        for (var i = 1; i < clones.Length; i++)
+        List<Weather> weathers;
+        Button newRow;
+
+         if (rowsCloneWea != null)
         {
-            clones[i] = rowsStage.transform.GetChild(i);
-            Destroy(clones[i].gameObject);
+            var clones = new Transform[rowsWeather.transform.childCount];
+            for (var i = 1; i < clones.Length; i++)
+            {
+                clones[i] = rowsWeather.transform.GetChild(i);
+                Destroy(clones[i].gameObject);
+            }
+            rowWea.gameObject.SetActive(true);
+        }
+        
+        List<Button> bts = new List<Button>();
+        weathers = new Weather().SearchAll(inputFieldWeatherSearch.text, false);
+        for(int i = 0; i< weathers.Count; i++)
+        {
+            textWeatherIDB.text = weathers[i].Id.ToString();
+            textWeatherNameB.text = weathers[i].Name;
+            textWeatherTypeB.text = weathers[i].Type.Name;
+            newRow = Instantiate(rowWea) as Button;
+            newRow.transform.SetParent(rowWea.transform.parent,false);
+            bts.Add(newRow);
+        }
+        rowsCloneWea = rowsWeather;
+        rowWea.gameObject.SetActive(false);
+        AddListenerWe(bts);
+    }
+
+     public void AddListenerWe(List<Button> bts)
+    {
+        foreach (Button btn in bts)
+        {
+            btn.onClick.AddListener(() => RowClickWe(btn)); 
         }
     }
 
+    public void RowClickWe(Button br)
+    {
+        selectedWeatherId = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textWeatherIDB).text);
+        Weather weather = new Weather().Search(selectedWeatherId);
+        panelWeather2.gameObject.SetActive(true);
+        
+        inputFieldWeatherName.text = weather.Name;
+        inputFieldWeatherType.text = weather.Type.Name;
+        inputFieldWeatherDescription.text = weather.Description;
+    }
+    public void ConfirmWeatherClick()
+    {
+        currentWeather = new Weather().Search(selectedWeatherId);
+        panelWeather1.gameObject.SetActive(false);
+        panelWeather2.gameObject.SetActive(false);
+        panelSelectWeather.gameObject.SetActive(false);
+        inputFieldWeather.text = currentWeather.Name;
+        selectedWeatherId = 0;
+    }
+
+    public void ClearWeatherTable()//chamado ao confirmar ou sair da tela1
+    {
+        inputFieldWeatherSearch.text = "";
+        var clones = new Transform[rowsWeather.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rowsWeather.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+    }
 }

@@ -12,9 +12,13 @@ public class MainMenuController : MonoBehaviour {
     [SerializeField] private Button buttonReport;
     [SerializeField] private Button buttonPatient;
     [SerializeField] private Button buttonPsychologist;
+    //colocar todos os outros botoes: pensar em criar função de usuario (adm) para bloquear/mostrar conteudo apropriado 
 
     void Start () {
         //usuario???
+
+        active = null;
+
         buttonSession.gameObject.SetActive(true);
         buttonReport.gameObject.SetActive(true);
 
@@ -23,7 +27,6 @@ public class MainMenuController : MonoBehaviour {
 
     }
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
@@ -50,17 +53,6 @@ public class MainMenuController : MonoBehaviour {
             active = panel;
             active.SetActive(true);
         }
-        //LevelManager.Instance.EnableEnvironment(false);
-    }
-
-    public void LoadMovementPanel(GameObject panel)
-    {
-        panel.SetActive(true);
-    }
-
-    public void CloseMovementPanel(GameObject panel)
-    {
-        panel.SetActive(false);
     }
 
     public void LogOut()

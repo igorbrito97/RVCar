@@ -9,44 +9,60 @@ public class Scenario : MonoBehaviour
 {
     private int id;
     private string name;
-    private string file;
     private EnvironmentType environment;
     private string description;
     private int status;
+    private List<KeyValuePair<int, string>> listComponents;
 
     public Scenario()
     {
         
     }
 
-    public Scenario(string name, string file, EnvironmentType environment, string description, int status)
+    public Scenario(int id)
+    {
+        this.id = id;
+    }
+
+    public Scenario(string name, EnvironmentType environment, string description, int status)
     {
         this.name = name;
-        this.file = file;
         this.environment = environment;
         this.description = description;
         this.status = status;
+        listComponents = null;
     }
 
      public Scenario(int id, string name, EnvironmentType environment, string description, int status)
     {
         this.id = id;
         this.name = name;
-        this.file = "";
         this.environment = environment;
         this.description = description;
         this.status = status;
+        listComponents = null;
     }
 
-    public Scenario(int id, string name, string file, EnvironmentType environment, string description, int status)
+
+    public Scenario(string name, EnvironmentType environment, string description, int status, List<KeyValuePair<int, string>> listComponents)
+    {
+        this.name = name;
+        this.environment = environment;
+        this.description = description;
+        this.status = status;
+        this.listComponents = listComponents;
+    }
+
+    public Scenario(int id, string name, EnvironmentType environment, string description, int status, List<KeyValuePair<int, string>> listComponents)
     {
         this.id = id;
         this.name = name;
-        this.file = file;
         this.environment = environment;
         this.description = description;
         this.status = status;
+        this.listComponents = listComponents;
     }
+
     public string Insert()
     {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
@@ -54,14 +70,12 @@ public class Scenario : MonoBehaviour
         string sql = @"insert into scenario 
                             (scenario_name,
                             scenario_description,
-                            scenario_file,
                             env_id,
                             scenario_status)
-                    values ('$n','$d','$f',$i,$s);";
+                    values ('$n','$d',$i,$s);";
                     
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
-        sql = sql.Replace("$f", this.file);
         sql = sql.Replace("$i", this.environment.Id + "");
         sql = sql.Replace("$s", this.status + "");
 
@@ -70,7 +84,13 @@ public class Scenario : MonoBehaviour
         Debug.Log("resultado query: " + result);
         if(result == 1)
         {
-            return "Ok";
+            if (this.ListComponents != null)
+            {
+                int lastPk = GameManager.instance.GetMaxPK("scenario", "scenario_id");
+                return InsertListScenarioComponent(lastPk) ? "Ok" : "Erro ao inserir!";
+            }
+            else
+                return "Ok";
         }
         return "Erro ao inserir!";
     }
@@ -83,14 +103,12 @@ public class Scenario : MonoBehaviour
                         scenario_name = '$n',
                         scenario_description = '$d',
                         env_id = $i,
-                        scenario_file = '$f',
                         scenario_status = $s
                         where scenario_id = " + id;
         
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$i", this.environment.Id + "");
-        sql = sql.Replace("$f", this.file);
         sql = sql.Replace("$s", this.status + "");
 
         Debug.Log("SWL ALTER: " + sql);
@@ -98,7 +116,13 @@ public class Scenario : MonoBehaviour
         result = command.ExecuteNonQuery();
         if(result == 1)
         {
-            return "Ok";
+            string sql2 = @"delete from component_scenario where scenario_id = " + id;
+            command.CommandText = sql2;
+            result = command.ExecuteNonQuery();
+            if (this.ListComponents != null) // se component deleta todos os de component_scenario e insere novos
+                return InsertListScenarioComponent(id) ? "Ok" : "Erro ao alterar!";
+            else
+                return "Ok";
         }
 
         return "Erro ao alterar!";
@@ -114,6 +138,31 @@ public class Scenario : MonoBehaviour
         result = command.ExecuteNonQuery();
 
         return result == 1;
+    }
+
+     private bool InsertListScenarioComponent(int id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        bool success = true;
+        for (int i = 0; i < this.ListComponents.Count && success; i++)
+        {
+            string sql = @"insert into component_scenario
+                    (component_id, scenario_id)
+                    values ($c,$s);";
+            sql = sql.Replace("$c", this.ListComponents[i].Key + "");
+            sql = sql.Replace("$s", id + "");
+
+            try
+            {
+                command.CommandText = sql;
+                success = command.ExecuteNonQuery() == 1;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+        }
+        return success;
     }
 
     public Scenario Search(int id)
@@ -132,7 +181,6 @@ public class Scenario : MonoBehaviour
             scenario = new Scenario(
                 Convert.ToInt32(data["scenario_id"]),
                 data["scenario_name"].ToString(),
-                data["scenario_file"].ToString(),
                 new EnvironmentType(
                     Convert.ToInt32(data["env_id"]),
                     data["env_name"].ToString(),
@@ -142,8 +190,22 @@ public class Scenario : MonoBehaviour
                 data["scenario_description"].ToString(),
                 Convert.ToInt32(data["scenario_status"])
             );
+            data.Close();
+
+            List<KeyValuePair<int, string>> lista = new List<KeyValuePair<int, string>>();
+            string sql2 =
+                @"select comp.component_id, comp.component_name from component_scenario as sce inner join
+                component as comp where comp.component_id = sce.component_id and scenario_id = " + id;
+            command.CommandText = sql2;
+            data = command.ExecuteReader();
+            while (data.Read())
+            {
+                lista.Add(new KeyValuePair<int, string>(Convert.ToInt32(data["component_id"]), data["component_name"].ToString()));
+            }
+            scenario.ListComponents = lista;
         }       
         data.Close();
+        
         return scenario;
     }
 
@@ -174,7 +236,6 @@ public class Scenario : MonoBehaviour
             list.Add(new Scenario(
                 Convert.ToInt32(data["scenario_id"]),
                 data["scenario_name"].ToString(),
-                data["scenario_file"].ToString(),
                 new EnvironmentType(
                     Convert.ToInt32(data["env_id"]),
                     data["env_name"].ToString(),
@@ -193,8 +254,8 @@ public class Scenario : MonoBehaviour
 
         public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
-    public string File { get => file; set => file = value; }
     public EnvironmentType Environment { get => environment; set => environment = value; }
     public string Description { get => description; set => description = value; }
     public int Status { get => status; set => status = value; }
+    public List<KeyValuePair<int, string>> ListComponents { get => listComponents; set => listComponents = value; }
 }
