@@ -28,6 +28,7 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private Button buttonSelectWeather;
     [SerializeField] private Button buttonAddComponent;
     [SerializeField] private Button buttonDeleteComponent;
+    [SerializeField] private Button buttonExecute;
     [SerializeField] private Button buttonConfirm;
     [SerializeField] private Button buttonAlter;
     [SerializeField] private Button buttonDuplicate;
@@ -109,6 +110,7 @@ public class SessionControlller : MonoBehaviour
     private Weather currentWeather = null;
 
     // paineis da tela
+    [SerializeField] private GameObject panelRun;
     [SerializeField] private GameObject panelEdit;
     [SerializeField] private GameObject panelSelectScenario;
     [SerializeField] private GameObject panelScenario1;
@@ -150,6 +152,7 @@ public class SessionControlller : MonoBehaviour
         toggleStatusSearch.isOn = false;
         Clear();
         changePanelEditInteractable(false);
+        buttonDelete.gameObject.SetActive(true);
         buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(true);
         buttonDelete.gameObject.SetActive(true);
@@ -180,6 +183,7 @@ public class SessionControlller : MonoBehaviour
         Clear();
         changePanelEditInteractable(true);
         inputFieldPsychologist.text = GameManager.instance.Psychologist.Name;
+        buttonExecute.gameObject.SetActive(false);
         buttonAlter.gameObject.SetActive(false);
         buttonDelete.gameObject.SetActive(false);
         buttonDuplicate.gameObject.SetActive(false);
@@ -272,6 +276,7 @@ public class SessionControlller : MonoBehaviour
         if(session.Psychologist.Id != GameManager.instance.Psychologist.Id){
             buttonAlter.gameObject.SetActive(false);
             buttonDelete.gameObject.SetActive(false);
+            buttonExecute.gameObject.SetActive(true);
         }
         buttonConfirm.gameObject.SetActive(false);
     }
@@ -341,10 +346,11 @@ public class SessionControlller : MonoBehaviour
 
     public void CancelClick()
     {
-        if(state == 2)
+        if(state == 2) //se estiver alterando
         {
             textTitle.text = "Gerenciar Sessão";
             changePanelEditInteractable(false);//habilita os campos
+            buttonExecute.gameObject.SetActive(true);
             buttonConfirm.gameObject.SetActive(false);
             buttonAlter.gameObject.SetActive(true);
             buttonDuplicate.gameObject.SetActive(true);
@@ -359,6 +365,7 @@ public class SessionControlller : MonoBehaviour
         state = 2;
         textTitle.text = "Gerenciar Sessão - Alterar";
         changePanelEditInteractable(true);//habilita os campos
+        buttonExecute.gameObject.SetActive(false);
         buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(false);
         buttonDuplicate.gameObject.SetActive(false);
@@ -371,10 +378,16 @@ public class SessionControlller : MonoBehaviour
         textTitle.text = "Gerenciar Sessão - Novo";
         changePanelEditInteractable(true);
         inputFieldPsychologist.text = GameManager.instance.Psychologist.Name;
+        buttonExecute.gameObject.SetActive(false);
         buttonConfirm.gameObject.SetActive(true);
         buttonDuplicate.gameObject.SetActive(false);
         currentPatient = new Patient();
         inputFieldPatient.text = "";
+    }
+
+    public void ExecuteClick()
+    {
+
     }
 
     public void AddComponentClick()
@@ -448,7 +461,7 @@ public class SessionControlller : MonoBehaviour
         dropdownComponent.ClearOptions();
         listComponent.Clear();
         selectedComponentIndex = -1;
-        //tableComplear
+        //tableComp clear
         var clones = new Transform[rowsComp.transform.childCount];
         for (var i = 1; i < clones.Length; i++)
         {
