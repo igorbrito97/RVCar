@@ -270,6 +270,9 @@
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+      <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
     <Reference Include="InteractionEngineUtility">
       <HintPath>D:/Igor/RVCar/Assets/LeapMotion/Modules/InteractionEngine/Plugins/InteractionEngineUtility.dll</HintPath>
     </Reference>
@@ -299,9 +302,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:/Igor/RVCar/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
-      <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>D:/Igor/RVCar/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
