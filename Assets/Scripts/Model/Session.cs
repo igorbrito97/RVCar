@@ -122,7 +122,6 @@ public class Session : MonoBehaviour {
     public string Alter(int id)
     {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
-        MySqlDataReader data;
         int result;
         string sql = @"update session set 
                         psychologist_id = $ps,
@@ -204,9 +203,10 @@ public class Session : MonoBehaviour {
         Session session = null;
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        string sql = @"select * from session as ses inner join psychologist inner join weather wea inner join patient inner join scenario as sce where
+        string sql = @"select * from session as ses inner join psychologist inner join weather wea inner join patient inner join scenario as sce 
+                inner join weatherType as wt inner join environmentType as et where 
                 psychologist_id = psyc_id and ses.weather_id = wea.weather_id and patient_id = pat_id and 
-                sce.scenario_id = ses.scenario_id and session_id = " + id;
+                sce.scenario_id = ses.scenario_id and wt.weatherType_id = wea.weatherType_id and et.env_id = sce.env_id and session_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -240,7 +240,10 @@ public class Session : MonoBehaviour {
                 new Scenario(
                     Convert.ToInt32(data["scenario_id"]),
                     data["scenario_name"].ToString(),
-                    new EnvironmentType(Convert.ToInt32(data["env_id"])),
+                    new EnvironmentType(
+                        Convert.ToInt32(data["env_id"]),
+                        data["env_name"].ToString()
+                    ),
                     data["scenario_description"].ToString(),
                     Convert.ToInt32(data["scenario_status"])
                 ),
@@ -248,7 +251,10 @@ public class Session : MonoBehaviour {
                     Convert.ToInt32(data["weather_id"]),
                     data["weather_name"].ToString(),
                     Convert.ToInt32(data["weather_info"]),
-                    new WeatherType(Convert.ToInt32(data["weatherType_id"])),
+                    new WeatherType(
+                        Convert.ToInt32(data["weatherType_id"]),
+                        data["weatherType_name"].ToString()
+                    ),
                     data["weather_description"].ToString(),
                     Convert.ToInt32(data["weather_status"])
                 ),

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RunSessionController : MonoBehaviour {
+    private int state = 0; // 0 nada, 2 - alter
 
 	// campos da tela inicial
     [SerializeField] private Text textTitle;
@@ -21,41 +22,84 @@ public class RunSessionController : MonoBehaviour {
 
 	//campos da tela de execução
     [SerializeField] private Text textSessionID;
-    [SerializeField] private InputField inputFieldName;
-    [SerializeField] private InputField inputFieldPsychologist;
-    [SerializeField] private Toggle toggleStatus;
-    [SerializeField] private Toggle toggleIsPublic;
-    [SerializeField] private InputField inputFieldDescription;
-    [SerializeField] private InputField inputFieldPatient;
-    [SerializeField] private InputField inputFieldStage;
-    [SerializeField] private Button buttonSelectPatient;
-    [SerializeField] private Button buttonSelectStage;
-    [SerializeField] private Button buttonConfirm;
+    [SerializeField] private InputField inputFieldPatName;
+    [SerializeField] private InputField inputFieldPatBirthday;
+    [SerializeField] private InputField inputFieldSessionName;
+    [SerializeField] private InputField inputFieldPsycName;
+    [SerializeField] private InputField inputFieldSessionDescription;
+    [SerializeField] private InputField inputFieldWeatherName;
+    [SerializeField] private InputField inputFieldWeatherType;
+    [SerializeField] private InputField inputFieldWeatherInfo;
+    [SerializeField] private InputField inputFieldScenarioName;
+    [SerializeField] private InputField inputFieldScenarioEnvType;
+    [SerializeField] private Button buttonAlter;
+    [SerializeField] private Button buttonRun;
+    [SerializeField] private Button buttonDelete;
+
+    //tabela Componente
+    [SerializeField] private Text textIDBComponent;
+    [SerializeField] private Text textNameBComponent;
+    [SerializeField] private Button rowComponent;
+    [SerializeField] private GameObject rowsComp;
+    private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
+
 
 	// paineis da tela
     [SerializeField] private GameObject panelEdit;
+    [SerializeField] private GameObject panelReady;
 
 	void Start () {
 		inputFieldSearch.characterLimit = 60;
+        inputFieldPatBirthday.characterLimit = 60;
+        inputFieldPatName.characterLimit = 60;
+        inputFieldPsycName.characterLimit = 60;
+        inputFieldScenarioEnvType.characterLimit = 60;
+        inputFieldScenarioName.characterLimit = 60;
+        inputFieldSessionDescription.characterLimit = 250;
+        inputFieldSessionName.characterLimit = 60;
+        inputFieldWeatherInfo.characterLimit = 60;
+        inputFieldWeatherName.characterLimit = 60;
+        inputFieldWeatherType.characterLimit = 60;
+
+        inputFieldPatBirthday.interactable = false;
+        inputFieldPatName.interactable = false;
+        inputFieldPsycName.interactable = false;
+        inputFieldScenarioEnvType.interactable = false;
+        inputFieldScenarioName.interactable = false;
+        inputFieldSessionDescription.interactable = false;
+        inputFieldSessionName.interactable = false;
+        inputFieldWeatherInfo.interactable = false;
+        inputFieldWeatherName.interactable = false;
+        inputFieldWeatherType.interactable = false;
 
 		Begin();
-	}
-	
-	void Update () {
-		
 	}
 
 	public void Begin()
 	{
 		textTitle.text = "Executar Sessão";
 		panelEdit.gameObject.SetActive(false);
+        panelReady.gameObject.SetActive(false);
         inputFieldSearch.text = "";
 		Clear();
+        buttonAlter.gameObject.SetActive(true);
+        buttonDelete.gameObject.SetActive(true);
+        buttonRun.gameObject.SetActive(true);
 	}
 
 	public void Clear()
 	{
-		
+		inputFieldPatBirthday.text = "";
+        inputFieldPatName.text = "";
+        inputFieldPsycName.text = "";
+        inputFieldScenarioEnvType.text = "";
+        inputFieldScenarioName.text = "";
+        inputFieldSessionDescription.text = "";
+        inputFieldSessionName.text = "";
+        inputFieldWeatherInfo.text = "";
+        inputFieldWeatherName.text = "";
+        inputFieldWeatherType.text = "";
+        ClearComponentTable();
 	}
 
 	public void TableLoad()
@@ -103,6 +147,72 @@ public class RunSessionController : MonoBehaviour {
 
 	public void RowClick(Button br)
 	{
+        Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
+        
+        textSessionID.text = session.Id.ToString();
+        inputFieldPatBirthday.text = session.Patient.Birthday.Day + "/" + session.Patient.Birthday.Month + "/" + session.Patient.Birthday.Year;
+        inputFieldPatName.text = session.Patient.Name;
+        inputFieldPsycName.text = session.Psychologist.Name;
+        inputFieldScenarioEnvType.text = session.Scenario.Environment.Name;
+        inputFieldScenarioName.text = session.Scenario.Name;
+        inputFieldSessionDescription.text = session.Description;
+        inputFieldSessionName.text = session.Name;
+        inputFieldWeatherInfo.text = session.Weather.Info + "";
+        inputFieldWeatherName.text = session.Weather.Name;
+        inputFieldWeatherType.text = session.Weather.Type.Name;
+
+        listComponent = session.ListComponents; 
+        foreach(KeyValuePair<int,string> par in listComponent)
+        {
+            AddRowTableComponent(par);
+        }
+
+        //ver botoes
 
 	}
+
+    public void AlterClick()
+    {
+
+    }
+
+    public void RunClick()
+    {
+
+    }
+
+    public void DeleteClick()
+    {
+
+    }
+
+    private void AddRowTableComponent(KeyValuePair<int,string> info)
+    {
+        Button newRow;
+        rowComponent.gameObject.SetActive(true);
+        textIDBComponent.text = info.Key.ToString();
+        textNameBComponent.text = info.Value;
+        newRow = Instantiate(rowComponent) as Button; 
+        newRow.transform.SetParent(rowComponent.transform.parent,false);
+        newRow.onClick.AddListener(() => RowClickComp(newRow));
+        rowComponent.gameObject.SetActive(false);
+    }
+
+    public void ClearComponentTable()
+    {
+        listComponent.Clear();
+        //tableComp clear
+        var clones = new Transform[rowsComp.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rowsComp.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+    }
+
+    public void RowClickComp(Button br)
+    {
+
+    }
+
 }

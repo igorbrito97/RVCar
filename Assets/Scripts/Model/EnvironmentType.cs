@@ -21,6 +21,12 @@ public class EnvironmentType : MonoBehaviour
         this.id = id;
     }
     
+    public EnvironmentType(int id,string name)
+    {
+        this.id = id;
+        this.name = name;
+    }
+    
     public EnvironmentType(string name, string description, int status)
     {
         this.name = name;

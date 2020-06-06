@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 15/05/2020 às 01:41
+-- Tempo de geração: 03/06/2020 às 20:12
 -- Versão do servidor: 10.4.11-MariaDB
 -- Versão do PHP: 7.4.4
 
@@ -30,21 +30,19 @@ SET time_zone = "+00:00";
 CREATE TABLE `component` (
   `component_id` int(11) NOT NULL,
   `component_name` varchar(60) NOT NULL,
-  `component_description` varchar(350) NOT NULL,
-  `component_status` tinyint(1) NOT NULL,
-  `component_file` varchar(80) NOT NULL
+  `component_description` varchar(250) NOT NULL,
+  `component_status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `component`
 --
 
-INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`, `component_file`) VALUES
-(1, 'Semaforo', 'Semaforo simples ', 1, ''),
-(2, 'Estrada de terra', 'Simlua uma estrada rural', 1, ''),
-(3, 'Ruas ', 'Rua simples que tem em todo lugar', 1, ''),
-(4, 'TesteZao', 'vamos ver', 1, ''),
-(5, 'TestezZZIn', 'gogogogogogogogoo', 1, '');
+INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`) VALUES
+(1, '', '', 0),
+(2, 'Obstaculo', 'Tartaruga', 1),
+(3, 'Semaforo', 'Semarf', 1),
+(4, 'Transito', 'Transss', 1);
 
 -- --------------------------------------------------------
 
@@ -53,25 +51,19 @@ INSERT INTO `component` (`component_id`, `component_name`, `component_descriptio
 --
 
 CREATE TABLE `component_scenario` (
-  `component_id` int(11) NOT NULL,
-  `scenario_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='componentes que podem ser executados em uma tabela';
+  `scenario_id` int(11) NOT NULL,
+  `component_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `component_scenario`
 --
 
-INSERT INTO `component_scenario` (`component_id`, `scenario_id`) VALUES
-(1, 1),
+INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 (1, 2),
-(2, 1),
-(2, 2),
-(3, 1),
-(3, 2),
-(3, 3),
-(4, 1),
+(1, 4),
 (4, 3),
-(5, 3);
+(4, 4);
 
 -- --------------------------------------------------------
 
@@ -161,22 +153,20 @@ INSERT INTO `psychologist` (`psyc_id`, `psyc_name`, `psyc_cpf`, `psyc_email`, `p
 CREATE TABLE `scenario` (
   `scenario_id` int(11) NOT NULL,
   `scenario_name` varchar(60) NOT NULL,
-  `scenario_description` varchar(350) NOT NULL,
-  `scenario_status` tinyint(1) NOT NULL,
-  `scenario_file` varchar(80) NOT NULL,
-  `env_id` int(11) NOT NULL
+  `scenario_description` varchar(250) NOT NULL,
+  `env_id` int(11) NOT NULL,
+  `scenario_status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Despejando dados para a tabela `scenario`
 --
 
-INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `scenario_status`, `scenario_file`, `env_id`) VALUES
-(1, 'Teste', 'Cenario inicial', 0, '', 0),
-(2, 'Rural', 'Simular uma estrada no meio rural', 0, '', 0),
-(3, 'Residencial', 'casas e mais caasas', 0, '', 0),
-(5, 'Cidade com movimentaçao', 'Simulaçao de cidade com movimentaçao de carros e de pessoas', 1, 'arqqq', 1),
-(6, 'Rua com garagem', 'Simulaçao de uma rua com a possibilidade de estacionar em uma garagem', 1, 'arq1', 2);
+INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `env_id`, `scenario_status`) VALUES
+(1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 1),
+(2, 'Rural', 'Rural', 3, 1),
+(3, 'Garagem', 'Graaaag', 2, 1),
+(4, 'Garagem dificil', 'alo alo', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -188,9 +178,10 @@ CREATE TABLE `session` (
   `session_id` int(11) NOT NULL,
   `psychologist_id` int(11) NOT NULL,
   `patient_id` int(11) NOT NULL,
-  `stage_id` int(11) NOT NULL,
+  `weather_id` int(11) NOT NULL,
+  `scenario_id` int(11) NOT NULL,
   `session_name` varchar(60) NOT NULL,
-  `session_description` varchar(450) NOT NULL,
+  `session_description` varchar(250) NOT NULL,
   `session_status` tinyint(4) NOT NULL,
   `session_public` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -199,58 +190,28 @@ CREATE TABLE `session` (
 -- Despejando dados para a tabela `session`
 --
 
-INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `stage_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
-(1, 1, 4, 4, 'sessaozinho alterado', 'vamos la\namigos', 1, 1),
-(2, 2, 1, 4, 'Sessao Publiccc', 'Descricao da publica sessao aqui vamos \nnos\nvamos', 1, 1),
-(3, 2, 4, 3, 'Sessao desativada e restritva', 'sessao so pra mim', 0, 0),
-(4, 1, 1, 4, 'Sessao Publiccc', 'Descricao da publica sessao aqui vamos \nnos\nvamos', 0, 1);
+INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
+(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1),
+(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `stage`
+-- Estrutura para tabela `session_component`
 --
 
-CREATE TABLE `stage` (
-  `stage_id` int(11) NOT NULL,
-  `scenario_id` int(11) NOT NULL,
-  `weather_id` int(11) NOT NULL,
-  `stage_description` varchar(350) NOT NULL,
-  `stage_time` int(11) NOT NULL,
-  `stage_status` tinyint(1) NOT NULL,
-  `stage_name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Despejando dados para a tabela `stage`
---
-
-INSERT INTO `stage` (`stage_id`, `scenario_id`, `weather_id`, `stage_description`, `stage_time`, `stage_status`, `stage_name`) VALUES
-(3, 3, 1, 'decricao sessao \nagora ja foi fio\nsucesso', 20, 1, 'sessao pronta'),
-(4, 2, 2, 'cena para se ambientar a ambientes rurais com muita ilumiacao', 12, 1, 'cena rural'),
-(5, 3, 2, 'description do stage gogo', 2, 0, 'Stage');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `stage_component`
---
-
-CREATE TABLE `stage_component` (
-  `stage_id` int(11) NOT NULL,
+CREATE TABLE `session_component` (
+  `session_id` int(11) NOT NULL,
   `component_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `stage_component`
+-- Despejando dados para a tabela `session_component`
 --
 
-INSERT INTO `stage_component` (`stage_id`, `component_id`) VALUES
-(3, 5),
-(4, 1),
-(4, 2),
-(5, 3),
-(5, 4);
+INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
+(2, 3),
+(2, 4);
 
 -- --------------------------------------------------------
 
@@ -310,9 +271,7 @@ ALTER TABLE `component`
 -- Índices de tabela `component_scenario`
 --
 ALTER TABLE `component_scenario`
-  ADD PRIMARY KEY (`component_id`,`scenario_id`),
-  ADD KEY `fk_scenario_id` (`scenario_id`),
-  ADD KEY `fk_component_id` (`component_id`) USING BTREE;
+  ADD PRIMARY KEY (`scenario_id`,`component_id`);
 
 --
 -- Índices de tabela `environmentType`
@@ -344,24 +303,13 @@ ALTER TABLE `scenario`
 -- Índices de tabela `session`
 --
 ALTER TABLE `session`
-  ADD PRIMARY KEY (`session_id`),
-  ADD KEY `fk_psyc` (`psychologist_id`),
-  ADD KEY `fk_patient` (`patient_id`),
-  ADD KEY `fk_stage` (`stage_id`);
+  ADD PRIMARY KEY (`session_id`);
 
 --
--- Índices de tabela `stage`
+-- Índices de tabela `session_component`
 --
-ALTER TABLE `stage`
-  ADD PRIMARY KEY (`stage_id`),
-  ADD KEY `fk_stage_scenario` (`scenario_id`) USING BTREE,
-  ADD KEY `fk_stage_weather` (`weather_id`) USING BTREE;
-
---
--- Índices de tabela `stage_component`
---
-ALTER TABLE `stage_component`
-  ADD PRIMARY KEY (`stage_id`,`component_id`) USING BTREE;
+ALTER TABLE `session_component`
+  ADD PRIMARY KEY (`session_id`,`component_id`);
 
 --
 -- Índices de tabela `weather`
@@ -383,7 +331,7 @@ ALTER TABLE `weatherType`
 -- AUTO_INCREMENT de tabela `component`
 --
 ALTER TABLE `component`
-  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `environmentType`
@@ -407,19 +355,13 @@ ALTER TABLE `psychologist`
 -- AUTO_INCREMENT de tabela `scenario`
 --
 ALTER TABLE `scenario`
-  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de tabela `stage`
---
-ALTER TABLE `stage`
-  MODIFY `stage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `weather`
@@ -432,18 +374,6 @@ ALTER TABLE `weather`
 --
 ALTER TABLE `weatherType`
   MODIFY `weatherType_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- Restrições para dumps de tabelas
---
-
---
--- Restrições para tabelas `component_scenario`
---
-ALTER TABLE `component_scenario`
-  ADD CONSTRAINT `fk_component` FOREIGN KEY (`component_id`) REFERENCES `component` (`component_id`),
-  ADD CONSTRAINT `fk_component_id` FOREIGN KEY (`component_id`) REFERENCES `component` (`component_id`),
-  ADD CONSTRAINT `fk_scenario_id` FOREIGN KEY (`scenario_id`) REFERENCES `scenario` (`scenario_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
