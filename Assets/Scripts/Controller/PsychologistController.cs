@@ -236,12 +236,15 @@ public class PsychologistController : MonoBehaviour {
 
     public void RowClick(Button br)
     {
+        Psychologist psyc = new Psychologist().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textID).text));
+        LoadPage(psyc);
+    }
+
+    private void LoadPage(Psychologist psychologist)
+    {
         state = 2;
         textTitle.text = "Gerenciar Psicológos - Alterar";
-
-        Psychologist psychologist = new Psychologist().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textID).text));
         buttonDelete.gameObject.SetActive(true);
-
         textPsychologistID.text = psychologist.Id.ToString();
         inputFieldName.text = psychologist.Name;
         inputFieldCpf.text = psychologist.Cpf;
@@ -259,6 +262,12 @@ public class PsychologistController : MonoBehaviour {
         while(i < dropdownGender.options.Count && 
             psychologist.Gender != dropdownGender.options[i].text[0])
             i++;
-        dropdownGender.value = i;    
+        dropdownGender.value = i;  
+    }
+
+    public void SettingsAlterClick(Psychologist psyc)
+    {
+        panelEdit.gameObject.SetActive(true);
+        LoadPage(psyc);
     }
 }
