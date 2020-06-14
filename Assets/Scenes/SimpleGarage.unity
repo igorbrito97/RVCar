@@ -1325,6 +1325,26 @@ Transform:
   m_Father: {fileID: 841114241}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &824877657 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1555925564438798, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481360189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &824877659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824877657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fbac9d7cbca384fa206b000831f61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkidTrailPrefab: {fileID: 0}
+  skidParticles: {fileID: 0}
 --- !u!1 &841114239
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,6 +1429,26 @@ Transform:
   m_Father: {fileID: 841114241}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &885359607 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1121695749784826, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481360189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &885359609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885359607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fbac9d7cbca384fa206b000831f61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkidTrailPrefab: {fileID: 0}
+  skidParticles: {fileID: 0}
 --- !u!1001 &890493072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1775,6 +1815,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1243897121 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1430061539950842, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481360189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1243897123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243897121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fbac9d7cbca384fa206b000831f61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkidTrailPrefab: {fileID: 0}
+  skidParticles: {fileID: 0}
 --- !u!1001 &1305692709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2204,6 +2264,11 @@ PrefabInstance:
       propertyPath: m_TargetDisplay
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 65714772893271468, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114154989828875054, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
         type: 3}
       propertyPath: m_Enabled
@@ -2213,22 +2278,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_WheelEffects.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 885359609}
     - target: {fileID: 114154989828875054, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
         type: 3}
       propertyPath: m_WheelEffects.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1751648776}
     - target: {fileID: 114154989828875054, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
         type: 3}
       propertyPath: m_WheelEffects.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1243897123}
     - target: {fileID: 114154989828875054, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
         type: 3}
       propertyPath: m_WheelEffects.Array.data[3]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 824877659}
     - target: {fileID: 114573960009690450, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
         type: 3}
       propertyPath: m_Enabled
@@ -2429,13 +2494,14 @@ MonoBehaviour:
   frontLeftT: {fileID: 1481360193}
   rearRightT: {fileID: 1481360192}
   rearLeftT: {fileID: 1481360191}
-  maxSteerAngle: 30
-  motorForce: 300
-  rotacao: 1
+  maxSteerAngle: 35
+  motorForce: 500
+  rotation: 1
   steeringWheel: {fileID: 1481360200}
-  wheelSpeedTurn: 2
-  numTurns: 1.5
+  wheelSpeedTurn: 3.5
+  numTurns: 1
   reverseTurn: 0
+  steerHelper: 0.644
 --- !u!1 &1481360200 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1927068234239744, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
@@ -2870,6 +2936,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1751648774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1210144338910700, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1481360189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1751648776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751648774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fbac9d7cbca384fa206b000831f61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkidTrailPrefab: {fileID: 0}
+  skidParticles: {fileID: 0}
 --- !u!1001 &1790828549
 PrefabInstance:
   m_ObjectHideFlags: 0

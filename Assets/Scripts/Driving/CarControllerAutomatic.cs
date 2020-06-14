@@ -18,6 +18,8 @@ public class CarControllerAutomatic : MonoBehaviour
     private float initialSteeringRotation = 0.0f;
     private float steeringWheelAngle;
     private float steerOldRotation;
+    private bool isOnGroundL;
+    private bool isOnGroundR;
 
     [SerializeField] public WheelCollider frontRightWC;
     [SerializeField] public WheelCollider frontLeftWC;
@@ -27,19 +29,53 @@ public class CarControllerAutomatic : MonoBehaviour
     [SerializeField] public Transform frontLeftT;
     [SerializeField] public Transform rearRightT;
     [SerializeField] public Transform rearLeftT;
-    [SerializeField] public float maxSteerAngle = 30f;
+    [SerializeField] public float maxSteerAngle = 35f;
     [SerializeField] public float motorForce = 50f;
     [SerializeField] private WheelType rotation = WheelType.TurnInZ;
     [SerializeField] private GameObject steeringWheel;
     [SerializeField] [Range(0.4f, 5.0f)] private float wheelSpeedTurn = 2.0f;
     [SerializeField] [Range(0.5f, 3.0f)] private float numTurns = 1.5f;
-    [SerializeField] bool reverseTurn;
+    [SerializeField] public bool reverseTurn;
     [Range(0, 1)] [SerializeField] private float steerHelper = 0.644f; // 0 is raw physics , 1 the car will grip in the direction it is facing
-
+    [SerializeField] private float power = 10000f;
+    [SerializeField] private float stabilizerXspeed = 800f;
     private void Awake()
     {
         Debug.Log(LogitechGSDK.LogiSteeringInitialize(false));
         carRigidbody = GetComponent<Rigidbody>();
+    }
+    
+    private void Start()
+    {
+        carRigidbody.centerOfMass += new Vector3(0,-0.3f,-0.3f);
+    }
+
+    private void Update()
+    {
+        float powerRearLeft, powerRearRight;
+        powerRearLeft = powerRearRight = 1;
+        //check colission
+        WheelHit hit;
+        isOnGroundL = rearLeftWC.GetGroundHit(out hit);
+        if(isOnGroundL)
+        {
+            powerRearLeft = (-rearLeftWC.transform.InverseTransformPoint(hit.point).y - rearLeftWC.radius) / rearLeftWC.suspensionDistance;
+        }
+        isOnGroundR = rearRightWC.GetGroundHit(out hit);
+        if(isOnGroundR)
+        {
+            powerRearRight = (-rearRightWC.transform.InverseTransformPoint(hit.point).y - rearRightWC.radius) / rearRightWC.suspensionDistance;
+        }
+        //apply forces
+        float antiRollForce = (powerRearLeft-powerRearRight) * power;
+        if(isOnGroundL)
+        {
+            carRigidbody.AddForceAtPosition(rearLeftWC.transform.up * -antiRollForce, rearLeftWC.transform.position);
+        }
+        if(isOnGroundR)
+        {
+            carRigidbody.AddForceAtPosition(rearRightWC.transform.up * -antiRollForce, rearRightWC.transform.position);
+        }
     }
 
     private void FixedUpdate()
@@ -54,6 +90,7 @@ public class CarControllerAutomatic : MonoBehaviour
             //SteerHelper();
             Accelerate();
             UpdateWheelPoses();
+            Stabilize();
             TurnSteeringWheel();
         }
     }
@@ -109,31 +146,40 @@ public class CarControllerAutomatic : MonoBehaviour
     }
 
     private void SteerHelper()
-        {
-            WheelHit wheelHitFR, wheelHitFL, wheelHitRR, wheelHitRL;
-            // wheels arent on the ground so dont realign the rigidbody velocity
-            frontRightWC.GetGroundHit(out wheelHitFR);
-            if(wheelHitFR.normal == Vector3.zero)
-                return;
-            frontLeftWC.GetGroundHit(out wheelHitFL);
-            if(wheelHitFL.normal == Vector3.zero)
-                return;
-            rearRightWC.GetGroundHit(out wheelHitRR);
-            if(wheelHitRR.normal == Vector3.zero)
-                return;
-            rearLeftWC.GetGroundHit(out wheelHitRL);
-            if(wheelHitRL.normal == Vector3.zero)
-                return;
+    {
+        WheelHit wheelHitFR, wheelHitFL, wheelHitRR, wheelHitRL;
+        // wheels arent on the ground so dont realign the rigidbody velocity
+        frontRightWC.GetGroundHit(out wheelHitFR);
+        if(wheelHitFR.normal == Vector3.zero)
+            return;
+        frontLeftWC.GetGroundHit(out wheelHitFL);
+        if(wheelHitFL.normal == Vector3.zero)
+            return;
+        rearRightWC.GetGroundHit(out wheelHitRR);
+        if(wheelHitRR.normal == Vector3.zero)
+            return;
+        rearLeftWC.GetGroundHit(out wheelHitRL);
+        if(wheelHitRL.normal == Vector3.zero)
+            return;
 
-            // this if is needed to avoid gimbal lock problems that will make the car suddenly shift direction
-            if (Mathf.Abs(steerOldRotation - transform.eulerAngles.y) < 10f)
-            {
-                var turnadjust = (transform.eulerAngles.y - steerOldRotation) * steerHelper;
-                Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
-                carRigidbody.velocity = velRotation * carRigidbody.velocity;
-            }
-            steerOldRotation = transform.eulerAngles.y;
+        // this if is needed to avoid gimbal lock problems that will make the car suddenly shift direction
+        if (Mathf.Abs(steerOldRotation - transform.eulerAngles.y) < 10f)
+        {
+            var turnadjust = (transform.eulerAngles.y - steerOldRotation) * steerHelper;
+            Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
+            carRigidbody.velocity = velRotation * carRigidbody.velocity;
         }
+        steerOldRotation = transform.eulerAngles.y;
+    }
+
+    private void Stabilize()
+    {
+        if(isOnGroundL || isOnGroundR) 
+        {
+            carRigidbody.AddForce(-transform.up * (5000 + stabilizerXspeed * Mathf.Abs((carRigidbody.velocity.magnitude * 3.6f))));
+        }
+        carRigidbody.velocity = Vector3.ClampMagnitude(carRigidbody.velocity, 300);
+    }
 
     private void TurnSteeringWheel()
     {
@@ -157,5 +203,6 @@ public class CarControllerAutomatic : MonoBehaviour
             }
         }
     }
+
 
 }

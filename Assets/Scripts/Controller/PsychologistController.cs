@@ -67,13 +67,8 @@ public class PsychologistController : MonoBehaviour {
         inputFieldConfirmPassword.contentType = InputField.ContentType.Password; 
         
         Begin();
+        Debug.Log("START");
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void Begin()
     {
         state = 0;
@@ -267,7 +262,13 @@ public class PsychologistController : MonoBehaviour {
 
     public void SettingsAlterClick(Psychologist psyc)
     {
-        panelEdit.gameObject.SetActive(true);
-        LoadPage(psyc);
+        Debug.Log("SETTTT");
+        Invoke("FunctionCall",2.0f);
+    }
+
+    void FunctionCall()
+    {
+        panelEdit.SetActive(false);
+        LoadPage(GameManager.instance.Psychologist);
     }
 }

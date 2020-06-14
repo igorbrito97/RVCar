@@ -53,9 +53,10 @@ public class SettingsController : MonoBehaviour {
 	public void AlterClick()
 	{
 		//fechar o painel de settings - abrir painel de psicologo, abrir painel edit e colocar as infos
+		// o que ta acontecendo: chama o controler, ele vai pra função antes de ir pro start
+		PsychologistController controller = new PsychologistController();
 		gameObjSetting.gameObject.SetActive(false);
 		panelPsyc.gameObject.SetActive(true);
-		PsychologistController controller = new PsychologistController();
 		controller.SettingsAlterClick(GameManager.instance.Psychologist);
 	}
 }

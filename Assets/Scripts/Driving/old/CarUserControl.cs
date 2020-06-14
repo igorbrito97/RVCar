@@ -157,7 +157,10 @@ namespace UnityStandardAssets.Vehicles.Car
                 moverVolante(h);
                 speedometer.text = string.Format("{0,00}", velo) + " - " + marchaAtual;
                 rotationsPerMinute.text = "rpm = " + rpm;
+                
+                m_Car.Move(h, v, v, 0);
             }
+
         }
         
         /*private bool estaMarchaCerta(double velo,int idx)
