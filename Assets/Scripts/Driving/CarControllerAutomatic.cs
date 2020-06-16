@@ -52,6 +52,7 @@ public class CarControllerAutomatic : MonoBehaviour
 
     private void Update()
     {
+        //stabilizer
         float powerRearLeft, powerRearRight;
         powerRearLeft = powerRearRight = 1;
         //check colission
@@ -84,7 +85,7 @@ public class CarControllerAutomatic : MonoBehaviour
         {
             //GetInput();
             LogitechGSDK.DIJOYSTATE2ENGINES rec = LogitechGSDK.LogiGetStateUnity(0);
-            horizontalInput = (float) rec.lX / 32768;//volante
+            horizontalInput = (float) rec.lX;//rec.lX / 32768;//volante
             verticalInput = (float) (rec.lY - rec.lRz) / -65534; //rec.lY acelerador / rec.lRz freio
             Steer();
             //SteerHelper();
@@ -98,6 +99,7 @@ public class CarControllerAutomatic : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+        Debug.Log("H: " + horizontalInput + " V: " + verticalInput);
     }
 
     public void Steer()
@@ -110,7 +112,7 @@ public class CarControllerAutomatic : MonoBehaviour
             angle = Mathf.Lerp(angle, horizontalInput, Time.deltaTime*2);
         }
         // OU
-        steeringAngle = maxSteerAngle * horizontalInput;
+        steeringAngle = horizontalInput/450;
 
         //por enquanto estou usando o steering, ver se suaviza mesmo com o angle
         Debug.Log("VER:" + verticalInput);

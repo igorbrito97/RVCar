@@ -354,6 +354,7 @@
     <Compile Include="Assets\Scripts\Model\ScenarioComponent.cs" />
     <Compile Include="Assets\Scripts\Model\Session.cs" />
     <Compile Include="Assets\Scripts\Model\Stage.cs" />
+    <Compile Include="Assets\Scripts\Model\VirtualObject.cs" />
     <Compile Include="Assets\Scripts\Model\Weather.cs" />
     <Compile Include="Assets\Scripts\Model\WeatherType.cs" />
     <None Include="Assets\LeapMotion\Core\Version.txt" />

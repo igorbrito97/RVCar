@@ -37,6 +37,10 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] private Button rowComponent;
     [SerializeField] private GameObject rowsComp;
 
+    //objeto virtual
+    [SerializeField] private Dropdown dropdownSelectObject;
+    //IMAGEM
+
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
     [SerializeField] private GameObject panelTableComponent;
@@ -45,6 +49,7 @@ public class ScenarioController : MonoBehaviour
     //listas 
     private KeyValuePair<int,string>[] arrayAllEnvType;
     private KeyValuePair<int,string>[] arrayAllComponent;
+    private KeyValuePair<int,string>[] arrayAllVirtualObj;
     private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
     private int selectedComponentIndex;
 
@@ -57,11 +62,6 @@ public class ScenarioController : MonoBehaviour
         Begin();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Begin()
     {
         state = 0;
@@ -82,7 +82,6 @@ public class ScenarioController : MonoBehaviour
         buttonDelete.gameObject.SetActive(false);
         listComponent.Clear();
         selectedComponentIndex = -1;
-        //tableClear
         var clones = new Transform[rowsComp.transform.childCount];
         for (var i = 1; i < clones.Length; i++)
         {
@@ -124,6 +123,17 @@ public class ScenarioController : MonoBehaviour
         }
         dropdownComponent.value = -1;
         dropdownComponent.value = 0;
+
+        List<VirtualObject> listaVO = new VirtualObject().SearchAllScenario();
+        dropdownSelectObject.ClearOptions();
+        arrayAllVirtualObj = new KeyValuePair<int, string>[listaVO.Count];
+        for(int i = 0; i < listaVO.Count; i++)
+        {
+            arrayAllVirtualObj[i] = new KeyValuePair<int, string>(listaVO[i].Id,listaVO[i].Name);
+            dropdownSelectObject.options.Add(new Dropdown.OptionData(listaVO[i].Name));
+        }
+        dropdownSelectObject.value = -1;
+        dropdownSelectObject.value = 0;
     }
 
     public void ConfirmClick()

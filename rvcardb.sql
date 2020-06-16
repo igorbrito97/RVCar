@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 03/06/2020 às 20:12
--- Versão do servidor: 10.4.11-MariaDB
--- Versão do PHP: 7.4.4
+-- Tempo de geração: 16-Jun-2020 às 05:12
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -24,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `component`
+-- Estrutura da tabela `component`
 --
 
 CREATE TABLE `component` (
@@ -35,7 +36,7 @@ CREATE TABLE `component` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `component`
+-- Extraindo dados da tabela `component`
 --
 
 INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`) VALUES
@@ -47,7 +48,7 @@ INSERT INTO `component` (`component_id`, `component_name`, `component_descriptio
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `component_scenario`
+-- Estrutura da tabela `component_scenario`
 --
 
 CREATE TABLE `component_scenario` (
@@ -56,7 +57,7 @@ CREATE TABLE `component_scenario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `component_scenario`
+-- Extraindo dados da tabela `component_scenario`
 --
 
 INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
@@ -68,10 +69,10 @@ INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `environmentType`
+-- Estrutura da tabela `environmenttype`
 --
 
-CREATE TABLE `environmentType` (
+CREATE TABLE `environmenttype` (
   `env_id` int(11) NOT NULL,
   `env_name` varchar(60) NOT NULL,
   `env_description` varchar(350) NOT NULL,
@@ -79,10 +80,10 @@ CREATE TABLE `environmentType` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `environmentType`
+-- Extraindo dados da tabela `environmenttype`
 --
 
-INSERT INTO `environmentType` (`env_id`, `env_name`, `env_description`, `env_status`) VALUES
+INSERT INTO `environmenttype` (`env_id`, `env_name`, `env_description`, `env_status`) VALUES
 (1, 'Urbano', 'Simulaçao de ambientes dentro de um perimetro urbano', 1),
 (2, 'Garagem', 'Cenario com uma garagem simples para entrar e sair', 1),
 (3, 'Rural', 'Cenario para estradas de terra e campos afastados da cidade', 1);
@@ -90,7 +91,44 @@ INSERT INTO `environmentType` (`env_id`, `env_name`, `env_description`, `env_sta
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `patient`
+-- Estrutura da tabela `objcomponent`
+--
+
+CREATE TABLE `objcomponent` (
+  `objComp_id` int(11) NOT NULL,
+  `objComp_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `objcomponent`
+--
+
+INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`) VALUES
+(1, 'Carros');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `objscenario`
+--
+
+CREATE TABLE `objscenario` (
+  `objSce_id` int(11) NOT NULL,
+  `objSce_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `objscenario`
+--
+
+INSERT INTO `objscenario` (`objSce_id`, `objSce_name`) VALUES
+(1, 'Garagem simples'),
+(2, 'Cidade simples');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `patient`
 --
 
 CREATE TABLE `patient` (
@@ -106,7 +144,7 @@ CREATE TABLE `patient` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `patient`
+-- Extraindo dados da tabela `patient`
 --
 
 INSERT INTO `patient` (`pat_id`, `pat_name`, `pat_cpf`, `pat_phone`, `pat_email`, `pat_note`, `pat_gender`, `pat_birthday`, `pat_status`) VALUES
@@ -118,7 +156,7 @@ INSERT INTO `patient` (`pat_id`, `pat_name`, `pat_cpf`, `pat_phone`, `pat_email`
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `psychologist`
+-- Estrutura da tabela `psychologist`
 --
 
 CREATE TABLE `psychologist` (
@@ -135,7 +173,7 @@ CREATE TABLE `psychologist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `psychologist`
+-- Extraindo dados da tabela `psychologist`
 --
 
 INSERT INTO `psychologist` (`psyc_id`, `psyc_name`, `psyc_cpf`, `psyc_email`, `psyc_phone`, `psyc_birthday`, `psyc_gender`, `psyc_crp`, `psyc_status`, `psyc_password`) VALUES
@@ -147,7 +185,7 @@ INSERT INTO `psychologist` (`psyc_id`, `psyc_name`, `psyc_cpf`, `psyc_email`, `p
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `scenario`
+-- Estrutura da tabela `scenario`
 --
 
 CREATE TABLE `scenario` (
@@ -159,7 +197,7 @@ CREATE TABLE `scenario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `scenario`
+-- Extraindo dados da tabela `scenario`
 --
 
 INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `env_id`, `scenario_status`) VALUES
@@ -171,7 +209,7 @@ INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `session`
+-- Estrutura da tabela `session`
 --
 
 CREATE TABLE `session` (
@@ -187,7 +225,7 @@ CREATE TABLE `session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `session`
+-- Extraindo dados da tabela `session`
 --
 
 INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
@@ -197,7 +235,7 @@ INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_i
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `session_component`
+-- Estrutura da tabela `session_component`
 --
 
 CREATE TABLE `session_component` (
@@ -206,7 +244,7 @@ CREATE TABLE `session_component` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `session_component`
+-- Extraindo dados da tabela `session_component`
 --
 
 INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
@@ -216,7 +254,7 @@ INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `weather`
+-- Estrutura da tabela `weather`
 --
 
 CREATE TABLE `weather` (
@@ -229,7 +267,7 @@ CREATE TABLE `weather` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `weather`
+-- Extraindo dados da tabela `weather`
 --
 
 INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `weather_status`, `weatherType_id`, `weather_info`) VALUES
@@ -239,92 +277,104 @@ INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `wea
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `weatherType`
+-- Estrutura da tabela `weathertype`
 --
 
-CREATE TABLE `weatherType` (
+CREATE TABLE `weathertype` (
   `weatherType_id` int(11) NOT NULL,
   `weatherType_name` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Despejando dados para a tabela `weatherType`
+-- Extraindo dados da tabela `weathertype`
 --
 
-INSERT INTO `weatherType` (`weatherType_id`, `weatherType_name`) VALUES
+INSERT INTO `weathertype` (`weatherType_id`, `weatherType_name`) VALUES
 (1, 'Sol'),
 (2, 'Chuva'),
 (3, 'Tempestade'),
 (4, 'Nublado');
 
 --
--- Índices de tabelas apagadas
+-- Índices para tabelas despejadas
 --
 
 --
--- Índices de tabela `component`
+-- Índices para tabela `component`
 --
 ALTER TABLE `component`
   ADD PRIMARY KEY (`component_id`);
 
 --
--- Índices de tabela `component_scenario`
+-- Índices para tabela `component_scenario`
 --
 ALTER TABLE `component_scenario`
   ADD PRIMARY KEY (`scenario_id`,`component_id`);
 
 --
--- Índices de tabela `environmentType`
+-- Índices para tabela `environmenttype`
 --
-ALTER TABLE `environmentType`
+ALTER TABLE `environmenttype`
   ADD PRIMARY KEY (`env_id`);
 
 --
--- Índices de tabela `patient`
+-- Índices para tabela `objcomponent`
+--
+ALTER TABLE `objcomponent`
+  ADD PRIMARY KEY (`objComp_id`);
+
+--
+-- Índices para tabela `objscenario`
+--
+ALTER TABLE `objscenario`
+  ADD PRIMARY KEY (`objSce_id`);
+
+--
+-- Índices para tabela `patient`
 --
 ALTER TABLE `patient`
   ADD PRIMARY KEY (`pat_id`),
   ADD UNIQUE KEY `unique_pat_cpf` (`pat_cpf`) USING BTREE;
 
 --
--- Índices de tabela `psychologist`
+-- Índices para tabela `psychologist`
 --
 ALTER TABLE `psychologist`
   ADD PRIMARY KEY (`psyc_id`),
   ADD UNIQUE KEY `unique_psyc_cpf` (`psyc_cpf`);
 
 --
--- Índices de tabela `scenario`
+-- Índices para tabela `scenario`
 --
 ALTER TABLE `scenario`
   ADD PRIMARY KEY (`scenario_id`);
 
 --
--- Índices de tabela `session`
+-- Índices para tabela `session`
 --
 ALTER TABLE `session`
   ADD PRIMARY KEY (`session_id`);
 
 --
--- Índices de tabela `session_component`
+-- Índices para tabela `session_component`
 --
 ALTER TABLE `session_component`
   ADD PRIMARY KEY (`session_id`,`component_id`);
 
 --
--- Índices de tabela `weather`
+-- Índices para tabela `weather`
 --
 ALTER TABLE `weather`
   ADD PRIMARY KEY (`weather_id`);
 
 --
--- Índices de tabela `weatherType`
+-- Índices para tabela `weathertype`
 --
-ALTER TABLE `weatherType`
+ALTER TABLE `weathertype`
   ADD PRIMARY KEY (`weatherType_id`);
 
 --
--- AUTO_INCREMENT de tabelas apagadas
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
@@ -334,10 +384,22 @@ ALTER TABLE `component`
   MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `environmentType`
+-- AUTO_INCREMENT de tabela `environmenttype`
 --
-ALTER TABLE `environmentType`
+ALTER TABLE `environmenttype`
   MODIFY `env_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `objcomponent`
+--
+ALTER TABLE `objcomponent`
+  MODIFY `objComp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de tabela `objscenario`
+--
+ALTER TABLE `objscenario`
+  MODIFY `objSce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `patient`
@@ -370,9 +432,9 @@ ALTER TABLE `weather`
   MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `weatherType`
+-- AUTO_INCREMENT de tabela `weathertype`
 --
-ALTER TABLE `weatherType`
+ALTER TABLE `weathertype`
   MODIFY `weatherType_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 

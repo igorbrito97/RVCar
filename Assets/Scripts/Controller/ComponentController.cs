@@ -25,10 +25,6 @@ public class ComponentController : MonoBehaviour
     [SerializeField] private Text textNameBScenario;
     [SerializeField] private Button rowScenario;
     [SerializeField] private GameObject rows2;
-    //private List<Configuration> scenarioList;
-    private KeyValuePair<int,string>[] arrayAllScenarios;
-    private List<KeyValuePair<int,string>> listScenario = new List<KeyValuePair<int, string>>();
-    private int selectedScenarioIndex;
 
     // tabela da tela inicial
     [SerializeField] private Text textIDB;
@@ -38,11 +34,20 @@ public class ComponentController : MonoBehaviour
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
     private GameObject rowsClone = null;
+    
+    //objeto virtual
+    [SerializeField] private Dropdown dropdownSelectObject;
+    //IMAGEM
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
     [SerializeField] private GameObject panelTableComponent;
     [SerializeField] private GameObject panelVirtualObj;
+
+    private KeyValuePair<int,string>[] arrayAllScenarios;
+    private KeyValuePair<int,string>[] arrayAllVirtualObj;
+    private List<KeyValuePair<int,string>> listScenario = new List<KeyValuePair<int, string>>();
+    private int selectedScenarioIndex;
 
     void Start()
     {
@@ -51,11 +56,6 @@ public class ComponentController : MonoBehaviour
         inputFieldDescription.characterLimit = 350;
 
         Begin();
-    }
-
-    void Update()
-    {
-        
     }
 
     public void Begin()
@@ -110,6 +110,17 @@ public class ComponentController : MonoBehaviour
         }
         dropdownScenario.value = -1;
         dropdownScenario.value = 0;
+
+        List<VirtualObject> listaVO = new VirtualObject().SearchAllComponent();
+        dropdownSelectObject.ClearOptions();
+        arrayAllVirtualObj = new KeyValuePair<int, string>[listaVO.Count];
+        for(int i = 0; i < listaVO.Count; i++)
+        {
+            arrayAllVirtualObj[i] = new KeyValuePair<int, string>(listaVO[i].Id,listaVO[i].Name);
+            dropdownSelectObject.options.Add(new Dropdown.OptionData(listaVO[i].Name));
+        }
+        dropdownSelectObject.value = -1;
+        dropdownSelectObject.value = 0;
     }
 
     public void ConfirmClick()

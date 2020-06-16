@@ -2502,12 +2502,26 @@ MonoBehaviour:
   numTurns: 1
   reverseTurn: 0
   steerHelper: 0.644
+  power: 10000
+  stabilizerXspeed: 800
 --- !u!1 &1481360200 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1927068234239744, guid: 4e1e39dc76695c44d89e084ab27e1b8f,
     type: 3}
   m_PrefabInstance: {fileID: 1481360189}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1481360208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481360190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8672c06e6e055374baa57bd3eefcf571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1530290622
 PrefabInstance:
   m_ObjectHideFlags: 0
