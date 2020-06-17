@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 16-Jun-2020 às 05:12
--- Versão do servidor: 10.4.6-MariaDB
--- versão do PHP: 7.1.32
+-- Tempo de geração: 17-Jun-2020 às 23:32
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -96,15 +96,16 @@ INSERT INTO `environmenttype` (`env_id`, `env_name`, `env_description`, `env_sta
 
 CREATE TABLE `objcomponent` (
   `objComp_id` int(11) NOT NULL,
-  `objComp_name` varchar(60) NOT NULL
+  `objComp_name` varchar(60) NOT NULL,
+  `objComp_file` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objcomponent`
 --
 
-INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`) VALUES
-(1, 'Carros');
+INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`, `objComp_file`) VALUES
+(1, 'Carros', '');
 
 -- --------------------------------------------------------
 
@@ -114,16 +115,17 @@ INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`) VALUES
 
 CREATE TABLE `objscenario` (
   `objSce_id` int(11) NOT NULL,
-  `objSce_name` varchar(60) NOT NULL
+  `objSce_name` varchar(60) NOT NULL,
+  `objSce_file` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objscenario`
 --
 
-INSERT INTO `objscenario` (`objSce_id`, `objSce_name`) VALUES
-(1, 'Garagem simples'),
-(2, 'Cidade simples');
+INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`) VALUES
+(1, 'Garagem simples', 'ScenarioImage/SimpleGarage'),
+(2, 'Cidade simples', 'ScenarioImage/SimpleCity');
 
 -- --------------------------------------------------------
 

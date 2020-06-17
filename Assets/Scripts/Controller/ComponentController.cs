@@ -37,7 +37,7 @@ public class ComponentController : MonoBehaviour
     
     //objeto virtual
     [SerializeField] private Dropdown dropdownSelectObject;
-    //IMAGEM
+    [SerializeField] private RawImage objImage;
 
     // paineis da tela
     [SerializeField] private GameObject panelEdit;
@@ -78,6 +78,7 @@ public class ComponentController : MonoBehaviour
         buttonDelete.gameObject.SetActive(false);
         listScenario.Clear();
         selectedScenarioIndex = -1;
+        objImage.texture = null;
         //tableScenarioClear
         var clones = new Transform[rows2.transform.childCount];
         for (var i = 1; i < clones.Length; i++)
@@ -120,7 +121,6 @@ public class ComponentController : MonoBehaviour
             dropdownSelectObject.options.Add(new Dropdown.OptionData(listaVO[i].Name));
         }
         dropdownSelectObject.value = -1;
-        dropdownSelectObject.value = 0;
     }
 
     public void ConfirmClick()
@@ -289,6 +289,15 @@ public class ComponentController : MonoBehaviour
             Destroy(clone.gameObject);
             listScenario.RemoveAt(selectedScenarioIndex);
             selectedScenarioIndex = -1;
+        }
+    }
+
+    public void ChangeImage()
+    {
+        if(dropdownSelectObject.value > -1)
+        {
+            VirtualObject obj = new VirtualObject().SearchComponent(arrayAllVirtualObj[dropdownSelectObject.value].Key);
+            objImage.texture = Resources.Load(obj.File) as Texture;
         }
     }
 }

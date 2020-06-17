@@ -8,15 +8,17 @@ public class VirtualObject : MonoBehaviour
 {
     private int id;
     private string name;
+    private string file;
 
     public VirtualObject()
     {
     }
 
-    public VirtualObject(int id, string name)
+    public VirtualObject(int id, string name, string file)
     {
         this.id = id;
         this.name = name;
+        this.file = file;
     }
     public List<VirtualObject> SearchAllComponent()
     {
@@ -31,12 +33,36 @@ public class VirtualObject : MonoBehaviour
         {
             list.Add(new VirtualObject(
                 Convert.ToInt32(data["objComp_id"]),
-                data["objComp_name"].ToString()
+                data["objComp_name"].ToString(),
+                data["objComp_file"].ToString()
             ));
         }
         data.Close();
 
         return list;
+    }
+
+     public VirtualObject SearchComponent(int id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        VirtualObject obj = null;
+        string sql = "select * from objComponent where objComp_id = " + id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            obj = new VirtualObject(
+                Convert.ToInt32(data["objComp_id"]),
+                data["objComp_name"].ToString(),
+                data["objComp_file"].ToString()
+            );
+        }
+                
+        data.Close();
+        return obj;
     }
 
     public List<VirtualObject> SearchAllScenario()
@@ -52,7 +78,8 @@ public class VirtualObject : MonoBehaviour
         {
             list.Add(new VirtualObject(
                 Convert.ToInt32(data["objSce_id"]),
-                data["objSce_name"].ToString()
+                data["objSce_name"].ToString(),
+                data["objSce_file"].ToString()
             ));
         }
         data.Close();
@@ -60,8 +87,32 @@ public class VirtualObject : MonoBehaviour
         return list;
     }
 
+    public VirtualObject SearchScenario(int id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        VirtualObject obj = null;
+        string sql = "select * from objScenario where objSce_id = " + id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            obj = new VirtualObject(
+                Convert.ToInt32(data["objSce_id"]),
+                data["objSce_name"].ToString(),
+                data["objSce_file"].ToString()
+            );
+        }
+                
+        data.Close();
+        return obj;
+    }
+
 
     
     public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
+    public string File { get => file; set => name = value; }
 }
