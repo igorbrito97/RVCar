@@ -43,10 +43,18 @@ public class RunSessionController : MonoBehaviour {
     [SerializeField] private GameObject rowsComp;
     private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
 
+    //campos da tela de pré execucao
+    [SerializeField] private Dropdown dropdownSelectCar;
+    [SerializeField] private RawImage carImage;
+    [SerializeField] private Toggle automaticToggle;
+    [SerializeField] private Toggle manualToggle;
+
+    private KeyValuePair<int,string>[] arrayAllCars;
 
 	// paineis da tela
     [SerializeField] private GameObject panelEdit;
     [SerializeField] private GameObject panelReady;
+    [SerializeField] private GameObject panelReady2;
 
 	void Start () {
 		inputFieldSearch.characterLimit = 60;
@@ -80,6 +88,7 @@ public class RunSessionController : MonoBehaviour {
 		textTitle.text = "Executar Sessão";
 		panelEdit.gameObject.SetActive(false);
         panelReady.gameObject.SetActive(false);
+        panelReady2.gameObject.SetActive(false);
         inputFieldSearch.text = "";
 		Clear();
         buttonAlter.gameObject.SetActive(true);
@@ -178,7 +187,10 @@ public class RunSessionController : MonoBehaviour {
 
     public void RunClick()
     {
-
+        ClearReadyPanel();
+        panelReady.gameObject.SetActive(true);
+        panelReady2.gameObject.SetActive(true);
+        LoadCarDropdown();
     }
 
     public void DeleteClick()
@@ -213,6 +225,28 @@ public class RunSessionController : MonoBehaviour {
     public void RowClickComp(Button br)
     {
 
+    }
+
+    public void ClearReadyPanel()
+    {
+        manualToggle.isOn = true;
+        automaticToggle.isOn = false;
+        carImage.texture = null;
+        dropdownSelectCar.ClearOptions();
+    }
+
+    private void LoadCarDropdown()
+    {
+        List<VirtualObject> list = new VirtualObject().SearchAllCar();
+        dropdownSelectCar.ClearOptions();
+        arrayAllCars = new KeyValuePair<int, string>[list.Count];
+        for(int i = 0; i < list.Count; i++)
+        {
+            arrayAllCars[i] = new KeyValuePair<int, string>(list[i].Id,list[i].Name);
+            dropdownSelectCar.options.Add(new Dropdown.OptionData(list[i].Name));
+        }
+        dropdownSelectCar.value = -1;
+        dropdownSelectCar.value = 0;
     }
 
 }

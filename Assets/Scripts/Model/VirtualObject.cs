@@ -109,6 +109,53 @@ public class VirtualObject : MonoBehaviour
         data.Close();
         return obj;
     }
+    
+    public List<VirtualObject> SearchAllCar()
+    {
+        
+        List<VirtualObject> list = new List<VirtualObject>();/*
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        String sql = "select * from objScenario ";
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+        while (data.Read())
+        {
+            list.Add(new VirtualObject(
+                Convert.ToInt32(data["objSce_id"]),
+                data["objSce_name"].ToString(),
+                data["objSce_file"].ToString()
+            ));
+        }
+        data.Close();
+    */
+        return list;
+    }
+
+    public VirtualObject SearchCar(int id)
+    {
+        VirtualObject obj = null;
+        /*
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        string sql = "select * from objScenario where objSce_id = " + id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            obj = new VirtualObject(
+                Convert.ToInt32(data["objSce_id"]),
+                data["objSce_name"].ToString(),
+                data["objSce_file"].ToString()
+            );
+        }
+                
+        data.Close();*/
+        return obj;
+    }
 
 
     
