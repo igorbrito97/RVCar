@@ -43,6 +43,19 @@ public class CarControllerAutomatic : MonoBehaviour
     {
         Debug.Log(LogitechGSDK.LogiSteeringInitialize(false));
         carRigidbody = GetComponent<Rigidbody>();
+        if (steeringWheel)
+        {
+            switch (rotation)
+            {
+                case WheelType.TurnInX:
+                    initialSteeringRotation = steeringWheel.transform.localEulerAngles.x;
+                    break;
+                case WheelType.TurnInZ:
+                    initialSteeringRotation = steeringWheel.transform.localEulerAngles.z;
+                    break;
+
+            }
+        }
     }
     
     private void Start()
@@ -188,7 +201,7 @@ public class CarControllerAutomatic : MonoBehaviour
         if (steeringWheel)
         {
             int speedMultiplier = reverseTurn ? -1 : 1;
-            float rotX, rotY, rotZ, wheelDirection = steeringAngle * speedMultiplier;
+            float rotX, rotY, rotZ, wheelDirection = horizontalInput * speedMultiplier;
             steeringWheelAngle = Mathf.MoveTowards(steeringWheelAngle, wheelDirection, Time.deltaTime * wheelSpeedTurn);
             rotX = steeringWheel.transform.localEulerAngles.x;
             rotY = steeringWheel.transform.localEulerAngles.y;
