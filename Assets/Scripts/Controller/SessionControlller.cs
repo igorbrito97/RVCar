@@ -134,11 +134,6 @@ public class SessionControlller : MonoBehaviour
 
 		Begin();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void Begin()
     {
@@ -152,6 +147,7 @@ public class SessionControlller : MonoBehaviour
         toggleStatusSearch.isOn = false;
         Clear();
         changePanelEditInteractable(false);
+        buttonExecute.gameObject.SetActive(true);
         buttonDelete.gameObject.SetActive(true);
         buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(true);
@@ -311,6 +307,16 @@ public class SessionControlller : MonoBehaviour
             {
                 string returnMsg = session.Insert();
                 Debug.Log(returnMsg);
+                if(returnMsg == "Ok")
+                {
+                    state = 1;
+                    textSessionID.text = GameManager.instance.GetMaxPK("session","session_id").ToString();
+                    changePanelEditInteractable(false);
+                    buttonAlter.gameObject.SetActive(false);
+                    buttonDelete.gameObject.SetActive(false);
+                    buttonExecute.gameObject.SetActive(true);
+                    buttonConfirm.gameObject.SetActive(false);
+                }
             }
             else if(state == 2)//alter
             {
@@ -387,7 +393,9 @@ public class SessionControlller : MonoBehaviour
 
     public void ExecuteClick()
     {
-
+        RunSessionController controller = panelRun.GetComponent<RunSessionController>();
+        controller.ExecuteClickSessionController(new Session().Search(Convert.ToInt32(textSessionID.text)));
+        this.gameObject.SetActive(false);
     }
 
     public void AddComponentClick()
@@ -688,5 +696,10 @@ public class SessionControlller : MonoBehaviour
             clones[i] = rowsWeather.transform.GetChild(i);
             Destroy(clones[i].gameObject);
         }
+    }
+
+    void OnDisable()
+    {
+        Begin();
     }
 }

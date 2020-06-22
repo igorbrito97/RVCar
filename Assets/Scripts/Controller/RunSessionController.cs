@@ -79,8 +79,6 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherInfo.interactable = false;
         inputFieldWeatherName.interactable = false;
         inputFieldWeatherType.interactable = false;
-
-		Begin();
 	}
 
 	public void Begin()
@@ -156,8 +154,12 @@ public class RunSessionController : MonoBehaviour {
 
 	public void RowClick(Button br)
 	{
-        Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
-        
+        Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));   
+        FillPanel(session);
+	}
+
+    private void FillPanel(Session session)
+    {
         textSessionID.text = session.Id.ToString();
         inputFieldPatBirthday.text = session.Patient.Birthday.Day + "/" + session.Patient.Birthday.Month + "/" + session.Patient.Birthday.Year;
         inputFieldPatName.text = session.Patient.Name;
@@ -177,8 +179,7 @@ public class RunSessionController : MonoBehaviour {
         }
 
         //ver botoes
-
-	}
+    }
 
     public void AlterClick()
     {
@@ -247,6 +248,18 @@ public class RunSessionController : MonoBehaviour {
         }
         dropdownSelectCar.value = -1;
         dropdownSelectCar.value = 0;
+    }
+
+    public void ExecuteClickSessionController(Session session)
+    {
+        this.gameObject.SetActive(true);
+        panelEdit.gameObject.SetActive(true);
+        FillPanel(session);
+    }
+
+    void OnDisable()
+    {
+        Begin();
     }
 
 }

@@ -64,10 +64,7 @@ public class PsychologistController : MonoBehaviour {
         inputFieldPhone.contentType = InputField.ContentType.IntegerNumber;
         inputFieldYear.contentType = InputField.ContentType.IntegerNumber;
         inputFieldPassword.contentType = InputField.ContentType.Password;
-        inputFieldConfirmPassword.contentType = InputField.ContentType.Password; 
-        
-        Begin();
-        Debug.Log("START");
+        inputFieldConfirmPassword.contentType = InputField.ContentType.Password;
     }
     public void Begin()
     {
@@ -262,13 +259,8 @@ public class PsychologistController : MonoBehaviour {
 
     public void SettingsAlterClick(Psychologist psyc)
     {
-        Debug.Log("SETTTT");
-        Invoke("FunctionCall",2.0f);
-    }
-
-    void FunctionCall()
-    {
-        panelEdit.SetActive(false);
-        LoadPage(GameManager.instance.Psychologist);
+        this.gameObject.SetActive(true);
+        panelEdit.gameObject.SetActive(true);
+        LoadPage(psyc);
     }
 }

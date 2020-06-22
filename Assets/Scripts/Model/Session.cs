@@ -200,6 +200,7 @@ public class Session : MonoBehaviour {
 
     public Session Search(int id) //nao busca tudo do stage porque tem scenario, weather
     {
+        Debug.Log("SEARCHZADA" + id);
         Session session = null;
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
