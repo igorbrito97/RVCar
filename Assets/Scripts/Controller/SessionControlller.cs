@@ -23,9 +23,12 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private InputField inputFieldPatient;
     [SerializeField] private InputField inputFieldScenario;
     [SerializeField] private InputField inputFieldWeather;
+    [SerializeField] private InputField inputFieldCar;
+    [SerializeField] private InputField inputFieldGear;
     [SerializeField] private Button buttonSelectPatient;
     [SerializeField] private Button buttonSelectScenario;
     [SerializeField] private Button buttonSelectWeather;
+    [SerializeField] private Button buttonSelectExecutionConfig;
     [SerializeField] private Button buttonAddComponent;
     [SerializeField] private Button buttonDeleteComponent;
     [SerializeField] private Button buttonExecute;
@@ -104,10 +107,17 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private InputField inputFieldWeatherType;
     [SerializeField] private InputField inputFieldWeatherDescription;
 
+    //campos da tela de configuracao da execucao
+    [SerializeField] private Dropdown dropdownSelectCar;
+    [SerializeField] private RawImage carImage;
+    [SerializeField] private Toggle automaticToggle;
+    [SerializeField] private Toggle manualToggle;
+
     //lista de objetos
     private Scenario currentScenario = null;
     private Patient currentPatient = null;
     private Weather currentWeather = null;
+    private KeyValuePair<int,string>[] arrayAllCars;
 
     // paineis da tela
     [SerializeField] private GameObject panelRun;
@@ -122,6 +132,7 @@ public class SessionControlller : MonoBehaviour
     [SerializeField] private GameObject panelSelectWeather;
     [SerializeField] private GameObject panelWeather1;
     [SerializeField] private GameObject panelWeather2;
+    [SerializeField] private GameObject panelExecutionConfig;
 
     void Start () {
         inputFieldSearch.characterLimit = 60;
@@ -143,6 +154,7 @@ public class SessionControlller : MonoBehaviour
         panelSelectPatient.gameObject.SetActive(false);
         panelSelectScenario.gameObject.SetActive(false);
         panelSelectWeather.gameObject.SetActive(false);
+        panelExecutionConfig.gameObject.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
         Clear();
@@ -196,6 +208,7 @@ public class SessionControlller : MonoBehaviour
         buttonSelectWeather.interactable = flag;
         buttonAddComponent.interactable = flag;
         buttonDeleteComponent.interactable = flag;
+        buttonSelectExecutionConfig.interactable = flag;
     }
 
     public void TableLoad()
@@ -696,6 +709,28 @@ public class SessionControlller : MonoBehaviour
             clones[i] = rowsWeather.transform.GetChild(i);
             Destroy(clones[i].gameObject);
         }
+    }
+
+    public void ClearExecutionConfigPanel()
+    {
+        manualToggle.isOn = true;
+        automaticToggle.isOn = false;
+        carImage.texture = null;
+        dropdownSelectCar.ClearOptions();
+    }
+
+    public void LoadCarDropdown()
+    {
+        List<VirtualObject> list = new VirtualObject().SearchAllCar();
+        dropdownSelectCar.ClearOptions();
+        arrayAllCars = new KeyValuePair<int, string>[list.Count];
+        for(int i = 0; i < list.Count; i++)
+        {
+            arrayAllCars[i] = new KeyValuePair<int, string>(list[i].Id,list[i].Name);
+            dropdownSelectCar.options.Add(new Dropdown.OptionData(list[i].Name));
+        }
+        dropdownSelectCar.value = -1;
+        dropdownSelectCar.value = 0;
     }
 
     void OnDisable()

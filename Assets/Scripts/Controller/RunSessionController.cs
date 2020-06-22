@@ -32,6 +32,8 @@ public class RunSessionController : MonoBehaviour {
     [SerializeField] private InputField inputFieldWeatherInfo;
     [SerializeField] private InputField inputFieldScenarioName;
     [SerializeField] private InputField inputFieldScenarioEnvType;
+    [SerializeField] private InputField inputFieldCar;
+    [SerializeField] private InputField inputFieldGear;
     [SerializeField] private Button buttonAlter;
     [SerializeField] private Button buttonRun;
     [SerializeField] private Button buttonDelete;
@@ -43,18 +45,8 @@ public class RunSessionController : MonoBehaviour {
     [SerializeField] private GameObject rowsComp;
     private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
 
-    //campos da tela de pré execucao
-    [SerializeField] private Dropdown dropdownSelectCar;
-    [SerializeField] private RawImage carImage;
-    [SerializeField] private Toggle automaticToggle;
-    [SerializeField] private Toggle manualToggle;
-
-    private KeyValuePair<int,string>[] arrayAllCars;
-
 	// paineis da tela
     [SerializeField] private GameObject panelEdit;
-    [SerializeField] private GameObject panelReady;
-    [SerializeField] private GameObject panelReady2;
 
 	void Start () {
 		inputFieldSearch.characterLimit = 60;
@@ -68,8 +60,10 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherInfo.characterLimit = 60;
         inputFieldWeatherName.characterLimit = 60;
         inputFieldWeatherType.characterLimit = 60;
+        inputFieldCar.characterLimit = 60;
+        inputFieldGear.characterLimit = 60;
 
-        inputFieldPatBirthday.interactable = false;
+        inputFieldPatBirthday.interactable = 
         inputFieldPatName.interactable = false;
         inputFieldPsycName.interactable = false;
         inputFieldScenarioEnvType.interactable = false;
@@ -79,14 +73,14 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherInfo.interactable = false;
         inputFieldWeatherName.interactable = false;
         inputFieldWeatherType.interactable = false;
+        inputFieldCar.interactable = false;
+        inputFieldGear.interactable = false;
 	}
 
 	public void Begin()
 	{
 		textTitle.text = "Executar Sessão";
 		panelEdit.gameObject.SetActive(false);
-        panelReady.gameObject.SetActive(false);
-        panelReady2.gameObject.SetActive(false);
         inputFieldSearch.text = "";
 		Clear();
         buttonAlter.gameObject.SetActive(true);
@@ -188,10 +182,6 @@ public class RunSessionController : MonoBehaviour {
 
     public void RunClick()
     {
-        ClearReadyPanel();
-        panelReady.gameObject.SetActive(true);
-        panelReady2.gameObject.SetActive(true);
-        LoadCarDropdown();
     }
 
     public void DeleteClick()
@@ -228,29 +218,7 @@ public class RunSessionController : MonoBehaviour {
 
     }
 
-    public void ClearReadyPanel()
-    {
-        manualToggle.isOn = true;
-        automaticToggle.isOn = false;
-        carImage.texture = null;
-        dropdownSelectCar.ClearOptions();
-    }
-
-    private void LoadCarDropdown()
-    {
-        List<VirtualObject> list = new VirtualObject().SearchAllCar();
-        dropdownSelectCar.ClearOptions();
-        arrayAllCars = new KeyValuePair<int, string>[list.Count];
-        for(int i = 0; i < list.Count; i++)
-        {
-            arrayAllCars[i] = new KeyValuePair<int, string>(list[i].Id,list[i].Name);
-            dropdownSelectCar.options.Add(new Dropdown.OptionData(list[i].Name));
-        }
-        dropdownSelectCar.value = -1;
-        dropdownSelectCar.value = 0;
-    }
-
-    public void ExecuteClickSessionController(Session session)
+        public void ExecuteClickSessionController(Session session)
     {
         this.gameObject.SetActive(true);
         panelEdit.gameObject.SetActive(true);
