@@ -733,6 +733,15 @@ public class SessionControlller : MonoBehaviour
         dropdownSelectCar.value = 0;
     }
 
+    public void ChangeImage()
+    {
+        if(dropdownSelectCar.value > -1)
+        {
+            VirtualObject obj = new VirtualObject().SearchCar(arrayAllCars[dropdownSelectCar.value].Key);
+            carImage.texture = Resources.Load(obj.File) as Texture;
+        }
+    }
+
     void OnDisable()
     {
         Begin();

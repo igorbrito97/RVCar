@@ -113,33 +113,31 @@ public class VirtualObject : MonoBehaviour
     public List<VirtualObject> SearchAllCar()
     {
         
-        List<VirtualObject> list = new List<VirtualObject>();/*
+        List<VirtualObject> list = new List<VirtualObject>();
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        String sql = "select * from objScenario ";
+        String sql = "select * from objCar ";
 
         command.CommandText = sql;
         data = command.ExecuteReader();
         while (data.Read())
         {
             list.Add(new VirtualObject(
-                Convert.ToInt32(data["objSce_id"]),
-                data["objSce_name"].ToString(),
-                data["objSce_file"].ToString()
+                Convert.ToInt32(data["objCar_id"]),
+                data["objCar_name"].ToString(),
+                data["objCar_file"].ToString()
             ));
         }
         data.Close();
-    */
         return list;
     }
 
     public VirtualObject SearchCar(int id)
     {
         VirtualObject obj = null;
-        /*
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        string sql = "select * from objScenario where objSce_id = " + id;
+        string sql = "select * from objCar where objCar_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -147,13 +145,13 @@ public class VirtualObject : MonoBehaviour
         if (data.Read())
         {
             obj = new VirtualObject(
-                Convert.ToInt32(data["objSce_id"]),
-                data["objSce_name"].ToString(),
-                data["objSce_file"].ToString()
+                Convert.ToInt32(data["objCar_id"]),
+                data["objCar_name"].ToString(),
+                data["objCar_file"].ToString()
             );
         }
                 
-        data.Close();*/
+        data.Close();
         return obj;
     }
 

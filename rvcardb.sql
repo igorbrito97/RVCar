@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 17-Jun-2020 às 23:32
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.3
+-- Tempo de geração: 23-Jun-2020 às 04:59
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -87,6 +87,27 @@ INSERT INTO `environmenttype` (`env_id`, `env_name`, `env_description`, `env_sta
 (1, 'Urbano', 'Simulaçao de ambientes dentro de um perimetro urbano', 1),
 (2, 'Garagem', 'Cenario com uma garagem simples para entrar e sair', 1),
 (3, 'Rural', 'Cenario para estradas de terra e campos afastados da cidade', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `objcar`
+--
+
+CREATE TABLE `objcar` (
+  `objCar_id` int(11) NOT NULL,
+  `objCar_name` varchar(60) NOT NULL,
+  `objCar_file` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `objcar`
+--
+
+INSERT INTO `objcar` (`objCar_id`, `objCar_name`, `objCar_file`) VALUES
+(1, 'Esportivo', 'CarImage/SportCoupe'),
+(2, 'Pickup 1', 'CarImage/Pickup1'),
+(3, 'Pickup 2', 'CarImage/Pickup2');
 
 -- --------------------------------------------------------
 
@@ -320,6 +341,12 @@ ALTER TABLE `environmenttype`
   ADD PRIMARY KEY (`env_id`);
 
 --
+-- Índices para tabela `objcar`
+--
+ALTER TABLE `objcar`
+  ADD PRIMARY KEY (`objCar_id`);
+
+--
 -- Índices para tabela `objcomponent`
 --
 ALTER TABLE `objcomponent`
@@ -390,6 +417,12 @@ ALTER TABLE `component`
 --
 ALTER TABLE `environmenttype`
   MODIFY `env_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `objcar`
+--
+ALTER TABLE `objcar`
+  MODIFY `objCar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `objcomponent`

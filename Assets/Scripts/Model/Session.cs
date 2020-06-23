@@ -13,6 +13,8 @@ public class Session : MonoBehaviour {
     private Scenario scenario;
     private Weather weather;
     private List<KeyValuePair<int, string>> listComponents;
+    private int gear;// 0 = manual, 1 = automatic
+    private VirtualObject car;
     private int status;
     private int isPublic;
 
@@ -385,6 +387,8 @@ public class Session : MonoBehaviour {
     public Patient Patient { get => patient; set => patient = value; }
     public Scenario Scenario { get => scenario; set => scenario = value; }
     public Weather Weather { get => weather; set => weather = value; }
+    public int Gear { get => gear; set => gear = value; }
+    public VirtualObject Car { get => car; set => car = value; }
     public int Status { get => status; set => status = value; }
     public int IsPublic { get => isPublic; set => isPublic = value; }
     public List<KeyValuePair<int, string>> ListComponents { get => listComponents; set => listComponents = value; }
