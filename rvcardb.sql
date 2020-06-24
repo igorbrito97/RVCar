@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 23-Jun-2020 às 04:59
+-- Tempo de geração: 24-Jun-2020 às 05:40
 -- Versão do servidor: 10.4.6-MariaDB
 -- versão do PHP: 7.1.32
 
@@ -32,18 +32,19 @@ CREATE TABLE `component` (
   `component_id` int(11) NOT NULL,
   `component_name` varchar(60) NOT NULL,
   `component_description` varchar(250) NOT NULL,
-  `component_status` tinyint(4) NOT NULL
+  `component_status` tinyint(4) NOT NULL,
+  `objComp_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `component`
 --
 
-INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`) VALUES
-(1, '', '', 0),
-(2, 'Obstaculo', 'Tartaruga', 1),
-(3, 'Semaforo', 'Semarf', 1),
-(4, 'Transito', 'Transss', 1);
+INSERT INTO `component` (`component_id`, `component_name`, `component_description`, `component_status`, `objComp_id`) VALUES
+(1, '', '', 0, 0),
+(2, 'Obstaculo', 'Tartaruga', 1, 0),
+(3, 'Semaforo', 'Semarf', 1, 0),
+(4, 'Transito', 'Transss', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -97,17 +98,18 @@ INSERT INTO `environmenttype` (`env_id`, `env_name`, `env_description`, `env_sta
 CREATE TABLE `objcar` (
   `objCar_id` int(11) NOT NULL,
   `objCar_name` varchar(60) NOT NULL,
-  `objCar_file` varchar(100) NOT NULL
+  `objCar_file` varchar(100) NOT NULL,
+  `objCar_prefab` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objcar`
 --
 
-INSERT INTO `objcar` (`objCar_id`, `objCar_name`, `objCar_file`) VALUES
-(1, 'Esportivo', 'CarImage/SportCoupe'),
-(2, 'Pickup 1', 'CarImage/Pickup1'),
-(3, 'Pickup 2', 'CarImage/Pickup2');
+INSERT INTO `objcar` (`objCar_id`, `objCar_name`, `objCar_file`, `objCar_prefab`) VALUES
+(1, 'Esportivo', 'CarImage/SportCoupe', ''),
+(2, 'Pickup 1', 'CarImage/Pickup1', ''),
+(3, 'Pickup 2', 'CarImage/Pickup2', '');
 
 -- --------------------------------------------------------
 
@@ -126,7 +128,8 @@ CREATE TABLE `objcomponent` (
 --
 
 INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`, `objComp_file`) VALUES
-(1, 'Carros', '');
+(1, 'Carros', 'ComponentImage/Car'),
+(2, 'Garagem', 'ComponentImage/Garage');
 
 -- --------------------------------------------------------
 
@@ -145,8 +148,10 @@ CREATE TABLE `objscenario` (
 --
 
 INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`) VALUES
-(1, 'Garagem simples', 'ScenarioImage/SimpleGarage'),
-(2, 'Cidade simples', 'ScenarioImage/SimpleCity');
+(1, 'Garagem Teste', 'ScenarioImage/GarageTest'),
+(2, 'Cidade Teste', 'ScenarioImage/CityTest'),
+(5, 'Cidade', 'ScenarioImage/City'),
+(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad');
 
 -- --------------------------------------------------------
 
@@ -216,18 +221,19 @@ CREATE TABLE `scenario` (
   `scenario_name` varchar(60) NOT NULL,
   `scenario_description` varchar(250) NOT NULL,
   `env_id` int(11) NOT NULL,
-  `scenario_status` tinyint(4) NOT NULL
+  `scenario_status` tinyint(4) NOT NULL,
+  `objSce_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `scenario`
 --
 
-INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `env_id`, `scenario_status`) VALUES
-(1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 1),
-(2, 'Rural', 'Rural', 3, 1),
-(3, 'Garagem', 'Graaaag', 2, 1),
-(4, 'Garagem dificil', 'alo alo', 2, 1);
+INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `env_id`, `scenario_status`, `objSce_id`) VALUES
+(1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 1, 0),
+(2, 'Rural', 'Rural', 3, 1, 0),
+(3, 'Garagem', 'Graaaag', 2, 1, 0),
+(4, 'Garagem dificil', 'alo alo', 2, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -244,16 +250,18 @@ CREATE TABLE `session` (
   `session_name` varchar(60) NOT NULL,
   `session_description` varchar(250) NOT NULL,
   `session_status` tinyint(4) NOT NULL,
-  `session_public` tinyint(4) NOT NULL
+  `session_public` tinyint(4) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `session_gear` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `session`
 --
 
-INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`) VALUES
-(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1),
-(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1);
+INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`, `car_id`, `session_gear`) VALUES
+(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1, 0, NULL),
+(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -428,13 +436,13 @@ ALTER TABLE `objcar`
 -- AUTO_INCREMENT de tabela `objcomponent`
 --
 ALTER TABLE `objcomponent`
-  MODIFY `objComp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `objComp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `objscenario`
 --
 ALTER TABLE `objscenario`
-  MODIFY `objSce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `objSce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `patient`
