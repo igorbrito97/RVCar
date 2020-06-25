@@ -12,22 +12,26 @@ public class Session : MonoBehaviour {
     private Patient patient;
     private Scenario scenario;
     private Weather weather;
-    private List<KeyValuePair<int, string>> listComponents;
-    private int gear;// 0 = manual, 1 = automatic
+
+    //uma lista de par com 1o elemento = id e 2o = par de nome e quantidade
+    private List<KeyValuePair<int,KeyValuePair<string,int>>> listComponents;
+    private int gear;//0 = manual, 1 = automatic
     private VirtualObject car;
     private int status;
     private int isPublic;
-
-
+    
     public Session()
     {
     }
+    
     public Session(Psychologist psychologist)
     {
         this.psychologist = psychologist;
+        
     }
 
-    public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic)
+    public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, 
+        int status, int isPublic,VirtualObject car, int gear)
     {
         this.name = name;
         this.description = description;
@@ -38,9 +42,12 @@ public class Session : MonoBehaviour {
         this.status = status;
         this.isPublic = isPublic;
         this.listComponents = null;
+        this.car = car;
+        this.gear = gear;
     }
 
-    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic)
+    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario,
+         Weather weather, int status, int isPublic)
     {
         this.id = id;
         this.name = name;
@@ -52,7 +59,27 @@ public class Session : MonoBehaviour {
         this.status = status;
         this.isPublic = isPublic;
         this.listComponents = null;
-    }public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic, List<KeyValuePair<int, string>> listComponents)
+    }
+
+    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario,
+         Weather weather, int status, int isPublic,VirtualObject car, int gear)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.psychologist = psychologist;
+        this.patient = patient;
+        this.scenario = scenario;
+        this.weather = weather;
+        this.status = status;
+        this.isPublic = isPublic;
+        this.listComponents = null;
+        this.car = car;
+        this.gear = gear;
+    }
+    public Session(string name, string description, Psychologist psychologist, Patient patient, Scenario scenario,
+         Weather weather, int status, int isPublic, List<KeyValuePair<int,KeyValuePair<string,int>>> listComponents,
+         VirtualObject car, int gear)
     {
         this.name = name;
         this.description = description;
@@ -63,9 +90,13 @@ public class Session : MonoBehaviour {
         this.status = status;
         this.isPublic = isPublic;
         this.listComponents = listComponents;
+        this.car = car;
+        this.gear = gear;
     }
 
-    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario, Weather weather, int status, int isPublic, List<KeyValuePair<int, string>> listComponents)
+    public Session(int id, string name, string description, Psychologist psychologist, Patient patient, Scenario scenario,
+         Weather weather, int status, int isPublic, List<KeyValuePair<int,KeyValuePair<string,int>>> listComponents,
+         VirtualObject car, int gear)
     {
         this.id = id;
         this.name = name;
@@ -77,6 +108,8 @@ public class Session : MonoBehaviour {
         this.status = status;
         this.isPublic = isPublic;
         this.listComponents = listComponents;
+        this.car = car;
+        this.gear = gear;
     }
 
     public string Insert()
@@ -91,8 +124,10 @@ public class Session : MonoBehaviour {
                             session_name,
                             session_description,
                             session_status,
-                            session_public)
-                    values ($ps,$pt,$we,$sce,'$n','$d',$st,$ip);";
+                            session_public,
+                            car_id,
+                            session_gear)
+                    values ($ps,$pt,$we,$sce,'$n','$d',$st,$ip,$car,$gear);";
 
         sql = sql.Replace("$ps", this.psychologist.Id + "");
         sql = sql.Replace("$pt", this.patient.Id + "");
@@ -102,6 +137,8 @@ public class Session : MonoBehaviour {
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$st", this.status + "");
         sql = sql.Replace("$ip", this.isPublic + "");
+        sql = sql.Replace("$car", this.car.Id + "");
+        sql = sql.Replace("$gear", this.gear + "");
 
         Debug.Log("inserting, sql:" + sql);
         command.CommandText = sql;
@@ -133,7 +170,9 @@ public class Session : MonoBehaviour {
                         session_name = '$n',
                         session_description = '$d',
                         session_status = $status,
-                        session_public = $ip
+                        session_public = $ip,
+                        car_id = $car,
+                        session_gear = $gear
                         where session_id = " + id;
 
         sql = sql.Replace("$ps", this.psychologist.Id + "");
@@ -144,6 +183,8 @@ public class Session : MonoBehaviour {
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$status", this.status + "");
         sql = sql.Replace("$ip", this.isPublic + "");
+        sql = sql.Replace("$car", this.car.Id + "");
+        sql = sql.Replace("$gear", this.gear + "");
 
         Debug.Log("altering. " + sql);
         command.CommandText = sql;
@@ -182,10 +223,11 @@ public class Session : MonoBehaviour {
         for (int i = 0; i < this.ListComponents.Count && success; i++)
         {
             string sql = @"insert into session_component
-                    (session_id, component_id)
-                    values ($s,$c);";
+                    (session_id, component_id, sescomp_quantity)
+                    values ($s,$c,$q);";
             sql = sql.Replace("$s", id + "");
             sql = sql.Replace("$c", this.ListComponents[i].Key + "");
+            sql = sql.Replace("$q", this.ListComponents[i].Value.Value + "");
 
             try
             {
@@ -200,16 +242,17 @@ public class Session : MonoBehaviour {
         return success;
     }
 
-    public Session Search(int id) //nao busca tudo do stage porque tem scenario, weather
+    public Session Search(int id)
     {
         Debug.Log("SEARCHZADA" + id);
         Session session = null;
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         string sql = @"select * from session as ses inner join psychologist inner join weather wea inner join patient inner join scenario as sce 
-                inner join weatherType as wt inner join environmentType as et where 
+                inner join weatherType as wt inner join environmentType as et inner join objCar where 
                 psychologist_id = psyc_id and ses.weather_id = wea.weather_id and patient_id = pat_id and 
-                sce.scenario_id = ses.scenario_id and wt.weatherType_id = wea.weatherType_id and et.env_id = sce.env_id and session_id = " + id;
+                sce.scenario_id = ses.scenario_id and wt.weatherType_id = wea.weatherType_id and et.env_id = sce.env_id 
+                and car_id = objCar_id and session_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -248,7 +291,8 @@ public class Session : MonoBehaviour {
                         data["env_name"].ToString()
                     ),
                     data["scenario_description"].ToString(),
-                    Convert.ToInt32(data["scenario_status"])
+                    Convert.ToInt32(data["scenario_status"]),
+                    new VirtualObject(Convert.ToInt32(data["objSce_id"]))
                 ),
                 new Weather(
                     Convert.ToInt32(data["weather_id"]),
@@ -262,28 +306,36 @@ public class Session : MonoBehaviour {
                     Convert.ToInt32(data["weather_status"])
                 ),
                 Convert.ToInt32(data["session_status"]),
-                Convert.ToInt32(data["session_public"])
+                Convert.ToInt32(data["session_public"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objCar_id"]),
+                    data["objCar_name"].ToString(),
+                    data["objCar_file"].ToString()
+                ),
+                Convert.ToInt32(data["session_gear"])
             );
             data.Close();
 
-            List<KeyValuePair<int, string>> lista = new List<KeyValuePair<int, string>>();
+            //uma lista de par com 1o elemento = id e 2o = par de nome e quantidade
+            List<KeyValuePair<int,KeyValuePair<string,int>>> list = new List<KeyValuePair<int,KeyValuePair<string,int>>>();
             string sql2 =
-                @"select comp.component_id, comp.component_name from session_component as ses inner join
-                component as comp where comp.component_id = ses.component_id and session_id = " + id;
+                @"select comp.component_id, component_name, sescomp_quantity from session_component as ses inner join component as comp 
+                    where comp.component_id = ses.component_id and session_id = " + id;
             command.CommandText = sql2;
             data = command.ExecuteReader();
             while (data.Read())
             {
-                lista.Add(new KeyValuePair<int, string>(Convert.ToInt32(data["component_id"]), data["component_name"].ToString()));
+                list.Add(new KeyValuePair<int, KeyValuePair<string, int>>(Convert.ToInt32(data["component_id"]),
+                        new KeyValuePair<string, int>(data["component_name"].ToString(),Convert.ToInt32(data["sescomp_quantity"]))));
             }
-            session.ListComponents = lista;
+            session.ListComponents = list;
         }
         data.Close();
         
         return session;
     }
 
-    //buscar todos nao precisa do join com stage porque nao aparece na tabela, só a psyc/pat, no search ele pega todas as infos
+
     public List<Session> SearchAll(string filter, bool status)
     {
         List<Session> lista = new List<Session>();
@@ -345,8 +397,9 @@ public class Session : MonoBehaviour {
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         //pego todas as sessoes que forem publicas ou que forem privadas e minhas
-        string sql = @"select * from session inner join patient where (session_public = 1 or psychologist_id = " + this.psychologist.Id + 
-            ") and patient_id = pat_id and session_status = 1";
+        string sql = @"select * from session inner join patient where (session_public = 1 or psychologist_id = " + 
+                    this.psychologist.Id + ") and patient_id = pat_id and session_status = 1";
+
         if(!filter.Trim().Equals(""))
         {
             sql+=" and pat_name like '%%f%'";
@@ -391,5 +444,5 @@ public class Session : MonoBehaviour {
     public VirtualObject Car { get => car; set => car = value; }
     public int Status { get => status; set => status = value; }
     public int IsPublic { get => isPublic; set => isPublic = value; }
-    public List<KeyValuePair<int, string>> ListComponents { get => listComponents; set => listComponents = value; }
+    public List<KeyValuePair<int,KeyValuePair<string,int>>> ListComponents { get => listComponents; set => listComponents = value; }
 }

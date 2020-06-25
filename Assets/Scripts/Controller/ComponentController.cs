@@ -17,6 +17,7 @@ public class ComponentController : MonoBehaviour
     [SerializeField] private InputField inputFieldName;
     [SerializeField] private InputField inputFieldDescription;
     [SerializeField] private Toggle toggleStatus;  
+    
     [SerializeField] private Button buttonDelete;
     //tabela para componente
     [SerializeField] private Dropdown dropdownScenario;
@@ -25,7 +26,7 @@ public class ComponentController : MonoBehaviour
     [SerializeField] private Text textNameBScenario;
     [SerializeField] private Button rowScenario;
     [SerializeField] private GameObject rows2;
-
+    
     // tabela da tela inicial
     [SerializeField] private Text textIDB;
     [SerializeField] private Text textNameB;
@@ -100,8 +101,8 @@ public class ComponentController : MonoBehaviour
 
     public void LoadDropdown()
     {
-        Configuration scenario = new Configuration(1);
-        List<Configuration> lista = scenario.SearchAll("",false);
+        Scenario scenario = new Scenario();
+        List<Scenario> lista = scenario.SearchAll("",false);
         dropdownScenario.ClearOptions();
         arrayAllScenarios = new KeyValuePair<int, string>[lista.Count];
         for(int i = 0; i < lista.Count; i++)
@@ -128,6 +129,7 @@ public class ComponentController : MonoBehaviour
         string id = textComponentID.text;
         string name = inputFieldName.text;
         string description = inputFieldDescription.text;
+        int objComp_id = arrayAllVirtualObj[dropdownSelectObject.value].Key;
         bool status = toggleStatus.isOn;
         ScenarioComponent comp;
 
@@ -139,7 +141,8 @@ public class ComponentController : MonoBehaviour
         //     Debug.Log("Erro nos cenários. É necessário pelo menos 1!");
         else 
         {
-            comp = new ScenarioComponent(name,description,status ? 1 : 0,listScenario.Count > 0 ? listScenario : null);
+            comp = new ScenarioComponent(name, description, status ? 1 : 0, listScenario.Count > 0 ? listScenario : null,
+                new VirtualObject(objComp_id));
             if(state == 1) //add
             {
                 string returnMsg = comp.Insert();
@@ -232,7 +235,14 @@ public class ComponentController : MonoBehaviour
         textTitle.text = "Gerenciar Componente - Alterar";
         panelTableComponent.SetActive(true);
         panelVirtualObj.SetActive(true);
-        LoadDropdown();     
+        LoadDropdown();
+
+        int i=0;
+        while(i < dropdownSelectObject.options.Count && 
+            arrayAllVirtualObj[i].Key != comp.ObjComponent.Id)
+            i++;
+        dropdownSelectObject.value = i;
+
         listScenario = comp.ListScenarios;
         foreach(KeyValuePair<int,string> par in listScenario)
         {

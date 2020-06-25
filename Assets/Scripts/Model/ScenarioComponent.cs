@@ -13,43 +13,41 @@ public class ScenarioComponent : MonoBehaviour
     private int status;
     private List<KeyValuePair<int, string>> listScenarios;
 
+    private VirtualObject objComponent;
+
 
     public ScenarioComponent()
     {
 
     }
 
-    public ScenarioComponent(string name, string description, int status)
+    public ScenarioComponent(string name, string description, int status, VirtualObject objComponent)
     {
         this.Name = name;
         this.Description = description;
         this.Status = status;
         this.ListScenarios = null;
+        this.ObjComponent = objComponent;
     }
-    public ScenarioComponent(int id, string name, string description, int status)
+
+    public ScenarioComponent(int id, string name, string description, int status, VirtualObject objComponent)
     {
         this.Id = id;
         this.Name = name;
         this.Description = description;
         this.Status = status;
         this.ListScenarios = null;
+        this.ObjComponent = objComponent;
     }
 
-    public ScenarioComponent(string name, string description, int status, List<KeyValuePair<int, string>> listScenarios)
+    public ScenarioComponent(string name, string description, int status, List<KeyValuePair<int, string>> listScenarios,
+        VirtualObject objComponent)
     {
         this.Name = name;
         this.Description = description;
         this.Status = status;
         this.ListScenarios = listScenarios;
-    }
-
-    public ScenarioComponent(int id, string name, string description, int status, List<KeyValuePair<int, string>> listScenarios)
-    {
-        this.Id = id;
-        this.Name = name;
-        this.Description = description;
-        this.Status = status;
-        this.ListScenarios = listScenarios;
+        this.ObjComponent = objComponent;
     }
 
     public string Insert()
@@ -59,13 +57,15 @@ public class ScenarioComponent : MonoBehaviour
         string sql = @"insert into component 
                     (component_name,
                     component_description,
-                    component_status)
-                    values ('$n','$d',$s);";
+                    component_status,
+                    objComp_id)
+                    values ('$n','$d',$s,$o);";
     
 
         sql = sql.Replace("$n", this.Name);
         sql = sql.Replace("$d", this.Description);
         sql = sql.Replace("$s", this.Status + "");
+        sql = sql.Replace("$o", this.objComponent.Id + "");
 
         Debug.Log("inserting, sql:" + sql);
         command.CommandText = sql;
@@ -95,12 +95,14 @@ public class ScenarioComponent : MonoBehaviour
         string sql = @"update component set
                 component_name = '$n',
                 component_description = '$d',
-                component_status = $s
+                component_status = $s,
+                objComp_id = $o
                 where component_id = " + id;
 
         sql = sql.Replace("$n", this.Name);
         sql = sql.Replace("$d", this.Description);
         sql = sql.Replace("$s", this.Status + "");
+        sql = sql.Replace("$o", this.objComponent.Id + "");
 
         Debug.Log("altering. " + sql);
         command.CommandText = sql;
@@ -160,7 +162,8 @@ public class ScenarioComponent : MonoBehaviour
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         ScenarioComponent comp = null;
-        string sql = "select * from component where component_id = " + id;
+        string sql = @"select * from component as comp inner join objComponent as obj where 
+                        comp.objComp_id = obj.objComp_id and component_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -171,7 +174,12 @@ public class ScenarioComponent : MonoBehaviour
                 Convert.ToInt32(data["component_id"]),
                 data["component_name"].ToString(),
                 data["component_description"].ToString(),
-                Convert.ToInt32(data["component_status"])
+                Convert.ToInt32(data["component_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objComp_id"]),
+                    data["objComp_name"].ToString(),
+                    data["objComp_file"].ToString()
+                )
             );
             data.Close();
 
@@ -196,17 +204,18 @@ public class ScenarioComponent : MonoBehaviour
         List<ScenarioComponent> list = new List<ScenarioComponent>();
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        String sql = "select * from component ";
+        String sql = @"select * from component as comp inner join objComponent as obj 
+                    where comp.objComp_id = obj.objComp_id";
 
         if (!filter.Trim().Equals(""))
         {
-            sql += "where component_name like '%$f%'";
+            sql += " and component_name like '%$f%'";
             sql = sql.Replace("$f", filter);
             if (!status)
                 sql += " and component_status = 1";
         }
         else if (!status)
-            sql += "where component_status = 1";
+            sql += " and component_status = 1";
 
         Debug.Log("SQL: " + sql);
         command.CommandText = sql;
@@ -217,7 +226,12 @@ public class ScenarioComponent : MonoBehaviour
                 Convert.ToInt32(data["component_id"]),
                 data["component_name"].ToString(),
                 data["component_description"].ToString(),
-                Convert.ToInt32(data["component_status"])
+                Convert.ToInt32(data["component_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objComp_id"]),
+                    data["objComp_name"].ToString(),
+                    data["objComp_file"].ToString()
+                )
             ));
         }
         data.Close();
@@ -230,7 +244,9 @@ public class ScenarioComponent : MonoBehaviour
         List<ScenarioComponent> list = new List<ScenarioComponent>();
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        String sql = @"select * from component_scenario as cs inner join component cp where cs.component_id = cp.component_id and scenario_id = " + id;
+        String sql = @"select * from component_scenario as cs inner join component cp inner join objComponent as obj
+                        where cs.component_id = cp.component_id and cp.objComp_id = obj.objComp_id
+                        and scenario_id = " + id;
         
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -240,7 +256,12 @@ public class ScenarioComponent : MonoBehaviour
                 Convert.ToInt32(data["component_id"]),
                 data["component_name"].ToString(),
                 data["component_description"].ToString(),
-                Convert.ToInt32(data["component_status"])
+                Convert.ToInt32(data["component_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objComp_id"]),
+                    data["objComp_name"].ToString(),
+                    data["objComp_file"].ToString()
+                )
             ));
         }
         data.Close();
@@ -248,9 +269,28 @@ public class ScenarioComponent : MonoBehaviour
         return list;
     }
 
+    public int GetMaxQuantityScenarioComponent(int comp_id, int sce_id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        int res = 1;
+        string sql = @"select quantmax from compsce_quantity where comp_id = " + comp_id + " and sce_id = " + sce_id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            res = Convert.ToInt32(data["quantmax"]);
+        }
+        data.Close();
+        return res;
+    }
+
     public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
     public string Description { get => description; set => description = value; }
     public int Status { get => status; set => status = value; }
     public List<KeyValuePair<int, string>> ListScenarios { get => listScenarios; set => listScenarios = value; }
+    public VirtualObject ObjComponent { get => objComponent; set => objComponent = value; }
 }

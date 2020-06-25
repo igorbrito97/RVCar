@@ -14,6 +14,11 @@ public class VirtualObject : MonoBehaviour
     {
     }
 
+    public VirtualObject(int id)
+    {
+        this.id = id;
+    }
+
     public VirtualObject(int id, string name, string file)
     {
         this.id = id;

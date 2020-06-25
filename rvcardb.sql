@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 24-Jun-2020 às 05:40
--- Versão do servidor: 10.4.6-MariaDB
--- versão do PHP: 7.1.32
+-- Tempo de geração: 25-Jun-2020 às 19:55
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -44,7 +44,9 @@ INSERT INTO `component` (`component_id`, `component_name`, `component_descriptio
 (1, '', '', 0, 0),
 (2, 'Obstaculo', 'Tartaruga', 1, 0),
 (3, 'Semaforo', 'Semarf', 1, 0),
-(4, 'Transito', 'Transss', 1, 0);
+(4, 'Transito', 'Transss', 1, 0),
+(5, 'Automóvel', 'Componente referente aos carros que ficam movimentando ', 1, 1),
+(6, 'Garagem', 'Esse componente permite que o paciente possa estacionar o carro', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -62,10 +64,34 @@ CREATE TABLE `component_scenario` (
 --
 
 INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
-(1, 2),
-(1, 4),
-(4, 3),
-(4, 4);
+(3, 5),
+(5, 5),
+(5, 6),
+(6, 5),
+(7, 5),
+(7, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `compsce_quantity`
+--
+
+CREATE TABLE `compsce_quantity` (
+  `comp_id` int(11) NOT NULL,
+  `sce_id` int(11) NOT NULL,
+  `quantmax` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `compsce_quantity`
+--
+
+INSERT INTO `compsce_quantity` (`comp_id`, `sce_id`, `quantmax`) VALUES
+(5, 3, 2),
+(5, 7, 5),
+(5, 5, 10),
+(5, 6, 15);
 
 -- --------------------------------------------------------
 
@@ -87,7 +113,8 @@ CREATE TABLE `environmenttype` (
 INSERT INTO `environmenttype` (`env_id`, `env_name`, `env_description`, `env_status`) VALUES
 (1, 'Urbano', 'Simulaçao de ambientes dentro de um perimetro urbano', 1),
 (2, 'Garagem', 'Cenario com uma garagem simples para entrar e sair', 1),
-(3, 'Rural', 'Cenario para estradas de terra e campos afastados da cidade', 1);
+(3, 'Rural', 'Cenario para estradas de terra e campos afastados da cidade', 1),
+(4, 'Teste', 'Cenarios para teste, bem simples e com poucos elementos facilitando com que o paciente possa se familiarizar com a plataforma', 1);
 
 -- --------------------------------------------------------
 
@@ -230,10 +257,13 @@ CREATE TABLE `scenario` (
 --
 
 INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, `env_id`, `scenario_status`, `objSce_id`) VALUES
-(1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 1, 0),
-(2, 'Rural', 'Rural', 3, 1, 0),
-(3, 'Garagem', 'Graaaag', 2, 1, 0),
-(4, 'Garagem dificil', 'alo alo', 2, 1, 0);
+(1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 0, 2),
+(2, 'Rural', 'Rural', 3, 0, 0),
+(3, 'Garagem Simples', 'Cenário que simula uma rua oval com somente uma garagem. É possível adicionar carros andando', 2, 1, 1),
+(4, 'Garagem dificil', 'alo alo', 2, 0, 6),
+(5, 'Cidade principal', 'Cidade com construções, ruas e rodovia. Possibilidade de adicionar carros se movimentando e garagem', 1, 1, 5),
+(6, 'Simulação de rodovias', 'Nesse cenário o paciente é posto perto da entrada para um rodovia. É possível de se adicionar carros', 1, 1, 6),
+(7, 'Cidade simples', 'Esse cenário simula um pequeno bairro sem muita moviemtação.Existe a possibilidade de se adicionar carros e garagem', 4, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -260,8 +290,10 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`, `car_id`, `session_gear`) VALUES
-(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1, 0, NULL),
-(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1, 0, NULL);
+(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1, 1, 0),
+(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1, 2, 0),
+(3, 1, 4, 4, 6, 'Testezaaaa', '1231231231231', 1, 0, 1, 1),
+(4, 1, 1, 3, 7, 'qqq', 'qqq', 0, 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -271,16 +303,18 @@ INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_i
 
 CREATE TABLE `session_component` (
   `session_id` int(11) NOT NULL,
-  `component_id` int(11) NOT NULL
+  `component_id` int(11) NOT NULL,
+  `sescomp_quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `session_component`
 --
 
-INSERT INTO `session_component` (`session_id`, `component_id`) VALUES
-(2, 3),
-(2, 4);
+INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity`) VALUES
+(2, 3, 1),
+(2, 4, 1),
+(3, 5, 15);
 
 -- --------------------------------------------------------
 
@@ -418,13 +452,13 @@ ALTER TABLE `weathertype`
 -- AUTO_INCREMENT de tabela `component`
 --
 ALTER TABLE `component`
-  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `environmenttype`
 --
 ALTER TABLE `environmenttype`
-  MODIFY `env_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `env_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `objcar`
@@ -460,13 +494,13 @@ ALTER TABLE `psychologist`
 -- AUTO_INCREMENT de tabela `scenario`
 --
 ALTER TABLE `scenario`
-  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `weather`

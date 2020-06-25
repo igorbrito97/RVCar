@@ -166,7 +166,7 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherName.text = session.Weather.Name;
         inputFieldWeatherType.text = session.Weather.Type.Name;
 
-        listComponent = session.ListComponents; 
+        //listComponent = session.ListComponents; 
         foreach(KeyValuePair<int,string> par in listComponent)
         {
             AddRowTableComponent(par);

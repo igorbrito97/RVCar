@@ -13,6 +13,7 @@ public class Scenario : MonoBehaviour
     private string description;
     private int status;
     private List<KeyValuePair<int, string>> listComponents;
+    private VirtualObject objScenario;
 
     public Scenario()
     {
@@ -30,37 +31,31 @@ public class Scenario : MonoBehaviour
         this.environment = environment;
         this.description = description;
         this.status = status;
-        listComponents = null;
+        this.listComponents = null;
+        this.objScenario = null;
     }
 
-     public Scenario(int id, string name, EnvironmentType environment, string description, int status)
+    public Scenario(int id, string name, EnvironmentType environment, string description, int status, VirtualObject objScenario)
     {
         this.id = id;
         this.name = name;
         this.environment = environment;
         this.description = description;
         this.status = status;
-        listComponents = null;
+        this.listComponents = null;
+        this.objScenario = objScenario;
     }
 
 
-    public Scenario(string name, EnvironmentType environment, string description, int status, List<KeyValuePair<int, string>> listComponents)
+    public Scenario(string name, EnvironmentType environment, string description, int status, 
+        List<KeyValuePair<int, string>> listComponents, VirtualObject objScenario)
     {
         this.name = name;
         this.environment = environment;
         this.description = description;
         this.status = status;
         this.listComponents = listComponents;
-    }
-
-    public Scenario(int id, string name, EnvironmentType environment, string description, int status, List<KeyValuePair<int, string>> listComponents)
-    {
-        this.id = id;
-        this.name = name;
-        this.environment = environment;
-        this.description = description;
-        this.status = status;
-        this.listComponents = listComponents;
+        this.objScenario = objScenario;
     }
 
     public string Insert()
@@ -71,12 +66,14 @@ public class Scenario : MonoBehaviour
                             (scenario_name,
                             scenario_description,
                             env_id,
+                            objSce_id,
                             scenario_status)
-                    values ('$n','$d',$i,$s);";
+                    values ('$n','$d',$i,$o,$s);";
                     
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$i", this.environment.Id + "");
+        sql = sql.Replace("$o", this.objScenario.Id + "");
         sql = sql.Replace("$s", this.status + "");
 
         command.CommandText = sql;
@@ -103,12 +100,14 @@ public class Scenario : MonoBehaviour
                         scenario_name = '$n',
                         scenario_description = '$d',
                         env_id = $i,
+                        objSce_id = $o,
                         scenario_status = $s
                         where scenario_id = " + id;
         
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$i", this.environment.Id + "");
+        sql = sql.Replace("$o", this.objScenario.Id + "");
         sql = sql.Replace("$s", this.status + "");
 
         Debug.Log("SWL ALTER: " + sql);
@@ -170,8 +169,8 @@ public class Scenario : MonoBehaviour
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         Scenario scenario = null;
-        string sql = @"select * from scenario as sce inner join environmentType as type
-                     where sce.env_id = type.env_id and sce.scenario_id = " + id;
+        string sql = @"select * from scenario as sce inner join environmentType as type inner join objScenario as obj
+                     where sce.env_id = type.env_id and sce.objSce_id = obj.objSce_id and sce.scenario_id = " + id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -188,7 +187,12 @@ public class Scenario : MonoBehaviour
                     Convert.ToInt32(data["env_status"])
                 ),
                 data["scenario_description"].ToString(),
-                Convert.ToInt32(data["scenario_status"])
+                Convert.ToInt32(data["scenario_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objSce_id"]),
+                    data["objSce_name"].ToString(),
+                    data["objSce_file"].ToString()
+                )
             );
             data.Close();
 
@@ -214,8 +218,8 @@ public class Scenario : MonoBehaviour
         List<Scenario> list = new List<Scenario>();
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
-        String sql = @"select * from scenario as sce inner join environmentType as type
-                     where sce.env_id = type.env_id";
+        String sql = @"select * from scenario as sce inner join environmentType as type inner join objScenario as obj
+                     where sce.env_id = type.env_id and sce.objSce_id = obj.objSce_id";
 
         if(!filter.Trim().Equals(""))
         {
@@ -243,7 +247,12 @@ public class Scenario : MonoBehaviour
                     Convert.ToInt32(data["env_status"])
                     ),
                 data["scenario_description"].ToString(),
-                Convert.ToInt32(data["scenario_status"])
+                Convert.ToInt32(data["scenario_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objSce_id"]),
+                    data["objSce_name"].ToString(),
+                    data["objSce_file"].ToString()
+                )
             ));
         }
         data.Close();
@@ -258,4 +267,5 @@ public class Scenario : MonoBehaviour
     public string Description { get => description; set => description = value; }
     public int Status { get => status; set => status = value; }
     public List<KeyValuePair<int, string>> ListComponents { get => listComponents; set => listComponents = value; }
+    public VirtualObject ObjScenario { get => objScenario; set => objScenario = value; }
 }

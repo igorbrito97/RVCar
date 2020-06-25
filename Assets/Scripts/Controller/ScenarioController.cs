@@ -143,15 +143,21 @@ public class ScenarioController : MonoBehaviour
         string description = inputFieldDescription.text;
         bool status = toggleStatus.isOn;
         int envType_id = arrayAllEnvType[dropdownEnvironmentType.value].Key;
+        int objSce_id = arrayAllVirtualObj[dropdownSelectObject.value].Key;
         Scenario scenario;
 
         if(name.Trim() == "")
             Debug.Log("Erro no nome!");
         else if(description.Trim() == "")
             Debug.Log("Erro na descrição!");
+        if(dropdownEnvironmentType.value < 0)
+            Debug.Log("Erro na seleção dos tipos de ambiente!");
+        if(dropdownSelectObject.value < 0)
+            Debug.Log("Erro na seleção do objeto virtual!");
         else
         {
-            scenario = new Scenario(name,new EnvironmentType(envType_id),description,status ? 1 : 0,listComponent.Count > 0 ? listComponent : null);
+            scenario = new Scenario(name,new EnvironmentType(envType_id),description,status ? 1 : 0,
+                listComponent.Count > 0 ? listComponent : null, new VirtualObject(objSce_id));
             if(state == 1)
             {
                 string returnMsg = scenario.Insert();
@@ -249,6 +255,12 @@ public class ScenarioController : MonoBehaviour
             arrayAllEnvType[i].Key != scenario.Environment.Id)
             i++;
         dropdownEnvironmentType.value = i;
+        
+        i=0;
+        while(i < dropdownSelectObject.options.Count && 
+            arrayAllVirtualObj[i].Key != scenario.ObjScenario.Id)
+            i++;
+        dropdownSelectObject.value = i;
 
         listComponent = scenario.ListComponents;
         foreach(KeyValuePair<int,string> par in listComponent)

@@ -48,13 +48,18 @@ public class SessionControlller : MonoBehaviour
     private GameObject rowsClone = null;   
 
     //tabela para componente (panelEdit)
+    [SerializeField] private Slider sliderQuantity;
+    [SerializeField] private Text textSliderQuantity;
     [SerializeField] private Dropdown dropdownComponent;
     [SerializeField] private Text textComponentIDB;
     [SerializeField] private Text textComponentNameB;
+    [SerializeField] private Text textComponentQuantityB;
     [SerializeField] private Button rowComponent;
     [SerializeField] private GameObject rowsComp;
     private KeyValuePair<int,string>[] arrayAllComponents;
-    private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
+
+    //uma lista de par com 1o elemento = id e 2o = par de nome e quantidade
+    private List<KeyValuePair<int,KeyValuePair<string,int>>> listComponent = new List<KeyValuePair<int, KeyValuePair<string, int>>>();
     private int selectedComponentIndex;
 
     //tabela de pacientes
@@ -117,6 +122,8 @@ public class SessionControlller : MonoBehaviour
     private Scenario currentScenario = null;
     private Patient currentPatient = null;
     private Weather currentWeather = null;
+    private KeyValuePair<int,string> currentCar;
+    private int currentGear = -1; // 1: manual - 2: automatic
     private KeyValuePair<int,string>[] arrayAllCars;
 
     // paineis da tela
@@ -143,6 +150,8 @@ public class SessionControlller : MonoBehaviour
         inputFieldScenarioSearch.characterLimit = 60;
         inputFieldWeatherSearch.characterLimit = 60;
 
+        sliderQuantity.wholeNumbers = true;
+
 		Begin();
 	}
 
@@ -157,8 +166,10 @@ public class SessionControlller : MonoBehaviour
         panelExecutionConfig.gameObject.SetActive(false);
         inputFieldSearch.text = "";
         toggleStatusSearch.isOn = false;
+
         Clear();
         changePanelEditInteractable(false);
+        
         buttonExecute.gameObject.SetActive(true);
         buttonDelete.gameObject.SetActive(true);
         buttonConfirm.gameObject.SetActive(true);
@@ -177,10 +188,17 @@ public class SessionControlller : MonoBehaviour
         selectedScenarioId = 0;
         currentWeather = new Weather();
         selectedWeatherId = 0;
+        currentCar = new KeyValuePair<int, string>();
+        currentGear = -1;
         inputFieldPatient.text = "";
         inputFieldScenario.text = "";
         inputFieldWeather.text = "";
+        inputFieldCar.text = "";
+        inputFieldGear.text = "";
         ClearComponentTable();
+        
+        sliderQuantity.interactable = false;
+        textSliderQuantity.text = "1";
     }
 
     public void New()
@@ -256,7 +274,6 @@ public class SessionControlller : MonoBehaviour
     public void RowClick(Button br)
     {
         Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
-        Debug.Log("SeSSAO: " + session.ListComponents.Count);
 
         textSessionID.text = session.Id.ToString();
         inputFieldName.text = session.Name;
@@ -265,20 +282,22 @@ public class SessionControlller : MonoBehaviour
         inputFieldScenario.text = session.Scenario.Name;
         inputFieldPatient.text = session.Patient.Name;
         inputFieldWeather.text = session.Weather.Name;
+        inputFieldCar.text = session.Car.Name;
+        inputFieldGear.text = session.Gear == 0 ? "Manual" : "Automático";
         toggleStatus.isOn = session.Status == 1;
         toggleIsPublic.isOn = session.IsPublic == 1;
         
         currentPatient = session.Patient;
         currentScenario = session.Scenario;
         currentWeather = session.Weather;
-
+        currentCar = new KeyValuePair<int, string>(session.Car.Id,session.Car.Name);
+        currentGear = session.Gear;
 
         LoadComponentDropdown();
         listComponent = session.ListComponents;
-        foreach(KeyValuePair<int,string> par in listComponent)
+        foreach(KeyValuePair<int,KeyValuePair<string,int>> item in listComponent)
         {
-            Debug.Log("FOREACH> KEY: " + par.Key + "VALUE: " + par.Value);
-            AddRowTableComponent(par);
+            AddRowTableComponent(item);
         }
 
         //se nao for seu nao pode alterar nem deletar
@@ -312,10 +331,14 @@ public class SessionControlller : MonoBehaviour
             Debug.Log("Erro. Selecione um cenário virtual!");
         else if(currentWeather.Id == 0)
             Debug.Log("Erro. Selecione um clima!");
+        else if(currentCar.Key == 0)
+            Debug.Log("Erro. Escolha um carro!");
+        else if(currentGear == -1)
+            Debug.Log("Erro. Escolha uma marcha");
         else 
         {
             session = new Session(name,description,GameManager.instance.Psychologist,currentPatient,currentScenario,currentWeather, 
-                status ? 1 : 0, isPubic ? 1 : 0, listComponent.Count > 0 ? listComponent : null);
+                status ? 1 : 0, isPubic ? 1 : 0, listComponent.Count > 0 ? listComponent : null,new VirtualObject(currentCar.Key),currentGear);
             if(state == 1) //add
             {
                 string returnMsg = session.Insert();
@@ -373,6 +396,8 @@ public class SessionControlller : MonoBehaviour
             buttonConfirm.gameObject.SetActive(false);
             buttonAlter.gameObject.SetActive(true);
             buttonDuplicate.gameObject.SetActive(true);
+            sliderQuantity.interactable = false;
+            textSliderQuantity.text = "1";
             state = 0;
         }
         else
@@ -384,6 +409,7 @@ public class SessionControlller : MonoBehaviour
         state = 2;
         textTitle.text = "Gerenciar Sessão - Alterar";
         changePanelEditInteractable(true);//habilita os campos
+        CheckScenarioComponent();
         buttonExecute.gameObject.SetActive(false);
         buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(false);
@@ -411,24 +437,42 @@ public class SessionControlller : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    private bool IsComponentInList(int id) 
+    {
+        bool res = false;
+        for(int i = 0; i< listComponent.Count; i++)
+        {
+            if(listComponent[i].Key == id)
+                return true;
+            i++;
+        }
+        return res;
+    }
+
     public void AddComponentClick()
     {
-        if(listComponent.Contains(arrayAllComponents[dropdownComponent.value])){
+        if(IsComponentInList(arrayAllComponents[dropdownComponent.value].Key))
+        {
             Debug.Log("ja existe na lista! Nao add");
             return;
         }
         else {
-            listComponent.Add(arrayAllComponents[dropdownComponent.value]);
-            AddRowTableComponent(arrayAllComponents[dropdownComponent.value]);
+            KeyValuePair<int,KeyValuePair<string,int>> item = new KeyValuePair<int, KeyValuePair<string, int>>(
+                arrayAllComponents[dropdownComponent.value].Key,new KeyValuePair<string, int>(
+                    arrayAllComponents[dropdownComponent.value].Value, Convert.ToInt32(sliderQuantity.value)));
+
+            listComponent.Add(item);
+            AddRowTableComponent(item);
         }
     }
 
-    private void AddRowTableComponent(KeyValuePair<int,string> info)
+    private void AddRowTableComponent(KeyValuePair<int,KeyValuePair<string,int>> item)
     {
         Button newRow;
         rowComponent.gameObject.SetActive(true);
-        textComponentIDB.text = info.Key.ToString();
-        textComponentNameB.text = info.Value;
+        textComponentIDB.text = item.Key.ToString();
+        textComponentNameB.text = item.Value.Key;
+        textComponentQuantityB.text = item.Value.Value.ToString();
         newRow = Instantiate(rowComponent) as Button; 
         newRow.transform.SetParent(rowComponent.transform.parent,false);
         newRow.onClick.AddListener(() => RowClickComp(newRow));
@@ -440,9 +484,9 @@ public class SessionControlller : MonoBehaviour
         //FAZER: QUANDO CLICAR DEIXAR A LINHA DE COR DIFERENTE, SE CLICAR NOVAMENTE TIRA
         int selectedComponentKey = Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textComponentIDB).text);
         int i=0;
-        foreach(KeyValuePair<int,string> par in listComponent)
+        foreach(KeyValuePair<int,KeyValuePair<string,int>> item in listComponent)
         {
-            if(par.Key == selectedComponentKey)
+            if(item.Key == selectedComponentKey)
             {
                 selectedComponentIndex = i;
                 break;
@@ -482,7 +526,6 @@ public class SessionControlller : MonoBehaviour
         dropdownComponent.ClearOptions();
         listComponent.Clear();
         selectedComponentIndex = -1;
-        //tableComp clear
         var clones = new Transform[rowsComp.transform.childCount];
         for (var i = 1; i < clones.Length; i++)
         {
@@ -571,7 +614,7 @@ public class SessionControlller : MonoBehaviour
     public void TableLoadScenario()
     {
         List<Scenario> scenarios;
-        Button newRow;
+        Button newRow;                                                                                                
 
          if (rowsCloneSce != null)
         {
@@ -627,6 +670,26 @@ public class SessionControlller : MonoBehaviour
         panelSelectScenario.gameObject.SetActive(false);
         inputFieldScenario.text = currentScenario.Name;
         selectedScenarioId = 0;
+
+        //VE SE TEM E TA NO DROPDOWN
+        if(dropdownComponent.options.Count > 0 && dropdownComponent.value > -1)
+        {
+            int comp_id = arrayAllComponents[dropdownComponent.value].Key;
+            int sce_id = currentScenario.Id;
+            int max = new ScenarioComponent().GetMaxQuantityScenarioComponent(comp_id,sce_id);
+            if(max > 1) // varios
+            {
+                sliderQuantity.interactable = true;
+                sliderQuantity.minValue = 1;
+                sliderQuantity.maxValue = max;
+            }
+            else
+            {
+                sliderQuantity.interactable = false;
+            }
+            sliderQuantity.value = 1;
+
+        }
     }
 
     public void ClearScenarioTable()//chamado ao confirmar ou sair da tela1
@@ -711,6 +774,32 @@ public class SessionControlller : MonoBehaviour
         }
     }
 
+    public void CheckScenarioComponent()
+    {
+        int comp_id = arrayAllComponents[dropdownComponent.value].Key;
+        if(currentScenario.Id > 0) //selected
+        {
+            int sce_id = currentScenario.Id;
+            int max = new ScenarioComponent().GetMaxQuantityScenarioComponent(comp_id,sce_id);
+            if(max > 1 && state != 0) // varios & esta para adicionar
+            {
+                sliderQuantity.interactable = true;
+                sliderQuantity.minValue = 1;
+                sliderQuantity.maxValue = max;
+            }
+            else
+            {
+                sliderQuantity.interactable = false;
+            }
+            sliderQuantity.value = 1;
+        }
+    }
+
+    public void OnChangeSliderQuantityComponent()
+    {
+        textSliderQuantity.text = "" + sliderQuantity.value;
+    }
+
     public void ClearExecutionConfigPanel()
     {
         manualToggle.isOn = true;
@@ -729,8 +818,41 @@ public class SessionControlller : MonoBehaviour
             arrayAllCars[i] = new KeyValuePair<int, string>(list[i].Id,list[i].Name);
             dropdownSelectCar.options.Add(new Dropdown.OptionData(list[i].Name));
         }
+        
+        //se ja foi escolhido altera
+        int j=0;
+        if(currentCar.Key > 0)
+        {
+            while(j < dropdownSelectCar.options.Count && 
+                arrayAllCars[j].Key != currentCar.Key)
+                j++;
+        }
         dropdownSelectCar.value = -1;
-        dropdownSelectCar.value = 0;
+        dropdownSelectCar.value = j;
+
+        if(currentGear > -1)
+        {
+            switch(currentGear)
+            {
+                case 0: manualToggle.isOn = true; break;
+                case 1: automaticToggle.isOn = true; break;
+            }
+        }
+    }
+    
+    public void ConfirmExecutionConfigClick()
+    {
+        if(dropdownSelectCar.value > -1)
+        {
+            currentCar = arrayAllCars[dropdownSelectCar.value];
+            currentGear = manualToggle.isOn ? 0 : 1; //se for manual = 0, senao = 1
+            panelExecutionConfig.gameObject.SetActive(false);
+            inputFieldCar.text = currentCar.Value;
+            inputFieldGear.text = currentGear == 0 ? "Manual" : "Automático";
+
+        }
+        else 
+            Debug.Log("Selecione um carro!");
     }
 
     public void ChangeImage()
