@@ -119,7 +119,7 @@ public class PatientController : MonoBehaviour
 
 
         if (name.Trim() == "")
-            Debug.Log("Erro no nome");
+            LevelManager.Instance.AlterMessage("Erro no nome!",Color.red);
         else if (email.Trim() == "")
             Debug.Log("Erro no email");
         else if (cpf.Trim() == "")
@@ -139,12 +139,30 @@ public class PatientController : MonoBehaviour
             if (state == 1)//adding
             {
                 string returnMsg = pat.Insert();
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    Debug.Log(returnMsg);
+                    //Begin();
+                    LevelManager.Instance.AlterMessage(returnMsg,Color.green);
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
             else if (state == 2) //alter
             {
                 string returnMsg = pat.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    Debug.Log(returnMsg);
+                    //Begin();
+                    LevelManager.Instance.AlterMessage(returnMsg,Color.green);
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
         }
     }

@@ -159,6 +159,7 @@ public class ScenarioComponent : MonoBehaviour
 
     public ScenarioComponent Search(int id)
     {
+        Debug.Log("SEARCHAADAA DO CLICK: " + id);
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         ScenarioComponent comp = null;
@@ -178,7 +179,8 @@ public class ScenarioComponent : MonoBehaviour
                 new VirtualObject(
                     Convert.ToInt32(data["objComp_id"]),
                     data["objComp_name"].ToString(),
-                    data["objComp_file"].ToString()
+                    data["objComp_file"].ToString(),
+                    data["objComp_prefab"].ToString()
                 )
             );
             data.Close();
@@ -230,7 +232,8 @@ public class ScenarioComponent : MonoBehaviour
                 new VirtualObject(
                     Convert.ToInt32(data["objComp_id"]),
                     data["objComp_name"].ToString(),
-                    data["objComp_file"].ToString()
+                    data["objComp_file"].ToString(),
+                    data["objComp_prefab"].ToString()
                 )
             ));
         }
@@ -260,7 +263,8 @@ public class ScenarioComponent : MonoBehaviour
                 new VirtualObject(
                     Convert.ToInt32(data["objComp_id"]),
                     data["objComp_name"].ToString(),
-                    data["objComp_file"].ToString()
+                    data["objComp_file"].ToString(),
+                    data["objComp_prefab"].ToString()
                 )
             ));
         }

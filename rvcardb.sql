@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 25-Jun-2020 às 19:55
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.3
+-- Tempo de geração: 29-Jun-2020 às 04:38
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -134,9 +134,9 @@ CREATE TABLE `objcar` (
 --
 
 INSERT INTO `objcar` (`objCar_id`, `objCar_name`, `objCar_file`, `objCar_prefab`) VALUES
-(1, 'Esportivo', 'CarImage/SportCoupe', ''),
-(2, 'Pickup 1', 'CarImage/Pickup1', ''),
-(3, 'Pickup 2', 'CarImage/Pickup2', '');
+(1, 'Esportivo', 'CarImage/SportCoupe', 'SportCoupe'),
+(2, 'Pickup 1', 'CarImage/Pickup1', 'Pickup1'),
+(3, 'Pickup 2', 'CarImage/Pickup2', 'Pickup2');
 
 -- --------------------------------------------------------
 
@@ -147,16 +147,17 @@ INSERT INTO `objcar` (`objCar_id`, `objCar_name`, `objCar_file`, `objCar_prefab`
 CREATE TABLE `objcomponent` (
   `objComp_id` int(11) NOT NULL,
   `objComp_name` varchar(60) NOT NULL,
-  `objComp_file` varchar(100) NOT NULL
+  `objComp_file` varchar(100) NOT NULL,
+  `objComp_prefab` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objcomponent`
 --
 
-INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`, `objComp_file`) VALUES
-(1, 'Carros', 'ComponentImage/Car'),
-(2, 'Garagem', 'ComponentImage/Garage');
+INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`, `objComp_file`, `objComp_prefab`) VALUES
+(1, 'Carros', 'ComponentImage/Car', 'Car'),
+(2, 'Garagem', 'ComponentImage/Garage', 'Garage');
 
 -- --------------------------------------------------------
 
@@ -167,18 +168,19 @@ INSERT INTO `objcomponent` (`objComp_id`, `objComp_name`, `objComp_file`) VALUES
 CREATE TABLE `objscenario` (
   `objSce_id` int(11) NOT NULL,
   `objSce_name` varchar(60) NOT NULL,
-  `objSce_file` varchar(100) NOT NULL
+  `objSce_file` varchar(100) NOT NULL,
+  `objSce_prefab` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objscenario`
 --
 
-INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`) VALUES
-(1, 'Garagem Teste', 'ScenarioImage/GarageTest'),
-(2, 'Cidade Teste', 'ScenarioImage/CityTest'),
-(5, 'Cidade', 'ScenarioImage/City'),
-(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad');
+INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`, `objSce_prefab`) VALUES
+(1, 'Garagem Teste', 'ScenarioImage/GarageTest', 'GarageTest'),
+(2, 'Cidade Teste', 'ScenarioImage/CityTest', 'CityTest'),
+(5, 'Cidade', 'ScenarioImage/City', 'City'),
+(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad', 'CityRoad');
 
 -- --------------------------------------------------------
 
@@ -203,10 +205,10 @@ CREATE TABLE `patient` (
 --
 
 INSERT INTO `patient` (`pat_id`, `pat_name`, `pat_cpf`, `pat_phone`, `pat_email`, `pat_note`, `pat_gender`, `pat_birthday`, `pat_status`) VALUES
-(1, 'Igor', '123456', '25697', 'emai@.com', 'paciente novo do bd novo', 'F', '2000-01-01', 1),
+(1, 'Igor', '123456', '25697', 'emai@.com', 'paciente novo do bd novo', 'F', '2000-01-01', 0),
 (2, 'Iguinho', '111', '123123', 'eaae@asd', '', 'M', '1968-01-01', 0),
 (3, 'Pacitizo', '123', '00002', 'eme.com', 'observation', 'M', '1987-01-01', 0),
-(4, 'Stella', '12313', '123123', 'stel.com', 'paciente fera demais', 'F', '2001-04-12', 1);
+(4, 'Stella', '12313', '123123', 'stel.com', 'paciente fera demais', 'F', '2001-04-12', 0);
 
 -- --------------------------------------------------------
 
@@ -260,7 +262,7 @@ INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, 
 (1, 'Centro', 'Simulaçao do centro de uma cidade', 1, 0, 2),
 (2, 'Rural', 'Rural', 3, 0, 0),
 (3, 'Garagem Simples', 'Cenário que simula uma rua oval com somente uma garagem. É possível adicionar carros andando', 2, 1, 1),
-(4, 'Garagem dificil', 'alo alo', 2, 0, 6),
+(4, 'Garagem dificil', 'alo alo', 2, 0, 1),
 (5, 'Cidade principal', 'Cidade com construções, ruas e rodovia. Possibilidade de adicionar carros se movimentando e garagem', 1, 1, 5),
 (6, 'Simulação de rodovias', 'Nesse cenário o paciente é posto perto da entrada para um rodovia. É possível de se adicionar carros', 1, 1, 6),
 (7, 'Cidade simples', 'Esse cenário simula um pequeno bairro sem muita moviemtação.Existe a possibilidade de se adicionar carros e garagem', 4, 1, 2);

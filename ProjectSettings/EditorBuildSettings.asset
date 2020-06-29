@@ -12,6 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 89ee809e50a610f4ca5fc01ea7d1b02b
   - enabled: 1
+    path: Assets/Scenes/GarageTest.unity
+    guid: 2dc208c81da62d9499feb346814e1bb2
+  - enabled: 1
     path: Assets/Scenes/CityTest.unity
     guid: de434bb0cfcace745b2c5a97b593e2ed
+  - enabled: 1
+    path: Assets/Scenes/City.unity
+    guid: a974d2dfa59439347a11e659f302971b
+  - enabled: 1
+    path: Assets/Scenes/CityRoad.unity
+    guid: 130d4dff2c332ed4ebb7a14359a17265
   m_configObjects: {}

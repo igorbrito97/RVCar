@@ -36,17 +36,33 @@ public class RunSessionController : MonoBehaviour {
     [SerializeField] private InputField inputFieldGear;
     [SerializeField] private Button buttonAlter;
     [SerializeField] private Button buttonRun;
-    [SerializeField] private Button buttonDelete;
 
     //tabela Componente
     [SerializeField] private Text textIDBComponent;
     [SerializeField] private Text textNameBComponent;
+    [SerializeField] private Text textQuantityBComponent;
     [SerializeField] private Button rowComponent;
     [SerializeField] private GameObject rowsComp;
-    private List<KeyValuePair<int,string>> listComponent = new List<KeyValuePair<int, string>>();
+
+    // panel informação componente
+    [SerializeField] private InputField inputFieldComponentName;
+    [SerializeField] private InputField inputFieldComponentQuantity;
+    [SerializeField] private InputField inputFieldComponentDescription;
+    [SerializeField] private RawImage imgComponent;
+
+    //panel pre execution
+    [SerializeField] private RawImage imgScenario;
+    [SerializeField] private Text textScenario;
+
+     
+     //uma lista de par com 1o elemento = id e 2o = par de nome e quantidade
+    private List<KeyValuePair<int,KeyValuePair<string,int>>> listComponent;
 
 	// paineis da tela
     [SerializeField] private GameObject panelEdit;
+    [SerializeField] private GameObject panelSession;
+    [SerializeField] private GameObject panelComponentInfo;
+    [SerializeField] private GameObject panelPreExecution;
 
 	void Start () {
 		inputFieldSearch.characterLimit = 60;
@@ -81,10 +97,11 @@ public class RunSessionController : MonoBehaviour {
 	{
 		textTitle.text = "Executar Sessão";
 		panelEdit.gameObject.SetActive(false);
+        panelComponentInfo.gameObject.SetActive(false);
+        panelPreExecution.gameObject.SetActive(false);
         inputFieldSearch.text = "";
 		Clear();
         buttonAlter.gameObject.SetActive(true);
-        buttonDelete.gameObject.SetActive(true);
         buttonRun.gameObject.SetActive(true);
 	}
 
@@ -100,6 +117,8 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherInfo.text = "";
         inputFieldWeatherName.text = "";
         inputFieldWeatherType.text = "";
+        inputFieldCar.text = "";
+        inputFieldGear.text = "";
         ClearComponentTable();
 	}
 
@@ -165,38 +184,62 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherInfo.text = session.Weather.Info + "";
         inputFieldWeatherName.text = session.Weather.Name;
         inputFieldWeatherType.text = session.Weather.Type.Name;
+        inputFieldCar.text = session.Car.Name;
+        inputFieldGear.text = session.Gear == 0 ? "Manual" : "Automático";
 
-        //listComponent = session.ListComponents; 
-        foreach(KeyValuePair<int,string> par in listComponent)
+        listComponent = session.ListComponents; 
+        foreach(KeyValuePair<int,KeyValuePair<string,int>> item in listComponent)
         {
-            AddRowTableComponent(par);
+            AddRowTableComponent(item);
         }
 
-        //ver botoes
+        //se nao for seu nao pode alterar nem deletar
+        if(session.Psychologist.Id != GameManager.instance.Psychologist.Id){
+            buttonAlter.gameObject.SetActive(false);
+            buttonRun.gameObject.SetActive(false);
+        }
     }
 
     public void AlterClick()
     {
-
+        SessionControlller controller = panelSession.GetComponent<SessionControlller>();
+        panelEdit.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
+        controller.AlterClickRunSessionController(new Session().Search(Convert.ToInt32(textSessionID.text)));
     }
 
     public void RunClick()
     {
+        int id = Convert.ToInt32(textSessionID.text);
+        textScenario.text = "Cenário: " + inputFieldScenarioName.text;
+        panelPreExecution.gameObject.SetActive(true);
+        imgScenario.texture = Resources.Load(new VirtualObject().GetScenarioImageByScenarioId(id)) as Texture;
     }
 
-    public void DeleteClick()
+    public void CancelPreExecutionClick()
     {
-
+        panelPreExecution.gameObject.SetActive(false);
+        imgScenario.texture = null;
     }
 
-    private void AddRowTableComponent(KeyValuePair<int,string> info)
+    public void ExecuteClick()
+    {
+        LevelManager.Instance.LoadSession(new Session().Search(Convert.ToInt32(textSessionID.text)));
+    }
+
+    private void AddRowTableComponent(KeyValuePair<int,KeyValuePair<string,int>> item)
     {
         Button newRow;
         rowComponent.gameObject.SetActive(true);
-        textIDBComponent.text = info.Key.ToString();
-        textNameBComponent.text = info.Value;
+        textIDBComponent.text = item.Key.ToString();
+        textNameBComponent.text = item.Value.Key;
+        textQuantityBComponent.text = item.Value.Value + "";
+        Debug.Log("2ID: " + textIDBComponent.text);
+        Debug.Log("2NAME: " + textNameBComponent.text);
+        Debug.Log("2QUANT: " + textQuantityBComponent.text);
         newRow = Instantiate(rowComponent) as Button; 
         newRow.transform.SetParent(rowComponent.transform.parent,false);
+        Debug.Log("VAMO LA RPAPasdasdasdasdsdasdasdEPA");
         newRow.onClick.AddListener(() => RowClickComp(newRow));
         rowComponent.gameObject.SetActive(false);
     }
@@ -215,15 +258,38 @@ public class RunSessionController : MonoBehaviour {
 
     public void RowClickComp(Button br)
     {
+        Debug.Log("VAMO LA RPAPEPA");
+        //mostra imagem com componente
+        panelComponentInfo.gameObject.SetActive(true);
+        Debug.Log("ID: " + br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text);
+        Debug.Log("NAME: " + br.gameObject.GetComponentInChildren<Text>(textNameBComponent).text);
+        Debug.Log("QUANT: " + br.gameObject.GetComponentInChildren<Text>(textQuantityBComponent).text);
+        ScenarioComponent component = new ScenarioComponent().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text));
+        inputFieldComponentName.text = component.name;
+        inputFieldComponentQuantity.text = br.gameObject.GetComponentInChildren<Text>(textQuantityBComponent).text;
+        inputFieldComponentDescription.text = component.Description;
 
+        //imgComponent.texture = Resources.Load(new VirtualObject().GetComponentImageByScenarioId(component.Id)) as Texture;
     }
 
-        public void ExecuteClickSessionController(Session session)
+    public void OkComponentInfoClick()
+    {
+        panelComponentInfo.gameObject.SetActive(false);
+        inputFieldComponentName.text = "";
+        inputFieldComponentQuantity.text = "";
+        inputFieldComponentDescription.text = "";
+
+        imgComponent.texture = null;
+    
+    }
+
+    public void ExecuteClickSessionController(Session session)
     {
         this.gameObject.SetActive(true);
         panelEdit.gameObject.SetActive(true);
         FillPanel(session);
     }
+    
 
     void OnDisable()
     {

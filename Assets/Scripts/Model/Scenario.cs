@@ -191,7 +191,8 @@ public class Scenario : MonoBehaviour
                 new VirtualObject(
                     Convert.ToInt32(data["objSce_id"]),
                     data["objSce_name"].ToString(),
-                    data["objSce_file"].ToString()
+                    data["objSce_file"].ToString(),
+                    data["objSce_prefab"].ToString()
                 )
             );
             data.Close();
@@ -251,7 +252,8 @@ public class Scenario : MonoBehaviour
                 new VirtualObject(
                     Convert.ToInt32(data["objSce_id"]),
                     data["objSce_name"].ToString(),
-                    data["objSce_file"].ToString()
+                    data["objSce_file"].ToString(),
+                    data["objSce_prefab"].ToString()
                 )
             ));
         }

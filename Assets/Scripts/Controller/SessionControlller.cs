@@ -151,8 +151,6 @@ public class SessionControlller : MonoBehaviour
         inputFieldWeatherSearch.characterLimit = 60;
 
         sliderQuantity.wholeNumbers = true;
-
-		Begin();
 	}
 
     public void Begin()
@@ -274,7 +272,11 @@ public class SessionControlller : MonoBehaviour
     public void RowClick(Button br)
     {
         Session session = new Session().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDB).text));
+        LoadPage(session);
+    }
 
+    private void LoadPage(Session session)
+    {   
         textSessionID.text = session.Id.ToString();
         inputFieldName.text = session.Name;
         inputFieldDescription.text = session.Description;
@@ -307,6 +309,7 @@ public class SessionControlller : MonoBehaviour
             buttonExecute.gameObject.SetActive(true);
         }
         buttonConfirm.gameObject.SetActive(false);
+
     }
 
     public void ConfirmClick()
@@ -862,6 +865,13 @@ public class SessionControlller : MonoBehaviour
             VirtualObject obj = new VirtualObject().SearchCar(arrayAllCars[dropdownSelectCar.value].Key);
             carImage.texture = Resources.Load(obj.File) as Texture;
         }
+    }
+
+    public void AlterClickRunSessionController(Session session)
+    {
+        this.gameObject.SetActive(true);
+        panelEdit.gameObject.SetActive(true);
+        LoadPage(session);
     }
 
     void OnDisable()

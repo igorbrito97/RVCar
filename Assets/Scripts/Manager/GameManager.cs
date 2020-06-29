@@ -29,11 +29,6 @@ public class GameManager : MonoBehaviour {
             // DestroyImmediate(gameObject);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		//Debug.Log("UPdate GM v: " + v);
-	}
 
     public int GetMaxPK(string table, string key)
     {

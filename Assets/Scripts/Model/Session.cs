@@ -310,7 +310,8 @@ public class Session : MonoBehaviour {
                 new VirtualObject(
                     Convert.ToInt32(data["objCar_id"]),
                     data["objCar_name"].ToString(),
-                    data["objCar_file"].ToString()
+                    data["objCar_file"].ToString(),
+                    data["objCar_prefab"].ToString()
                 ),
                 Convert.ToInt32(data["session_gear"])
             );
