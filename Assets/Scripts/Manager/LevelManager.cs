@@ -73,7 +73,6 @@ public class LevelManager : MonoBehaviour {
 	{
 		// selecionar cenario, carro com marcha correta, componentes, clima
 		currentSession = session;
-		Debug.Log("EXEcutando: " + session.Id + " - " + session.Name);
 
 		string scenarioPrefab = new VirtualObject().GetScenarioPrefabById(session.Scenario.Id);
 		if(scenarioPrefab.Equals(""))
@@ -81,22 +80,33 @@ public class LevelManager : MonoBehaviour {
 		else 
 		{
 			SceneManager.LoadScene(scenarioPrefab);
-			GameObject drivingCar = GetCar(session.Car);
-			Instantiate(drivingCar,new Vector3(0,0,0), Quaternion.identity);
+			SceneManager.sceneLoaded += OnSceneLoaded;
 		}
 	}
 
-	private GameObject GetCar(VirtualObject car)
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
+		SceneManager.SetActiveScene(scene);
+		GameObject drivingCar = InstantiateCar(currentSession.Car);
+		//marcha
+		//instanciar componentes e clima
+	}
+
+	private GameObject InstantiateCar(VirtualObject car)
+	{
+		Debug.Log("CARRAO: " + car.Prefab);
+		//pegar posicao inicial do carro de acordo com o cenario
 		switch(car.Prefab)
 		{
 			case "Pickup1":
-				return carPickup1;
+				return Instantiate(carPickup1,new Vector3(0,0,0), Quaternion.identity) as GameObject;
 			case "Pickup2":
-				return carPickup2;
+				return Instantiate(carPickup2,new Vector3(0,0,0), Quaternion.identity) as GameObject;
 			case "SportCoupe":
-				return carSportCoupe;
+				return Instantiate(carSportCoupe,new Vector3(0,0,0), Quaternion.identity) as GameObject;
 		}
 		return null;
 	}
+
+	
 }

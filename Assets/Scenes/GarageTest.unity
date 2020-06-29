@@ -2162,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1211215896502330, guid: 4e1e39dc76695c44d89e084ab27e1b8f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1367734738892974, guid: 4e1e39dc76695c44d89e084ab27e1b8f, type: 3}
       propertyPath: m_Name
@@ -3708,6 +3708,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Car9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165695066445008457, guid: 9a7535fc33b85d44882a5a86173e936b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8165695066447270025, guid: 9a7535fc33b85d44882a5a86173e936b,
         type: 3}
