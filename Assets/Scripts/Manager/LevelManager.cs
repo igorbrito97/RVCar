@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using System;
+using System.Globalization;
 public class LevelManager : MonoBehaviour {
     public static LevelManager Instance = null;
     [SerializeField] private Button buttonMessage;
@@ -87,25 +88,58 @@ public class LevelManager : MonoBehaviour {
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
 		SceneManager.SetActiveScene(scene);
+		//instanciar componentes e clima
+
+		for(int i=0;i<currentSession.ListComponents.Count;i++)
+		{
+			if(currentSession.ListComponents[i].Key == 1)//garage
+			{
+
+			}
+			else if(currentSession.ListComponents[i].Key == 2)//car
+			{
+
+			}
+		}
+
+		//carro
 		GameObject drivingCar = InstantiateCar(currentSession.Car);
 		//marcha
-		//instanciar componentes e clima
 	}
 
 	private GameObject InstantiateCar(VirtualObject car)
 	{
 		Debug.Log("CARRAO: " + car.Prefab);
 		//pegar posicao inicial do carro de acordo com o cenario
+		KeyValuePair<Vector3,Quaternion> initialPosition = GetInitialPosition(new VirtualObject().GetScenarioPositionById(currentSession.Scenario.Id));
 		switch(car.Prefab)
 		{
 			case "Pickup1":
-				return Instantiate(carPickup1,new Vector3(0,0,0), Quaternion.identity) as GameObject;
+				return Instantiate(carPickup1, initialPosition.Key, initialPosition.Value) as GameObject;
 			case "Pickup2":
-				return Instantiate(carPickup2,new Vector3(0,0,0), Quaternion.identity) as GameObject;
+				return Instantiate(carPickup2, initialPosition.Key, initialPosition.Value) as GameObject;
 			case "SportCoupe":
-				return Instantiate(carSportCoupe,new Vector3(0,0,0), Quaternion.identity) as GameObject;
+				return Instantiate(carSportCoupe, initialPosition.Key, initialPosition.Value) as GameObject;
 		}
 		return null;
+	}
+
+	private KeyValuePair<Vector3,Quaternion> GetInitialPosition(string text)
+	{
+		//vector3/quat => x,y,z,x,y,z
+		string[] info = text.Split(',');
+		float vecX,vecY,vecZ,quatX,quatY,quatZ;
+		vecX = float.Parse(info[0], CultureInfo.InvariantCulture.NumberFormat);
+		vecY = float.Parse(info[1], CultureInfo.InvariantCulture.NumberFormat);
+		vecZ = float.Parse(info[2], CultureInfo.InvariantCulture.NumberFormat);
+		quatX = float.Parse(info[3], CultureInfo.InvariantCulture.NumberFormat);
+		quatY = float.Parse(info[4], CultureInfo.InvariantCulture.NumberFormat);
+		quatZ = float.Parse(info[5], CultureInfo.InvariantCulture.NumberFormat);
+		Vector3 pos = new Vector3(vecX,vecY,vecZ);
+		Quaternion quat = Quaternion.Euler(quatX,quatY,quatZ);
+		
+		return new KeyValuePair<Vector3, Quaternion>(pos,quat);
+
 	}
 
 	

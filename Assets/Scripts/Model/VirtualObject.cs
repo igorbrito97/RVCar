@@ -140,6 +140,25 @@ public class VirtualObject : MonoBehaviour
         data.Close();
         return res;
     }
+    public string GetScenarioPositionById(int id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        string res = "";
+        string sql = @"select objSce_pos from objScenario as obj inner join scenario as sce
+                where obj.objSce_id = sce.objSce_id and scenario_id= " + id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            res = data["objSce_pos"].ToString();
+        }
+                
+        data.Close();
+        return res;
+    }
     
     public List<VirtualObject> SearchAllCar()
     {
