@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 29-Jun-2020 às 04:38
--- Versão do servidor: 10.4.6-MariaDB
--- versão do PHP: 7.1.32
+-- Tempo de geração: 01-Jul-2020 às 19:56
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -68,6 +68,7 @@ INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 (5, 5),
 (5, 6),
 (6, 5),
+(6, 6),
 (7, 5),
 (7, 6);
 
@@ -169,18 +170,21 @@ CREATE TABLE `objscenario` (
   `objSce_id` int(11) NOT NULL,
   `objSce_name` varchar(60) NOT NULL,
   `objSce_file` varchar(100) NOT NULL,
-  `objSce_prefab` varchar(60) NOT NULL
+  `objSce_prefab` varchar(60) NOT NULL,
+  `objSce_carpos` varchar(50) NOT NULL,
+  `objSce_garagepos` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `objscenario`
 --
 
-INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`, `objSce_prefab`) VALUES
-(1, 'Garagem Teste', 'ScenarioImage/GarageTest', 'GarageTest'),
-(2, 'Cidade Teste', 'ScenarioImage/CityTest', 'CityTest'),
-(5, 'Cidade', 'ScenarioImage/City', 'City'),
-(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad', 'CityRoad');
+INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`, `objSce_prefab`, `objSce_carpos`, `objSce_garagepos`) VALUES
+(1, 'Garagem Teste', 'ScenarioImage/GarageTest', 'GarageTest', '', ''),
+(2, 'Cidade Teste', 'ScenarioImage/CityTest', 'CityTest', '', ''),
+(5, 'Cidade', 'ScenarioImage/City', 'City', '', ''),
+(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad', 'CityRoad', '-150,0.71,-48,0,274,0', '-183,4,-50,0,0,0'),
+(7, 'Cidade sem rodovia', 'ScenarioImage/CityCenter', 'CityCenter', '', '');
 
 -- --------------------------------------------------------
 
@@ -205,10 +209,11 @@ CREATE TABLE `patient` (
 --
 
 INSERT INTO `patient` (`pat_id`, `pat_name`, `pat_cpf`, `pat_phone`, `pat_email`, `pat_note`, `pat_gender`, `pat_birthday`, `pat_status`) VALUES
-(1, 'Igor', '123456', '25697', 'emai@.com', 'paciente novo do bd novo', 'F', '2000-01-01', 0),
+(1, 'Igor', '123456', '25697', 'emai@.com', 'paciente novo do bd novo', 'F', '2000-01-01', 1),
 (2, 'Iguinho', '111', '123123', 'eaae@asd', '', 'M', '1968-01-01', 0),
 (3, 'Pacitizo', '123', '00002', 'eme.com', 'observation', 'M', '1987-01-01', 0),
-(4, 'Stella', '12313', '123123', 'stel.com', 'paciente fera demais', 'F', '2001-04-12', 0);
+(4, 'Stella', '12313', '123123', 'stel.com', 'paciente fera demais', 'F', '2001-04-12', 1),
+(5, 'Mensageiro', '123123123', '222222', 'msg@email.com', 'aaa', 'M', '1991-01-01', 1);
 
 -- --------------------------------------------------------
 
@@ -316,7 +321,8 @@ CREATE TABLE `session_component` (
 INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity`) VALUES
 (2, 3, 1),
 (2, 4, 1),
-(3, 5, 15);
+(3, 5, 15),
+(3, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -478,13 +484,13 @@ ALTER TABLE `objcomponent`
 -- AUTO_INCREMENT de tabela `objscenario`
 --
 ALTER TABLE `objscenario`
-  MODIFY `objSce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `objSce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `pat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `pat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `psychologist`

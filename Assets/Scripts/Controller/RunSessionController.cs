@@ -233,14 +233,11 @@ public class RunSessionController : MonoBehaviour {
         rowComponent.gameObject.SetActive(true);
         textIDBComponent.text = item.Key.ToString();
         textNameBComponent.text = item.Value.Key;
-        textQuantityBComponent.text = item.Value.Value + "";
-        Debug.Log("2ID: " + textIDBComponent.text);
-        Debug.Log("2NAME: " + textNameBComponent.text);
+        textQuantityBComponent.text = item.Value.Value.ToString();
         Debug.Log("2QUANT: " + textQuantityBComponent.text);
         newRow = Instantiate(rowComponent) as Button; 
         newRow.transform.SetParent(rowComponent.transform.parent,false);
-        Debug.Log("VAMO LA RPAPasdasdasdasdsdasdasdEPA");
-        newRow.onClick.AddListener(() => RowClickComp(newRow));
+        newRow.onClick.AddListener(() => RowClickComp(newRow,item.Value.Value));
         rowComponent.gameObject.SetActive(false);
     }
 
@@ -256,20 +253,17 @@ public class RunSessionController : MonoBehaviour {
         }
     }
 
-    public void RowClickComp(Button br)
+    public void RowClickComp(Button br, int quant)
     {
-        Debug.Log("VAMO LA RPAPEPA");
         //mostra imagem com componente
         panelComponentInfo.gameObject.SetActive(true);
-        Debug.Log("ID: " + br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text);
-        Debug.Log("NAME: " + br.gameObject.GetComponentInChildren<Text>(textNameBComponent).text);
         Debug.Log("QUANT: " + br.gameObject.GetComponentInChildren<Text>(textQuantityBComponent).text);
-        ScenarioComponent component = new ScenarioComponent().Search(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text));
-        inputFieldComponentName.text = component.name;
-        inputFieldComponentQuantity.text = br.gameObject.GetComponentInChildren<Text>(textQuantityBComponent).text;
+        ScenarioComponent component = new ScenarioComponent().SimpleSearch(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text));
+        inputFieldComponentName.text = component.Name;
+        inputFieldComponentQuantity.text = quant.ToString();
         inputFieldComponentDescription.text = component.Description;
 
-        //imgComponent.texture = Resources.Load(new VirtualObject().GetComponentImageByScenarioId(component.Id)) as Texture;
+        imgComponent.texture = Resources.Load(new VirtualObject().GetComponentImageByScenarioId(component.Id)) as Texture;
     }
 
     public void OkComponentInfoClick()
@@ -289,10 +283,22 @@ public class RunSessionController : MonoBehaviour {
         panelEdit.gameObject.SetActive(true);
         FillPanel(session);
     }
-    
-
-    void OnDisable()
+    public void ClearMainTable()
     {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textIDB.text = textNameB.text = textPatientB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
         Begin();
     }
 

@@ -157,6 +157,33 @@ public class ScenarioComponent : MonoBehaviour
         return command.ExecuteNonQuery() == 1;
     }
 
+    public ScenarioComponent SimpleSearch(int id) //no list
+    {
+        Debug.Log("SEARCHAADAA DO CLICK: " + id);
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        ScenarioComponent comp = null;
+        string sql = @"select * from component as comp where component_id = " + id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            comp = new ScenarioComponent(
+                Convert.ToInt32(data["component_id"]),
+                data["component_name"].ToString(),
+                data["component_description"].ToString(),
+                Convert.ToInt32(data["component_status"]),
+                new VirtualObject(
+                    Convert.ToInt32(data["objComp_id"])
+                )
+            );
+        }
+        data.Close();
+        return comp;
+    }
+
     public ScenarioComponent Search(int id)
     {
         Debug.Log("SEARCHAADAA DO CLICK: " + id);

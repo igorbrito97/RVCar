@@ -48,12 +48,6 @@ public class WeatherController : MonoBehaviour
         Begin();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Begin()
     {
         state = 0;
@@ -107,23 +101,43 @@ public class WeatherController : MonoBehaviour
         Weather weather;
 
         if(name.Trim() == "")
-            Debug.Log("Erro no nome!");
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(description.Trim() == "")
-            Debug.Log("Erro na descrição!");
+            LevelManager.Instance.AlterMessage("Descrição inválida. Digite uma descrição válida!",Color.red);
         else if(info <= 0)  
-            Debug.Log("Erro na informação!");
+            LevelManager.Instance.AlterMessage("Info inválida. Digite uma info válida!",Color.red);
         else
         {
             weather = new Weather(name,info,new WeatherType(type_id,type_name),description,status ? 1 : 0);
             if(state == 1)
             {
                 string returnMsg = weather.Insert();
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Clima inserido com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
             else if(state == 2)
             {
                 string returnMsg = weather.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Clima alterado com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
         }
             
@@ -136,18 +150,18 @@ public class WeatherController : MonoBehaviour
 
         if(!status)
         {
-            Debug.Log("Clima ja desativado!");
+            LevelManager.Instance.AlterMessage("Erro. Clima já desativado!", Color.red);
             return;
         }
 
         if(new Weather().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso!");
+            LevelManager.Instance.AlterMessage("Clima desativado com sucesso!", Color.green);
         }
         else
         {
-            Debug.Log("Erro ao deletar!");
+            LevelManager.Instance.AlterMessage("Erro ao desativar clima!", Color.red);
         }
     }
 
@@ -213,5 +227,23 @@ public class WeatherController : MonoBehaviour
             arrayAllWeatherType[i].Key != weather.Type.Id)
             i++;
         dropdownWeatherType.value = i;
+    }
+    public void ClearMainTable()
+    {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textIDB.text = textNameB.text = textWeatherTypeB.text = textInfoB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
+        Begin();
     }
 }

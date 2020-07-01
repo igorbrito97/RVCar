@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour {
     [SerializeField] private Text textMessage;
 	private bool msgStatus;
     private float startTime;
+	private GameObject mainCar;
 
 	//SCENE OBJECTS
 	//CAR
@@ -19,14 +20,15 @@ public class LevelManager : MonoBehaviour {
 	[SerializeField] GameObject carSportCoupe;
 
 	//COMPONENTS
-	[SerializeField] GameObject componentCar;
 	[SerializeField] GameObject componentGarage;
+	[SerializeField] GameObject[] componentCars; // carros que ficam movimentando
 
 	//para execução
 	public static Session currentSession;
 
     // Use this for initialization
     void Start () {
+		mainCar = null;
         if (Instance == null)
         {
             msgStatus = false;
@@ -89,29 +91,32 @@ public class LevelManager : MonoBehaviour {
 	{
 		SceneManager.SetActiveScene(scene);
 		//instanciar componentes e clima
+		
+		//carro
+		mainCar = InstantiateCar(currentSession.Car);
+		//marcha
 
 		for(int i=0;i<currentSession.ListComponents.Count;i++)
 		{
-			if(currentSession.ListComponents[i].Key == 1)//garage
+			if(currentSession.ListComponents[i].Key == 6)//garage
 			{
+				KeyValuePair<Vector3,Quaternion> position = 
+					GetPosition(new VirtualObject().GetGaragePositionByScenarioId(currentSession.Scenario.Id));
 
+                GameObject garage = Instantiate(componentGarage, position.Key, position.Value) as GameObject;
 			}
-			else if(currentSession.ListComponents[i].Key == 2)//car
+			else if(currentSession.ListComponents[i].Key == 5)//car
 			{
-
+				//ver quantidade, instaciar, selecionar o caminho e qual carro para todos
 			}
 		}
 
-		//carro
-		GameObject drivingCar = InstantiateCar(currentSession.Car);
-		//marcha
 	}
 
 	private GameObject InstantiateCar(VirtualObject car)
 	{
-		Debug.Log("CARRAO: " + car.Prefab);
 		//pegar posicao inicial do carro de acordo com o cenario
-		KeyValuePair<Vector3,Quaternion> initialPosition = GetInitialPosition(new VirtualObject().GetScenarioPositionById(currentSession.Scenario.Id));
+		KeyValuePair<Vector3,Quaternion> initialPosition = GetPosition(new VirtualObject().GetCarPositionByScenarioId(currentSession.Scenario.Id));
 		switch(car.Prefab)
 		{
 			case "Pickup1":
@@ -124,7 +129,7 @@ public class LevelManager : MonoBehaviour {
 		return null;
 	}
 
-	private KeyValuePair<Vector3,Quaternion> GetInitialPosition(string text)
+	private KeyValuePair<Vector3,Quaternion> GetPosition(string text)
 	{
 		//vector3/quat => x,y,z,x,y,z
 		string[] info = text.Split(',');

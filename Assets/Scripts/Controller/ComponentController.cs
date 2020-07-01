@@ -134,11 +134,9 @@ public class ComponentController : MonoBehaviour
         ScenarioComponent comp;
 
         if(name.Trim() == "")
-            Debug.Log("Erro no nome!");
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(description.Trim() == "")
-            Debug.Log("Erro na descrição!");
-        // else if(listScenario.Count == 0)
-        //     Debug.Log("Erro nos cenários. É necessário pelo menos 1!");
+            LevelManager.Instance.AlterMessage("Descrição inválida. Digite uma descrição válida!",Color.red);
         else 
         {
             comp = new ScenarioComponent(name, description, status ? 1 : 0, listScenario.Count > 0 ? listScenario : null,
@@ -146,12 +144,32 @@ public class ComponentController : MonoBehaviour
             if(state == 1) //add
             {
                 string returnMsg = comp.Insert();
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Componente inserido com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
             else if(state == 2)//alter
             {
                 string returnMsg = comp.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
+                 if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Componente alterado com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
         }
     }
@@ -163,18 +181,18 @@ public class ComponentController : MonoBehaviour
 
         if(!status)
         {
-            Debug.Log("Configuração ja desativada!");
+            LevelManager.Instance.AlterMessage("Erro! Componente já desativado!", Color.red);
             return;
         }
 
         if(new ScenarioComponent().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso!");
+            LevelManager.Instance.AlterMessage("Componente desativado com sucesso!", Color.green);
         }
         else
         {
-            Debug.Log("Erro ao deletar!");
+            LevelManager.Instance.AlterMessage("Erro ao desativar componente", Color.red);
         }
     }
 
@@ -253,7 +271,7 @@ public class ComponentController : MonoBehaviour
     public void AddScenarioClick()
     {
         if(listScenario.Contains(arrayAllScenarios[dropdownScenario.value])){
-            Debug.Log("ja existe na lista! Nao add");
+            LevelManager.Instance.AlterMessage("Erro ao adicionar. Cenário já esta na lista!", Color.red);
             return;
         }
         else {
@@ -293,7 +311,7 @@ public class ComponentController : MonoBehaviour
     public void DeleteScenarioClick()
     {
         if(selectedScenarioIndex < 0)
-            Debug.Log("Erro ao excluir!");
+            LevelManager.Instance.AlterMessage("Erro ao excluir. Selecione um cenário!", Color.red);
         else {
             var clone = rows2.transform.GetChild(selectedScenarioIndex+1); //+1 porque o primeiro ta false
             Destroy(clone.gameObject);
@@ -309,5 +327,24 @@ public class ComponentController : MonoBehaviour
             VirtualObject obj = new VirtualObject().SearchComponent(arrayAllVirtualObj[dropdownSelectObject.value].Key);
             objImage.texture = Resources.Load(obj.File) as Texture;
         }
+    }
+
+    public void ClearMainTable()
+    {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textIDB.text = textNameB.text = textDescriptionB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
+        Begin();
     }
 }

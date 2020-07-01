@@ -64,12 +64,6 @@ public class PatientController : MonoBehaviour
         Begin();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void Begin()
     {
         state = 0;
@@ -119,19 +113,19 @@ public class PatientController : MonoBehaviour
 
 
         if (name.Trim() == "")
-            LevelManager.Instance.AlterMessage("Erro no nome!",Color.red);
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if (email.Trim() == "")
-            Debug.Log("Erro no email");
+            LevelManager.Instance.AlterMessage("Email inválido. Digite um email válido!",Color.red);
         else if (cpf.Trim() == "")
-            Debug.Log("Erro no cpf");
+            LevelManager.Instance.AlterMessage("CPF inválido. Digite um CPF válido!",Color.red);
         else if (phone.Trim() == "")
-            Debug.Log("Erro no phone");
+            LevelManager.Instance.AlterMessage("Telefone inválido. Digite um telefone válido!",Color.red);
         else if (yearString.Trim() == "")
-            Debug.Log("Erro no year");
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido!",Color.red);
         else if (!Int32.TryParse(yearString, out year))
-            Debug.Log("Erro no ano de nascimento ");
-        else if (year < 1920 || year > 2010)
-            Debug.Log("Erro no ano de nascimento");
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido!",Color.red);
+        else if (year < 1920 || year > 2005)
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido! (É necessário ter 18 anos)",Color.red);
         else
         {
             DateTime birthday = new DateTime(year, month + 1, day + 1);
@@ -141,9 +135,10 @@ public class PatientController : MonoBehaviour
                 string returnMsg = pat.Insert();
                 if(returnMsg.Equals("Ok"))
                 {
-                    Debug.Log(returnMsg);
-                    //Begin();
-                    LevelManager.Instance.AlterMessage(returnMsg,Color.green);
+                    LevelManager.Instance.AlterMessage("Paciente inserido com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
                 }
                 else
                 {
@@ -155,9 +150,10 @@ public class PatientController : MonoBehaviour
                 string returnMsg = pat.Alter(Convert.ToInt32(id));
                 if(returnMsg.Equals("Ok"))
                 {
-                    Debug.Log(returnMsg);
-                    //Begin();
-                    LevelManager.Instance.AlterMessage(returnMsg,Color.green);
+                    LevelManager.Instance.AlterMessage("Paciente alterado com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
                 }
                 else
                 {
@@ -174,17 +170,17 @@ public class PatientController : MonoBehaviour
 
         if(!status)
         {
-            Debug.Log("usuario ja desativado!");
+            LevelManager.Instance.AlterMessage("Erro! Paciente já desativado!", Color.red);
             return;
         }
 
         if(new Patient().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso!");
+            LevelManager.Instance.AlterMessage("Sucesso ao deletar paciente!", Color.green);
         }
         else {
-            Debug.Log("erro");
+            LevelManager.Instance.AlterMessage("Erro ao deletar paciente!", Color.red);
         }
     }
 
@@ -257,5 +253,23 @@ public class PatientController : MonoBehaviour
             patient.Gender != dropdownGender.options[i].text[0])
             i++;
         dropdownGender.value = i;
+    }
+    public void ClearMainTable()
+    {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textID.text = textNameB.text = textCpfB.text = textBirthdayB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
+        Begin();
     }
 }

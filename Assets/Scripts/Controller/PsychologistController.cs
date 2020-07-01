@@ -121,39 +121,59 @@ public class PsychologistController : MonoBehaviour {
         
         
         if(name.Trim() == "")
-            Debug.Log("Erro no nome");
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(email.Trim() == "")
-            Debug.Log("Erro no email");
+            LevelManager.Instance.AlterMessage("Email inválido. Digite um email válido!",Color.red);
         else if(cpf.Trim() == "")
-            Debug.Log("Erro no cpf");
+            LevelManager.Instance.AlterMessage("CPF inválido. Digite um CPF válido!",Color.red);
         else if(crp.Trim() == "")
-            Debug.Log("Erro no crp");
+            LevelManager.Instance.AlterMessage("CRP inválido. Digite um CRP válido!",Color.red);
         else if(phone.Trim() == "")
-            Debug.Log("Erro no phone");
+            LevelManager.Instance.AlterMessage("Telefone inválido. Digite um telefone válido!",Color.red);
         else if(yearString.Trim() == "")
-            Debug.Log("Erro no year");
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido!",Color.red);
         else if(!Int32.TryParse(yearString, out year))
-            Debug.Log("Erro no ano de nascimento ");
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido!",Color.red);
         else if(year < 1920 || year > 2010)
-            Debug.Log("Erro no ano de nascimento");
+            LevelManager.Instance.AlterMessage("Ano de nascimento inválido. Digite um ano válido! (É necessário ter 18 anos)",Color.red);
         else if(password.Trim() == "")
-            Debug.Log("Erro no password");
+            LevelManager.Instance.AlterMessage("Senha inválida. Digite uma senha válida!",Color.red);
         else if(password2.Trim() == "")
-            Debug.Log("Erro no password2");
+            LevelManager.Instance.AlterMessage("Senha inválida. Digite uma senha válida!",Color.red);
         else if(password != password2)
-            Debug.Log("Senhas não são iguais!");
+            LevelManager.Instance.AlterMessage("Senhas diferentes. Digite novamente, as duas senhas devem ser iguais",Color.red);
         else {
             DateTime birthday = new DateTime(year,month+1,day+1);
             Psychologist psyc = new Psychologist(name,cpf,phone,email,gender,password,status ? 1 : 0,crp,birthday);
             if(state == 1) //adding
             {
                 string returnMsg = psyc.Insert();
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Psicólogo inserido com sucesso!",Color.red);
+                    Begin();
+                    if(rowsClone!=null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg,Color.red);
+                }
             } 
             else if(state == 2) //alter
             {
                 string returnMsg = psyc.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Psicólogo alterado com sucesso!",Color.red);
+                    Begin();
+                    if(rowsClone!=null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg,Color.red);
+                }
             }
         }
     }
@@ -165,17 +185,17 @@ public class PsychologistController : MonoBehaviour {
 
         if(!status)
         {
-            Debug.Log("usuário ja desativado!");
+            LevelManager.Instance.AlterMessage("Erro. Psicólogo já desativado!",Color.red);
             return;
         }
 
         if(new Psychologist().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso");
+            LevelManager.Instance.AlterMessage("Psicólogo desativado com sucesso!",Color.green);
         }
         else {
-            Debug.Log("erro");
+            LevelManager.Instance.AlterMessage("Erro ao desativar Psicólogo!",Color.red);
         }
     }
 
@@ -262,5 +282,23 @@ public class PsychologistController : MonoBehaviour {
         this.gameObject.SetActive(true);
         panelEdit.gameObject.SetActive(true);
         LoadPage(psyc);
+    }
+    public void ClearMainTable()
+    {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textID.text = textNameB.text = textCpfB.text = textBirthdayB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
+        Begin();
     }
 }

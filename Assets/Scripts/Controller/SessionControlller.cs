@@ -323,21 +323,21 @@ public class SessionControlller : MonoBehaviour
         Session session;
 
         if(inputFieldPsychologist.text.Trim() == "")
-            Debug.Log("Erro no psicologo!");
+            LevelManager.Instance.AlterMessage("Psicólogo inválido!",Color.red);
         else if(name.Trim() == "")
-            Debug.Log("Erro no nome!");
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(description.Trim() == "")
-            Debug.Log("Erro na descrição!");
+            LevelManager.Instance.AlterMessage("Descrição inválida. Digite uma descrição válida!",Color.red);
         else if(currentPatient.Id == 0)
-            Debug.Log("Erro. Selecione um paciente!");
+            LevelManager.Instance.AlterMessage("Paciente inválido. Selecione um paciente válido!",Color.red);
         else if(currentScenario.Id == 0)
-            Debug.Log("Erro. Selecione um cenário virtual!");
+            LevelManager.Instance.AlterMessage("Cenário inválido. Selecione um cenário válido!",Color.red);
         else if(currentWeather.Id == 0)
-            Debug.Log("Erro. Selecione um clima!");
+            LevelManager.Instance.AlterMessage("Clima inválido. Selecione um clima válido!",Color.red);
         else if(currentCar.Key == 0)
-            Debug.Log("Erro. Escolha um carro!");
+            LevelManager.Instance.AlterMessage("Carro inválido. Selecione um carro válido!",Color.red);
         else if(currentGear == -1)
-            Debug.Log("Erro. Escolha uma marcha");
+            LevelManager.Instance.AlterMessage("Sistema de marcha inválido. Selecione uma marcha válida!",Color.red);
         else 
         {
             session = new Session(name,description,GameManager.instance.Psychologist,currentPatient,currentScenario,currentWeather, 
@@ -345,7 +345,6 @@ public class SessionControlller : MonoBehaviour
             if(state == 1) //add
             {
                 string returnMsg = session.Insert();
-                Debug.Log(returnMsg);
                 if(returnMsg == "Ok")
                 {
                     state = 1;
@@ -355,14 +354,32 @@ public class SessionControlller : MonoBehaviour
                     buttonDelete.gameObject.SetActive(false);
                     buttonExecute.gameObject.SetActive(true);
                     buttonConfirm.gameObject.SetActive(false);
+
+                    LevelManager.Instance.AlterMessage("Sessão inserida com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
                 }
             }
             else if(state == 2)//alter
             {
                 string returnMsg = session.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
-                if(returnMsg == "Ok")
+                if(returnMsg.Equals("Ok"))
+                {
                     state = 0;
+                    LevelManager.Instance.AlterMessage("Cenário alterado com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
         }
     }
@@ -374,18 +391,18 @@ public class SessionControlller : MonoBehaviour
 
         if(!status)
         {
-            Debug.Log("Sessão ja desativada!");
+            LevelManager.Instance.AlterMessage("Erro! Sessão já desativado!", Color.red);
             return;
         }
 
         if(new Session().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso!");
+            LevelManager.Instance.AlterMessage("Sessão desativada com sucesso!", Color.green);
         }
         else
         {
-            Debug.Log("Erro ao deletar!");
+            LevelManager.Instance.AlterMessage("Erro ao desativar sessão!", Color.red);
         }
     }
 
@@ -456,7 +473,7 @@ public class SessionControlller : MonoBehaviour
     {
         if(IsComponentInList(arrayAllComponents[dropdownComponent.value].Key))
         {
-            Debug.Log("ja existe na lista! Nao add");
+            LevelManager.Instance.AlterMessage("Erro ao adicionar. Componente já esta na lista!", Color.red);
             return;
         }
         else {
@@ -501,7 +518,7 @@ public class SessionControlller : MonoBehaviour
     public void DeleteComponentClick()
     {
         if(selectedComponentIndex < 0)
-            Debug.Log("Erro ao excluir!");
+            LevelManager.Instance.AlterMessage("Erro ao excluir. Selecione um componente!", Color.red);
         else {
             var clone = rowsComp.transform.GetChild(selectedComponentIndex+1); //+1 porque o primeiro ta false
             Destroy(clone.gameObject);
@@ -874,8 +891,22 @@ public class SessionControlller : MonoBehaviour
         LoadPage(session);
     }
 
-    void OnDisable()
+    public void ClearMainTable()
     {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textIDB.text = textNameB.text = textPsychologistB.text = textPublicB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
         Begin();
     }
 }

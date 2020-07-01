@@ -40,11 +40,6 @@ public class EnvironmentTypeController : MonoBehaviour
 
     }
 
-    void Update()
-    {
-        
-    }
-
     public void Begin()
     {
         state = 0;
@@ -79,21 +74,41 @@ public class EnvironmentTypeController : MonoBehaviour
         EnvironmentType envType;
 
         if(name.Trim() == "")
-            Debug.Log("Erro no nome!");
+            LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(description.Trim() == "")
-            Debug.Log("Erro na descrição!");
+            LevelManager.Instance.AlterMessage("Descrição inválida. Digite uma descrição válida!",Color.red);
         else 
         {
             envType = new EnvironmentType(name,description,status ? 1 : 0);
             if(state == 1)
             {
                 string returnMsg = envType.Insert();
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Tipo de ambiente inserido com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
             else if(state == 2)
             {
                 string returnMsg = envType.Alter(Convert.ToInt32(id));
-                Debug.Log(returnMsg);
+                if(returnMsg.Equals("Ok"))
+                {
+                    LevelManager.Instance.AlterMessage("Tipo de ambiente alterado com sucesso!",Color.green);
+                    Begin();
+                    if(rowsClone != null)
+                        ClearMainTable();
+                }
+                else
+                {
+                    LevelManager.Instance.AlterMessage(returnMsg, Color.red);
+                }
             }
         }
     }
@@ -105,18 +120,18 @@ public class EnvironmentTypeController : MonoBehaviour
 
         if(!status)
         {
-            Debug.Log("Ambiente ja desativado!");
+            LevelManager.Instance.AlterMessage("Erro! Tipo de ambiente já desativado!", Color.red);
             return;
         }
 
         if(new EnvironmentType().Delete(Convert.ToInt32(id)))
         {
             Begin();
-            Debug.Log("Sucesso!");
+            LevelManager.Instance.AlterMessage("Tipo de ambiente desativado com sucesso!", Color.green);
         }
         else
         {
-            Debug.Log("Erro ao deletar!");
+            LevelManager.Instance.AlterMessage("Erro ao desativar tipo de ambiente!", Color.red);
         }
     }
 
@@ -174,5 +189,23 @@ public class EnvironmentTypeController : MonoBehaviour
         inputFieldDescription.text = env.Description;
         
         toggleStatus.isOn = env.Status == 1;
+    }
+    public void ClearMainTable()
+    {
+        var clones = new Transform[rows.transform.childCount];
+        for (var i = 1; i < clones.Length; i++)
+        {
+            clones[i] = rows.transform.GetChild(i);
+            Destroy(clones[i].gameObject);
+        }
+        textIDB.text = textNameB.text = textDescriptionB.text = textStatusB.text = "";
+        row.gameObject.SetActive(true);
+        rowsClone = null;
+    }
+    void onDisable()
+    {
+        if(rowsClone != null)
+            ClearMainTable();
+        Begin();
     }
 }
