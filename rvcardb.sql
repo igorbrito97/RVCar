@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 01-Jul-2020 às 19:56
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.3
+-- Tempo de geração: 02-Jul-2020 às 07:22
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -68,9 +68,9 @@ INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 (5, 5),
 (5, 6),
 (6, 5),
-(6, 6),
 (7, 5),
-(7, 6);
+(7, 6),
+(8, 5);
 
 -- --------------------------------------------------------
 
@@ -92,7 +92,8 @@ INSERT INTO `compsce_quantity` (`comp_id`, `sce_id`, `quantmax`) VALUES
 (5, 3, 2),
 (5, 7, 5),
 (5, 5, 10),
-(5, 6, 15);
+(5, 6, 15),
+(5, 8, 12);
 
 -- --------------------------------------------------------
 
@@ -180,11 +181,11 @@ CREATE TABLE `objscenario` (
 --
 
 INSERT INTO `objscenario` (`objSce_id`, `objSce_name`, `objSce_file`, `objSce_prefab`, `objSce_carpos`, `objSce_garagepos`) VALUES
-(1, 'Garagem Teste', 'ScenarioImage/GarageTest', 'GarageTest', '', ''),
-(2, 'Cidade Teste', 'ScenarioImage/CityTest', 'CityTest', '', ''),
-(5, 'Cidade', 'ScenarioImage/City', 'City', '', ''),
-(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad', 'CityRoad', '-150,0.71,-48,0,274,0', '-183,4,-50,0,0,0'),
-(7, 'Cidade sem rodovia', 'ScenarioImage/CityCenter', 'CityCenter', '', '');
+(1, 'Garagem Teste', 'ScenarioImage/GarageTest', 'GarageTest', '70,1,-91.4,0,270,0', ''),
+(2, 'Cidade Teste', 'ScenarioImage/CityTest', 'CityTest', '6.7,0.1,-240.58,0,0,0', '71,2.5,-266.7,0,0,0'),
+(5, 'Cidade', 'ScenarioImage/City', 'City', '107,0.91,-79,0.7,93,-2', '-169,3.4,22,0,-96,0'),
+(6, 'Cidade com rodovia', 'ScenarioImage/CityRoad', 'CityRoad', '-150,0.71,-48,0,274,0', ''),
+(7, 'Cidade sem rodovia', 'ScenarioImage/CityCenter', 'CityCenter', '-181.6,0.7,-33,0,173,0', '');
 
 -- --------------------------------------------------------
 
@@ -270,7 +271,8 @@ INSERT INTO `scenario` (`scenario_id`, `scenario_name`, `scenario_description`, 
 (4, 'Garagem dificil', 'alo alo', 2, 0, 1),
 (5, 'Cidade principal', 'Cidade com construções, ruas e rodovia. Possibilidade de adicionar carros se movimentando e garagem', 1, 1, 5),
 (6, 'Simulação de rodovias', 'Nesse cenário o paciente é posto perto da entrada para um rodovia. É possível de se adicionar carros', 1, 1, 6),
-(7, 'Cidade simples', 'Esse cenário simula um pequeno bairro sem muita moviemtação.Existe a possibilidade de se adicionar carros e garagem', 4, 1, 2);
+(7, 'Cidade simples', 'Esse cenário simula um pequeno bairro sem muita moviemtação.Existe a possibilidade de se adicionar carros e garagem', 4, 1, 2),
+(8, 'Área urbana', 'Simulação de uma área com casas e prédios', 1, 1, 7);
 
 -- --------------------------------------------------------
 
@@ -297,10 +299,14 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`, `car_id`, `session_gear`) VALUES
-(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 1, 1, 1, 0),
-(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 1, 1, 2, 0),
+(1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 0, 1, 1, 0),
+(2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 0, 1, 2, 0),
 (3, 1, 4, 4, 6, 'Testezaaaa', '1231231231231', 1, 0, 1, 1),
-(4, 1, 1, 3, 7, 'qqq', 'qqq', 0, 1, 3, 1);
+(4, 1, 1, 3, 7, 'qqq', 'qqq', 0, 1, 3, 1),
+(5, 1, 1, 4, 3, 'Sessão garagT', '22', 1, 1, 2, 0),
+(6, 1, 5, 3, 7, 'CityT', '3', 1, 1, 3, 0),
+(7, 1, 4, 4, 5, 'Cityzda', '1', 1, 1, 1, 0),
+(8, 1, 5, 3, 8, 'Cter', 'a', 1, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -322,7 +328,9 @@ INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity
 (2, 3, 1),
 (2, 4, 1),
 (3, 5, 15),
-(3, 6, 1);
+(3, 6, 1),
+(6, 6, 1),
+(7, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -502,13 +510,13 @@ ALTER TABLE `psychologist`
 -- AUTO_INCREMENT de tabela `scenario`
 --
 ALTER TABLE `scenario`
-  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `scenario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `weather`

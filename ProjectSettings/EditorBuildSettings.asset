@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CityRoad.unity
     guid: 130d4dff2c332ed4ebb7a14359a17265
+  - enabled: 1
+    path: Assets/Scenes/CityCenter.unity
+    guid: c8b16c483f920f547b25afb693bf2314
   m_configObjects: {}
