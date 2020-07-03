@@ -305,7 +305,7 @@ public class ScenarioComponent : MonoBehaviour
         MySqlCommand command = GameManager.instance.Con.CreateCommand();
         MySqlDataReader data;
         int res = 1;
-        string sql = @"select quantmax from compsce_quantity where comp_id = " + comp_id + " and sce_id = " + sce_id;
+        string sql = @"select quantmax from compsce_execution where comp_id = " + comp_id + " and sce_id = " + sce_id;
 
         command.CommandText = sql;
         data = command.ExecuteReader();
@@ -313,6 +313,24 @@ public class ScenarioComponent : MonoBehaviour
         if (data.Read())
         {
             res = Convert.ToInt32(data["quantmax"]);
+        }
+        data.Close();
+        return res;
+    }
+
+    public string GetComponentInitialPosition(int comp_id, int sce_id)
+    {
+        MySqlCommand command = GameManager.instance.Con.CreateCommand();
+        MySqlDataReader data;
+        string res = "";
+        string sql = @"select initialPositions from compsce_execution where comp_id = " + comp_id + " and sce_id = " + sce_id;
+
+        command.CommandText = sql;
+        data = command.ExecuteReader();
+
+        if (data.Read())
+        {
+            res = data["initialPositions"].ToString();
         }
         data.Close();
         return res;

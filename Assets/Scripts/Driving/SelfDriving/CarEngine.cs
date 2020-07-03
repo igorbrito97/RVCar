@@ -28,21 +28,56 @@ public class CarEngine : MonoBehaviour
     public float frontSensorAngle = 30f;
 
     private List<Transform> nodes;
-    private int currentNode = 0;
+    private int currentNode;
     private bool isAvoiding = false;
     private float targetSteerAngle = 0;
     void Start()
     {
         GetComponent<Rigidbody>().centerOfMass = centerOfMass;
         Transform[] pathTranform = path.GetComponentsInChildren<Transform>();
+        //ver qual é o ponto mais proximo do carro e começar a colocar os nodes a partir dele, ai vai seguir um caminho só
+        
+        /*
+        int pos = GetClosestNode(pathTranform);
         nodes = new List<Transform>();
+        for(int count = 0; count < pathTranform.Length; count ++)
+        {
+            if(pathTranform[pos] != path.transform)
+            {
+                nodes.Add(pathTranform[pos]);
+            }
+            if(pos == pathTranform.Length-1) //last one
+                pos = 0;
+            else pos++;
+        }*/
 
+        currentNode = GetFirstNode(pathTranform);
+        nodes = new List<Transform>();
         for(int i = 0; i< pathTranform.Length; i++)
         {
             if(pathTranform[i] != path.transform)
                 nodes.Add(pathTranform[i]);
         }
+        Debug.Log("FIRST NODE: "+ currentNode);
+        Debug.Log("NODES COUNT: " + nodes.Count);
+        
     }
+
+    private int GetFirstNode(Transform[] pathTranform)
+    {
+        float minDist = Vector3.Distance(this.transform.position, pathTranform[0].position);
+        int pos = 0;
+        for(int i = 1; i < pathTranform.Length; i++)
+        {
+            if(Vector3.Distance(this.transform.position, pathTranform[i].position) < minDist)
+            {
+                pos = i;
+                minDist = Vector3.Distance(this.transform.position, pathTranform[i].position);
+            }
+        }
+        return pos;
+    }
+
     void FixedUpdate()
     {
         CheckSensors();
@@ -127,9 +162,6 @@ public class CarEngine : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("AVOID TURN: " + avoidTurn);
-        Debug.Log(" ISAV " + isAvoiding);
         if(isAvoiding)
             targetSteerAngle = maxSteerAngle * avoidTurn;
 
@@ -168,6 +200,8 @@ public class CarEngine : MonoBehaviour
                 currentNode = 0;
             else 
                 currentNode++;
+
+            Debug.Log("HORA DE TROCAR: " + currentNode);
         }
     }
 

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 02-Jul-2020 às 07:22
--- Versão do servidor: 10.4.6-MariaDB
--- versão do PHP: 7.1.32
+-- Tempo de geração: 03-Jul-2020 às 23:58
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -75,25 +75,26 @@ INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `compsce_quantity`
+-- Estrutura da tabela `compsce_execution`
 --
 
-CREATE TABLE `compsce_quantity` (
+CREATE TABLE `compsce_execution` (
   `comp_id` int(11) NOT NULL,
   `sce_id` int(11) NOT NULL,
-  `quantmax` int(11) NOT NULL
+  `quantmax` int(11) NOT NULL,
+  `initialPositions` varchar(2000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `compsce_quantity`
+-- Extraindo dados da tabela `compsce_execution`
 --
 
-INSERT INTO `compsce_quantity` (`comp_id`, `sce_id`, `quantmax`) VALUES
-(5, 3, 2),
-(5, 7, 5),
-(5, 5, 10),
-(5, 6, 15),
-(5, 8, 12);
+INSERT INTO `compsce_execution` (`comp_id`, `sce_id`, `quantmax`, `initialPositions`) VALUES
+(5, 3, 2, '-11.1,1.3,-97,0,90,0/49,1.3,3.3,0,270,0'),
+(5, 7, 5, ''),
+(5, 5, 10, ''),
+(5, 6, 15, ''),
+(5, 8, 12, '');
 
 -- --------------------------------------------------------
 
@@ -328,7 +329,7 @@ INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity
 (2, 3, 1),
 (2, 4, 1),
 (3, 5, 15),
-(3, 6, 1),
+(5, 5, 1),
 (6, 6, 1),
 (7, 6, 1);
 

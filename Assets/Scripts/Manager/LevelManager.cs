@@ -107,10 +107,14 @@ public class LevelManager : MonoBehaviour {
 			}
 			else if(currentSession.ListComponents[i].Key == 5)//car
 			{
-				//ver quantidade, instaciar, selecionar o caminho e qual carro para todos
-				for(int j = 0; j<currentSession.ListComponents[i].Value.Value; j++)
+				//ver quantidade, instaciar(pos inicial), selecionar o caminho e qual carro para todos
+				// as posicoes estao no banco separadas por /
+				//CAT DEALERS: 1:37
+				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
+				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
 				{
 					Debug.Log("Carro: " + j);
+					Instantiate(componentCars[0], listCarPos[j].Key, listCarPos[j].Value);
 				}
 			}
 		}
@@ -131,6 +135,18 @@ public class LevelManager : MonoBehaviour {
 				return Instantiate(carSportCoupe, initialPosition.Key, initialPosition.Value) as GameObject;
 		}
 		return null;
+	}
+
+	private List<KeyValuePair<Vector3,Quaternion>> GetCarInitialPositions(int comp_id)
+	{
+		List<KeyValuePair<Vector3,Quaternion>> list = new List<KeyValuePair<Vector3,Quaternion>>();
+		string text = new ScenarioComponent().GetComponentInitialPosition(comp_id,currentSession.Scenario.Id);
+		string[] positions = text.Split('/');
+		for(int i=0; i< positions.Length; i++)
+		{
+			list.Add(GetPosition(positions[i]));
+		}
+		return list;
 	}
 
 	private KeyValuePair<Vector3,Quaternion> GetPosition(string text)

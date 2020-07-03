@@ -93367,7 +93367,8 @@ MonoBehaviour:
     type: 3}
   componentGarage: {fileID: 5251823836364875310, guid: 9e9abce375ea74f41b62fe7ec7369706,
     type: 3}
-  componentCars: []
+  componentCars:
+  - {fileID: 8165695066445008457, guid: 9a7535fc33b85d44882a5a86173e936b, type: 3}
 --- !u!4 &1405380698
 Transform:
   m_ObjectHideFlags: 0
