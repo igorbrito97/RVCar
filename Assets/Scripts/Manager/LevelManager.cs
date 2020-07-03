@@ -108,6 +108,10 @@ public class LevelManager : MonoBehaviour {
 			else if(currentSession.ListComponents[i].Key == 5)//car
 			{
 				//ver quantidade, instaciar, selecionar o caminho e qual carro para todos
+				for(int j = 0; j<currentSession.ListComponents[i].Value.Value; j++)
+				{
+					Debug.Log("Carro: " + j);
+				}
 			}
 		}
 
