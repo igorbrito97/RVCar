@@ -81,7 +81,7 @@ public class LoginController : MonoBehaviour {
             {
                 data.Close();
                 connection.Close();
-                errorText.text = "Erro ao conectar no banco!";
+                errorText.text = "Erro ao conectar no banco! ";
                 errorText.gameObject.SetActive(true);
                 return;
             }

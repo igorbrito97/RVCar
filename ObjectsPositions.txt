@@ -1,0 +1,19 @@
+Vector3,Quaternion
+Cenários: 3 - Garagem Simples / 4 - Garagem dificil / 5 - Cidade principal / 6 - Simulação de rodovias / 7 - Cidade simples / 8 - Área urbana
+
+Garage(6):
+7(Cidade simples): 71,2.5,-266.7,0,0,0
+5(Cidade): -169,3.4,22,0,-96,0
+
+Carros em movimento(5): OK para caminho criado
+3(Garagem) = 2 : OK -11.1,1.3,-97,0,90,0/49,1.3,3.3,0,270,0
+5(Cidade) = 10 : 
+6(Rodovia) = 15 : 
+7(Cidade simples) = 5 : 
+8(Centro) = 12 : 
+
+
+Carros estacionados(7): 
+3(Garagem) = 5 : 25,1.3,-106,0,90,0/50,1.3,11.65,0,270,0/-59,1.3,-11.6,0,90,0/-52,1.3,11.65,0,270,0/-66,1.3,-82.7,0,270,0
+5(Cidade) = 10 : 88,1,-89.1,0,90,0/-52,1,-82,0,93,0/-19.77,1,-22,0,0,0/150.42,1,3.3,0,4,0/119.8,1,57,0,183,0/210,1,135.2,0,271,0/92,1,122.5,0,91,0/2,1,-51.9,0,273,0/268.8,1,-5,0,183,0/270,1,101,0,181,0
+8(Centro) = 10 : 

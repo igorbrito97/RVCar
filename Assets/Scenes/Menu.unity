@@ -93367,8 +93367,13 @@ MonoBehaviour:
     type: 3}
   componentGarage: {fileID: 5251823836364875310, guid: 9e9abce375ea74f41b62fe7ec7369706,
     type: 3}
-  componentCars:
-  - {fileID: 8165695066445008457, guid: 9a7535fc33b85d44882a5a86173e936b, type: 3}
+  componentMovingCars:
+  - {fileID: 6870276326776927056, guid: 91660304531cbe843ae46ddbb381295d, type: 3}
+  componentParkedCars:
+  - {fileID: 3392082827364778506, guid: bc20e831e0d73da45970348cbddc7ddb, type: 3}
+  - {fileID: 5349141041140606578, guid: 0e23c2ff5a8055b449f42bd9f6f0c191, type: 3}
+  - {fileID: 2965838799390781237, guid: b8e3ad83dba6b084da843df01136cdce, type: 3}
+  - {fileID: 9221301826364989936, guid: d315e41797f84e84180fc8a771d7d758, type: 3}
 --- !u!4 &1405380698
 Transform:
   m_ObjectHideFlags: 0

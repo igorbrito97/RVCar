@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
 using System.Globalization;
+
 public class LevelManager : MonoBehaviour {
     public static LevelManager Instance = null;
     [SerializeField] private Button buttonMessage;
@@ -21,7 +20,8 @@ public class LevelManager : MonoBehaviour {
 
 	//COMPONENTS
 	[SerializeField] GameObject componentGarage;
-	[SerializeField] GameObject[] componentCars; // carros que ficam movimentando
+	[SerializeField] GameObject[] componentMovingCars; // carros que ficam movimentando
+	[SerializeField] GameObject[] componentParkedCars; // carros que ficam movimentando
 
 	//para execução
 	public static Session currentSession;
@@ -105,7 +105,7 @@ public class LevelManager : MonoBehaviour {
 
                 GameObject garage = Instantiate(componentGarage, position.Key, position.Value) as GameObject;
 			}
-			else if(currentSession.ListComponents[i].Key == 5)//car
+			else if(currentSession.ListComponents[i].Key == 5)//moving car
 			{
 				//ver quantidade, instaciar(pos inicial), selecionar o caminho e qual carro para todos
 				// as posicoes estao no banco separadas por /
@@ -113,12 +113,35 @@ public class LevelManager : MonoBehaviour {
 				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
 				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
 				{
-					Debug.Log("Carro: " + j);
-					Instantiate(componentCars[0], listCarPos[j].Key, listCarPos[j].Value);
+					Instantiate(componentMovingCars[0], listCarPos[j].Key, listCarPos[j].Value);
+				}
+			}
+			else if(currentSession.ListComponents[i].Key == 7)//parked car
+			{
+				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
+				listCarPos = Shuffle(listCarPos);
+				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
+				{
+					Instantiate(componentParkedCars[Random.Range(0,componentParkedCars.Length)], listCarPos[j].Key, listCarPos[j].Value);
 				}
 			}
 		}
 
+	}
+
+	private List<KeyValuePair<Vector3,Quaternion>> Shuffle(List<KeyValuePair<Vector3,Quaternion>> list)
+	{  
+		int n = list.Count;  
+		while (n > 1) 
+		{  
+			KeyValuePair<Vector3,Quaternion> item;
+			n--;  
+			int k = Random.Range(0,n + 1);  
+			item = list[k];  
+			list[k] = list[n];  
+			list[n] = item;  
+		}  
+		return list;
 	}
 
 	private GameObject InstantiateCar(VirtualObject car)

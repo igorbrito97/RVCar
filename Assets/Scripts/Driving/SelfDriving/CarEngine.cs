@@ -34,6 +34,7 @@ public class CarEngine : MonoBehaviour
     void Start()
     {
         GetComponent<Rigidbody>().centerOfMass = centerOfMass;
+        path = GameObject.Find("Path").transform; //pega da cena
         Transform[] pathTranform = path.GetComponentsInChildren<Transform>();
         //ver qual é o ponto mais proximo do carro e começar a colocar os nodes a partir dele, ai vai seguir um caminho só
         
