@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - SensorBloco
   - Garage
   - Environment
+  - Brake
   layers:
   - Default
   - TransparentFX

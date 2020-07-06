@@ -202,7 +202,12 @@ public class CarEngine : MonoBehaviour
             else 
                 currentNode++;
 
-            Debug.Log("HORA DE TROCAR: " + currentNode);
+            if(nodes[currentNode].CompareTag("Brake"))
+            {
+                isBraking = true;
+                Debug.Log("ESTA FREIANDO");
+            }
+            else isBraking = false;
         }
     }
 
