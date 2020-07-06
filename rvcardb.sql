@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 03-Jul-2020 às 23:58
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.3
+-- Tempo de geração: 06-Jul-2020 às 13:14
+-- Versão do servidor: 10.4.6-MariaDB
+-- versão do PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -45,8 +45,9 @@ INSERT INTO `component` (`component_id`, `component_name`, `component_descriptio
 (2, 'Obstaculo', 'Tartaruga', 1, 0),
 (3, 'Semaforo', 'Semarf', 1, 0),
 (4, 'Transito', 'Transss', 1, 0),
-(5, 'Automóvel', 'Componente referente aos carros que ficam movimentando ', 1, 1),
-(6, 'Garagem', 'Esse componente permite que o paciente possa estacionar o carro', 1, 2);
+(5, 'Carros em movimento', 'Componente referente aos carros que ficam movimentando ', 1, 1),
+(6, 'Garagem', 'Esse componente permite que o paciente possa estacionar o carro', 1, 2),
+(7, 'Carros estacionados', 'Objeto correspondentes aos carros que ficam parados ', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -65,12 +66,15 @@ CREATE TABLE `component_scenario` (
 
 INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 (3, 5),
+(3, 7),
 (5, 5),
 (5, 6),
+(5, 7),
 (6, 5),
 (7, 5),
 (7, 6),
-(8, 5);
+(8, 5),
+(8, 7);
 
 -- --------------------------------------------------------
 
@@ -94,7 +98,10 @@ INSERT INTO `compsce_execution` (`comp_id`, `sce_id`, `quantmax`, `initialPositi
 (5, 7, 5, ''),
 (5, 5, 10, ''),
 (5, 6, 15, ''),
-(5, 8, 12, '');
+(5, 8, 12, ''),
+(7, 8, 10, '88,1,-89.1,0,90,0/-52,1,-82,0,93,0/-19.77,1,-22,0,0,0/150.42,1,3.3,0,4,0/119.8,1,57,0,183,0/210,1,135.2,0,271,0/92,1,122.5,0,91,0/2,1,-51.9,0,273,0/268.8,1,-5,0,183,0/270,1,101,0,181,0'),
+(7, 3, 5, '25,1.3,-106,0,90,0/50,1.3,11.65,0,270,0/-59,1.3,-11.6,0,90,0/-52,1.3,11.65,0,270,0/-66,1.3,-82.7,0,270,0'),
+(7, 5, 10, '88,1,-89.1,0,90,0/-52,1,-82,0,93,0/-19.77,1,-22,0,0,0/150.42,1,3.3,0,4,0/119.8,1,57,0,183,0/210,1,135.2,0,271,0/92,1,122.5,0,91,0/2,1,-51.9,0,273,0/268.8,1,-5,0,183,0/270,1,101,0,181,0');
 
 -- --------------------------------------------------------
 
@@ -329,9 +336,11 @@ INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity
 (2, 3, 1),
 (2, 4, 1),
 (3, 5, 15),
-(5, 5, 1),
+(5, 5, 2),
+(5, 7, 3),
 (6, 6, 1),
-(7, 6, 1);
+(7, 7, 10),
+(8, 7, 10);
 
 -- --------------------------------------------------------
 
@@ -469,7 +478,7 @@ ALTER TABLE `weathertype`
 -- AUTO_INCREMENT de tabela `component`
 --
 ALTER TABLE `component`
-  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `component_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `environmenttype`
