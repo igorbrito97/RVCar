@@ -66,17 +66,18 @@ public class CarEngine : MonoBehaviour
 
     private int GetFirstNode(Transform[] pathTranform)
     {
-        float minDist = Vector3.Distance(this.transform.position, pathTranform[0].position);
-        int pos = 0;
-        for(int i = 1; i < pathTranform.Length; i++)
+        float minDist = Vector3.Distance(this.transform.position, pathTranform[1].position);
+        int pos = 1, i = 2;
+        while(i < pathTranform.Length)// pos 0 não
         {
             if(Vector3.Distance(this.transform.position, pathTranform[i].position) < minDist)
             {
                 pos = i;
                 minDist = Vector3.Distance(this.transform.position, pathTranform[i].position);
             }
+            i++;
         }
-        return pos;
+        return pos-1;
     }
 
     void FixedUpdate()
@@ -195,19 +196,21 @@ public class CarEngine : MonoBehaviour
 
     private void CheckNextNodeDistance()
     {
-        if(Vector3.Distance(transform.position, nodes[currentNode].position) < 0.5f)
+        if(Vector3.Distance(transform.position, nodes[currentNode].position) < 0.4f)
         {
+            if(nodes[currentNode].CompareTag("Brake"))
+            {
+                isBraking = true;
+            }
+            else isBraking = false;
+
+            Debug.Log("CHEGOU PERTO: " + currentNode);
             if(currentNode == nodes.Count -1)
                 currentNode = 0;
             else 
                 currentNode++;
-
-            if(nodes[currentNode].CompareTag("Brake"))
-            {
-                isBraking = true;
-                Debug.Log("ESTA FREIANDO");
-            }
-            else isBraking = false;
+            
+            Debug.Log("MUDANDO: " + currentNode);
         }
     }
 

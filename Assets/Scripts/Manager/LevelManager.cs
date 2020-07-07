@@ -109,8 +109,8 @@ public class LevelManager : MonoBehaviour {
 			{
 				//ver quantidade, instaciar(pos inicial), selecionar o caminho e qual carro para todos
 				// as posicoes estao no banco separadas por /
-				//CAT DEALERS: 1:37
 				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
+				listCarPos = Shuffle(listCarPos);
 				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
 				{
 					Instantiate(componentMovingCars[0], listCarPos[j].Key, listCarPos[j].Value);
