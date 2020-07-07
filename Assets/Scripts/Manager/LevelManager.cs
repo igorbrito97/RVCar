@@ -5,12 +5,26 @@ using UnityEngine.SceneManagement;
 using System.Globalization;
 
 public class LevelManager : MonoBehaviour {
+	public enum WeatherType
+    {
+        RANDOM,
+        SUN,
+        CLOUDY,
+        RAIN,
+        THUNDERSTORM,
+        SNOW,
+        NUMBEROFWEATHERTYPES
+    };
+
     public static LevelManager Instance = null;
     [SerializeField] private Button buttonMessage;
     [SerializeField] private Text textMessage;
 	private bool msgStatus;
     private float startTime;
 	private GameObject mainCar;
+
+	private GameObject timeController = null;
+	private GameObject weatherController;
 
 	//SCENE OBJECTS
 	//CAR
@@ -95,6 +109,11 @@ public class LevelManager : MonoBehaviour {
 		//carro
 		mainCar = InstantiateCar(currentSession.Car);
 		//marcha
+
+		timeController = GameObject.Find("TimeOfDay");
+		timeController.GetComponent<ToD_Base>().GetSet_iStartHour = 11;
+		weatherController = GameObject.Find("WeatherMaster");
+		weatherController.GetComponent<Weather_Controller>().BeginLevelWeather(2);
 
 		for(int i=0;i<currentSession.ListComponents.Count;i++)
 		{
