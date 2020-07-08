@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: a46bb5ebf1f910f469f4f759299304f3, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -1674,6 +1674,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 644060642}
   m_PrefabAsset: {fileID: 0}
+--- !u!108 &687268260 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6641262712287919211, guid: e58ff3c6a551a1c49bb68b57098bcdf0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1525864430}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &687496735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1810,6 +1816,16 @@ PrefabInstance:
       propertyPath: gWeatherMaster
       value: 
       objectReference: {fileID: 779942333}
+    - target: {fileID: 6463290442670232298, guid: 03e16716e220e084b860a3b29c43dbe9,
+        type: 3}
+      propertyPath: lSun
+      value: 
+      objectReference: {fileID: 687268260}
+    - target: {fileID: 6463290442670232298, guid: 03e16716e220e084b860a3b29c43dbe9,
+        type: 3}
+      propertyPath: lMoon
+      value: 
+      objectReference: {fileID: 1831818648}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03e16716e220e084b860a3b29c43dbe9, type: 3}
 --- !u!1 &708440438 stripped
@@ -5774,6 +5790,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c03a0634addcf04409530e7a35ac75b1, type: 3}
+--- !u!108 &1831818648 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 404364044075252586, guid: 2bee9a48f6976404496bdad9a49b5920,
+    type: 3}
+  m_PrefabInstance: {fileID: 1413786765}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1851726910
 GameObject:
   m_ObjectHideFlags: 0
