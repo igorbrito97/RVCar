@@ -29,7 +29,7 @@ public class RunSessionController : MonoBehaviour {
     [SerializeField] private InputField inputFieldSessionDescription;
     [SerializeField] private InputField inputFieldWeatherName;
     [SerializeField] private InputField inputFieldWeatherType;
-    [SerializeField] private InputField inputFieldWeatherInfo;
+    [SerializeField] private InputField inputFieldWeatherTime;
     [SerializeField] private InputField inputFieldScenarioName;
     [SerializeField] private InputField inputFieldScenarioEnvType;
     [SerializeField] private InputField inputFieldCar;
@@ -73,7 +73,7 @@ public class RunSessionController : MonoBehaviour {
         inputFieldScenarioName.characterLimit = 60;
         inputFieldSessionDescription.characterLimit = 250;
         inputFieldSessionName.characterLimit = 60;
-        inputFieldWeatherInfo.characterLimit = 60;
+        inputFieldWeatherTime.characterLimit = 60;
         inputFieldWeatherName.characterLimit = 60;
         inputFieldWeatherType.characterLimit = 60;
         inputFieldCar.characterLimit = 60;
@@ -86,7 +86,7 @@ public class RunSessionController : MonoBehaviour {
         inputFieldScenarioName.interactable = false;
         inputFieldSessionDescription.interactable = false;
         inputFieldSessionName.interactable = false;
-        inputFieldWeatherInfo.interactable = false;
+        inputFieldWeatherTime.interactable = false;
         inputFieldWeatherName.interactable = false;
         inputFieldWeatherType.interactable = false;
         inputFieldCar.interactable = false;
@@ -114,7 +114,7 @@ public class RunSessionController : MonoBehaviour {
         inputFieldScenarioName.text = "";
         inputFieldSessionDescription.text = "";
         inputFieldSessionName.text = "";
-        inputFieldWeatherInfo.text = "";
+        inputFieldWeatherTime.text = "";
         inputFieldWeatherName.text = "";
         inputFieldWeatherType.text = "";
         inputFieldCar.text = "";
@@ -181,7 +181,7 @@ public class RunSessionController : MonoBehaviour {
         inputFieldScenarioName.text = session.Scenario.Name;
         inputFieldSessionDescription.text = session.Description;
         inputFieldSessionName.text = session.Name;
-        inputFieldWeatherInfo.text = session.Weather.Info + "";
+        inputFieldWeatherTime.text = session.Weather.Time + "";
         inputFieldWeatherName.text = session.Weather.Name;
         inputFieldWeatherType.text = session.Weather.Type.Name;
         inputFieldCar.text = session.Car.Name;

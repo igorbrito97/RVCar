@@ -297,7 +297,7 @@ public class Session : MonoBehaviour {
                 new Weather(
                     Convert.ToInt32(data["weather_id"]),
                     data["weather_name"].ToString(),
-                    Convert.ToInt32(data["weather_info"]),
+                    Convert.ToInt32(data["weather_time"]),
                     new WeatherType(
                         Convert.ToInt32(data["weatherType_id"]),
                         data["weatherType_name"].ToString()

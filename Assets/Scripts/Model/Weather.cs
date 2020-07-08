@@ -9,7 +9,7 @@ public class Weather : MonoBehaviour
 {
     private int id;
     private string name;
-    private int info;
+    private int time;
     private WeatherType type;
     private string description;
     private int status;
@@ -24,20 +24,20 @@ public class Weather : MonoBehaviour
         this.id = id;
     }
 
-    public Weather(string name, int info, WeatherType type, string description, int status)
+    public Weather(string name, int time, WeatherType type, string description, int status)
     {
         this.name = name;
-        this.info = info;
+        this.time = time;
         this.type = type;
         this.description = description;
         this.status = status;
     }
 
-    public Weather(int id, string name, int info, WeatherType type, string description, int status)
+    public Weather(int id, string name, int time, WeatherType type, string description, int status)
     {
         this.id = id;
         this.name = name;
-        this.info = info;
+        this.time = time;
         this.type = type;
         this.description = description;
         this.status = status;
@@ -51,14 +51,14 @@ public class Weather : MonoBehaviour
                             (weather_name,
                             weather_description,
                             weatherType_id,
-                            weather_info,
+                            weather_time,
                             weather_status)
                     values ('$n','$d',$t,$i,$s);";
                     
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$t", this.type.Id + "");
-        sql = sql.Replace("$i", this.info + "");
+        sql = sql.Replace("$i", this.time + "");
         sql = sql.Replace("$s", this.status + "");
 
         command.CommandText = sql;
@@ -81,14 +81,14 @@ public class Weather : MonoBehaviour
                         weather_name = '$n',
                         weather_description = '$d',
                         weatherType_id = $t,
-                        weather_info = $i,
+                        weather_time = $i,
                         weather_status = $s
                         where weather_id = " + id;
         
         sql = sql.Replace("$n", this.name);
         sql = sql.Replace("$d", this.description);
         sql = sql.Replace("$t", this.type.Id + "");
-        sql = sql.Replace("$i", this.info + "");
+        sql = sql.Replace("$i", this.time + "");
         sql = sql.Replace("$s", this.status + "");
 
         Debug.Log("SWL ALTER: " + sql);
@@ -130,7 +130,7 @@ public class Weather : MonoBehaviour
             weather = new Weather(
                 Convert.ToInt32(data["weather_id"]),
                 data["weather_name"].ToString(),
-                Convert.ToInt32(data["weather_info"]),
+                Convert.ToInt32(data["weather_time"]),
                 new WeatherType(
                     Convert.ToInt32(data["weatherType_id"]),
                     data["weatherType_name"].ToString()
@@ -171,7 +171,7 @@ public class Weather : MonoBehaviour
             list.Add(new Weather(
                 Convert.ToInt32(data["weather_id"]),
                 data["weather_name"].ToString(),
-                Convert.ToInt32(data["weather_info"]),
+                Convert.ToInt32(data["weather_time"]),
                 new WeatherType(
                     Convert.ToInt32(data["weatherType_id"]),
                     data["weatherType_name"].ToString()
@@ -187,7 +187,7 @@ public class Weather : MonoBehaviour
 
     public int Id { get => id; set => id = value; }
     public string Name { get => name; set => name = value; }
-    public int Info { get => info; set => info = value; }
+    public int Time { get => time; set => time = value; }
     public WeatherType Type { get => type; set => type = value; }
     public string Description { get => description; set => description = value; }
     public int Status { get => status; set => status = value; }

@@ -110,6 +110,7 @@ public class SessionControlller : MonoBehaviour
     //campos tela de fases
     [SerializeField] private InputField inputFieldWeatherName;
     [SerializeField] private InputField inputFieldWeatherType;
+    [SerializeField] private InputField inputFieldWeatherTime;
     [SerializeField] private InputField inputFieldWeatherDescription;
 
     //campos da tela de configuracao da execucao
@@ -771,6 +772,7 @@ public class SessionControlller : MonoBehaviour
         
         inputFieldWeatherName.text = weather.Name;
         inputFieldWeatherType.text = weather.Type.Name;
+        inputFieldWeatherTime.text = weather.Time.ToString();
         inputFieldWeatherDescription.text = weather.Description;
     }
     public void ConfirmWeatherClick()

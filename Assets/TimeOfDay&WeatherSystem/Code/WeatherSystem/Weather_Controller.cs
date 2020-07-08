@@ -554,17 +554,18 @@ public class Weather_Controller : MonoBehaviour
         }
     }
 
-    public void BeginLevelWeather(int op)
+    public void BeginLevelWeather(int type)
     {
-        if(op == 1)//sun
-        {
+        if(type == 1)//sun
             EnterNewWeather((int)WeatherType.SUN);
-        }
-        else if(op == 2) //rain
-        {
+        else if(type == 2) //rain
             EnterNewWeather((int)WeatherType.RAIN);
-
-        }
+        else if(type == 3) //thunderstorm
+            EnterNewWeather((int)WeatherType.THUNDERSTORM);
+        else if(type == 4) //cloudy
+            EnterNewWeather((int)WeatherType.CLOUDY);
+        else
+            Debug.Log("ERRO AO CONECTAR O CLIMA!");
     }
 }
 

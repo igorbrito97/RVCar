@@ -16,7 +16,8 @@ public class WeatherController : MonoBehaviour
     [SerializeField] private Text textWeatherID;
     [SerializeField] private InputField inputFieldName;
     [SerializeField] private Dropdown dropdownWeatherType;
-    [SerializeField] private InputField inputFieldInfo;
+    [SerializeField] private Slider sliderTime;
+    [SerializeField] private Text textSliderTime;
     [SerializeField] private InputField inputFieldDescription;
     [SerializeField] private Toggle toggleStatus;  
     [SerializeField] private Button buttonDelete;
@@ -25,7 +26,7 @@ public class WeatherController : MonoBehaviour
     [SerializeField] private Text textIDB;
     [SerializeField] private Text textNameB;
     [SerializeField] private Text textWeatherTypeB;
-    [SerializeField] private Text textInfoB;
+    [SerializeField] private Text textTimeB;
     [SerializeField] private Text textStatusB;
     [SerializeField] private Button row;
     [SerializeField] GameObject rows;
@@ -42,8 +43,10 @@ public class WeatherController : MonoBehaviour
         inputFieldSearch.characterLimit = 60;
         inputFieldName.characterLimit = 60;
         inputFieldDescription.characterLimit = 350;
-        inputFieldInfo.characterLimit = 10;
-        inputFieldInfo.contentType = InputField.ContentType.IntegerNumber;
+        sliderTime.wholeNumbers = true;
+        sliderTime.minValue = 0;
+        sliderTime.maxValue = 23;
+        sliderTime.value = 12;
 
         Begin();
     }
@@ -62,7 +65,7 @@ public class WeatherController : MonoBehaviour
     {
         inputFieldName.text = "";
         inputFieldDescription.text = "";
-        inputFieldInfo.text = "";
+        sliderTime.value = 12;
         toggleStatus.isOn = true;
         buttonDelete.gameObject.SetActive(false);
     }
@@ -94,7 +97,7 @@ public class WeatherController : MonoBehaviour
         string id = textWeatherID.text;
         string name = inputFieldName.text;
         string description = inputFieldDescription.text;
-        int info = Convert.ToInt32(inputFieldInfo.text);
+        int time = Convert.ToInt32(sliderTime.value);
         bool status = toggleStatus.isOn;
         int type_id = arrayAllWeatherType[dropdownWeatherType.value].Key;
         string type_name = arrayAllWeatherType[dropdownWeatherType.value].Value;
@@ -104,11 +107,11 @@ public class WeatherController : MonoBehaviour
             LevelManager.Instance.AlterMessage("Nome inválido. Digite um nome válido!",Color.red);
         else if(description.Trim() == "")
             LevelManager.Instance.AlterMessage("Descrição inválida. Digite uma descrição válida!",Color.red);
-        else if(info <= 0)  
-            LevelManager.Instance.AlterMessage("Info inválida. Digite uma info válida!",Color.red);
+        else if(time < 0 || time > 23)  
+            LevelManager.Instance.AlterMessage("Horário inválida. Digite um horário válido!",Color.red);
         else
         {
-            weather = new Weather(name,info,new WeatherType(type_id,type_name),description,status ? 1 : 0);
+            weather = new Weather(name,time,new WeatherType(type_id,type_name),description,status ? 1 : 0);
             if(state == 1)
             {
                 string returnMsg = weather.Insert();
@@ -188,7 +191,7 @@ public class WeatherController : MonoBehaviour
             textIDB.text = list[i].Id.ToString();
             textNameB.text = list[i].Name;
             textWeatherTypeB.text = list[i].Type.Name;
-            textInfoB.text = list[i].Info.ToString();  
+            textTimeB.text = list[i].Time.ToString();  
             textStatusB.text = list[i].Status == 1 ? "Ativo" : "Desativado";
             newRow = Instantiate(row) as Button;
             newRow.transform.SetParent(row.transform.parent,false);
@@ -219,7 +222,7 @@ public class WeatherController : MonoBehaviour
         textWeatherID.text = weather.Id.ToString();
         inputFieldName.text = weather.Name;
         inputFieldDescription.text = weather.Description;
-        inputFieldInfo.text = weather.Info.ToString();
+        sliderTime.value = weather.Time;
         toggleStatus.isOn = weather.Status == 1;
 
         int i=0;
@@ -228,6 +231,15 @@ public class WeatherController : MonoBehaviour
             i++;
         dropdownWeatherType.value = i;
     }
+
+    public void OnChangeSlider()
+    {
+        if(sliderTime.value > -1 && sliderTime.value < 24)
+        {
+            textSliderTime.text = sliderTime.value.ToString();
+        }
+    }
+
     public void ClearMainTable()
     {
         var clones = new Transform[rows.transform.childCount];
@@ -236,7 +248,7 @@ public class WeatherController : MonoBehaviour
             clones[i] = rows.transform.GetChild(i);
             Destroy(clones[i].gameObject);
         }
-        textIDB.text = textNameB.text = textWeatherTypeB.text = textInfoB.text = textStatusB.text = "";
+        textIDB.text = textNameB.text = textWeatherTypeB.text = textTimeB.text = textStatusB.text = "";
         row.gameObject.SetActive(true);
         rowsClone = null;
     }

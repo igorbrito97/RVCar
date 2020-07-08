@@ -104,17 +104,21 @@ public class LevelManager : MonoBehaviour {
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
 		SceneManager.SetActiveScene(scene);
-		//instanciar componentes e clima
 		
 		//carro
 		mainCar = InstantiateCar(currentSession.Car);
 		//marcha
 
+		//tempo e clima
 		timeController = GameObject.Find("TimeOfDay");
-		timeController.GetComponent<ToD_Base>().GetSet_iStartHour = 11;
+		Debug.Log("STARTING HOUR: " + currentSession.Weather.Time);
+		timeController.GetComponent<ToD_Base>().GetSet_iStartHour = currentSession.Weather.Time;
 		weatherController = GameObject.Find("WeatherMaster");
-		weatherController.GetComponent<Weather_Controller>().BeginLevelWeather(2);
+		Debug.Log("WEATHERZADA: " + currentSession.Weather.Type.Id);
+		weatherController.GetComponent<Weather_Controller>().BeginLevelWeather(currentSession.Weather.Type.Id);
 
+
+		//componentes
 		for(int i=0;i<currentSession.ListComponents.Count;i++)
 		{
 			if(currentSession.ListComponents[i].Key == 6)//garage

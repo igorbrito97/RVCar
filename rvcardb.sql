@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 07-Jul-2020 às 06:30
+-- Tempo de geração: 08-Jul-2020 às 13:03
 -- Versão do servidor: 10.4.6-MariaDB
 -- versão do PHP: 7.1.32
 
@@ -311,7 +311,7 @@ INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_i
 (2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 0, 1, 2, 0),
 (3, 1, 4, 4, 6, 'Testezaaaa', '1231231231231', 1, 0, 1, 1),
 (4, 1, 1, 3, 7, 'qqq', 'qqq', 0, 1, 3, 1),
-(5, 1, 1, 4, 3, 'Sessão garagT', '22', 1, 1, 2, 0),
+(5, 1, 1, 5, 3, 'Sessão garagT', '22', 1, 1, 2, 0),
 (6, 1, 5, 3, 7, 'CityT', '3', 1, 1, 3, 0),
 (7, 1, 4, 4, 5, 'Cityzda', '1', 1, 1, 1, 0),
 (8, 1, 5, 3, 8, 'Cter', 'a', 1, 1, 2, 0);
@@ -357,16 +357,18 @@ CREATE TABLE `weather` (
   `weather_description` varchar(350) NOT NULL,
   `weather_status` tinyint(1) NOT NULL,
   `weatherType_id` int(11) NOT NULL,
-  `weather_info` int(11) NOT NULL
+  `weather_time` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `weather`
 --
 
-INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `weather_status`, `weatherType_id`, `weather_info`) VALUES
-(3, 'Chuva leve', 'Pequena quantidade de chuva', 1, 2, 100),
-(4, 'Dia nublado', 'Dia muito nublado, dificultando a visao', 1, 4, 800);
+INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `weather_status`, `weatherType_id`, `weather_time`) VALUES
+(3, 'Chuva leve', 'Pequena quantidade de chuva', 1, 2, 10),
+(4, 'Dia nublado', 'Dia muito nublado, dificultando a visao', 1, 4, 20),
+(5, 'Tempestade a noite', 'Tempestade no período noturno', 1, 3, 22),
+(6, 'Dia ensolarado', 'Tarde de sol', 1, 1, 14);
 
 -- --------------------------------------------------------
 
@@ -384,7 +386,7 @@ CREATE TABLE `weathertype` (
 --
 
 INSERT INTO `weathertype` (`weatherType_id`, `weatherType_name`) VALUES
-(1, 'Sol'),
+(1, 'Sol (Céu limpo)'),
 (2, 'Chuva'),
 (3, 'Tempestade'),
 (4, 'Nublado');
@@ -535,7 +537,7 @@ ALTER TABLE `session`
 -- AUTO_INCREMENT de tabela `weather`
 --
 ALTER TABLE `weather`
-  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `weathertype`
