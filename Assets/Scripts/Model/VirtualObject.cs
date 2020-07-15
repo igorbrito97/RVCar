@@ -20,6 +20,12 @@ public class VirtualObject : MonoBehaviour
         this.id = id;
     }
 
+    public VirtualObject(int id,string name)
+    {
+        this.id = id;
+        this.name = name;
+    }
+
     public VirtualObject(int id, string name, string file, string prefab)
     {
         this.id = id;

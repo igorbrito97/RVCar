@@ -91,6 +91,8 @@ public class RunSessionController : MonoBehaviour {
         inputFieldWeatherType.interactable = false;
         inputFieldCar.interactable = false;
         inputFieldGear.interactable = false;
+
+        //listComponent = new List<KeyValuePair<int, KeyValuePair<string, int>>>();
 	}
 
 	public void Begin()
@@ -205,6 +207,7 @@ public class RunSessionController : MonoBehaviour {
         SessionControlller controller = panelSession.GetComponent<SessionControlller>();
         panelEdit.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
+        ClearComponentTable();
         controller.AlterClickRunSessionController(new Session().Search(Convert.ToInt32(textSessionID.text)));
     }
 

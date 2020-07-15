@@ -12,65 +12,57 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 
-namespace VehiclePhysics.UI
-{
-
 public class EscapeDialog : MonoBehaviour
 	{
-	//public VehicleBase vehicle;
+	public MainCarController carController;
 	public KeyCode escapeKey = KeyCode.Escape;
 
 	[Header("Buttons")]
 	public Button continueButton;
-	public Button resetCarButton;
-	public Button resetDemoButton;
-	public Button quitDemoButton;
+	public Button resetButton;
+	public Button quitButton;
 
-
-	// float m_currentTimeScale;
-
+	void Start()
+	{
+		carController = GameObject.FindObjectOfType (typeof(MainCarController))as MainCarController;
+	}
 
 	void OnEnable ()
-		{
+	{
 		AddListener(continueButton, OnContinue);
-		AddListener(resetCarButton, OnResetCar);
-		AddListener(resetDemoButton, OnResetDemo);
-		AddListener(quitDemoButton, OnQuitDemo);
-
-		// m_currentTimeScale = Time.timeScale;
-		// Time.timeScale = 0.0f;
-		}
-
-
+		AddListener(resetButton, OnReset);
+		AddListener(quitButton, OnQuit);
+	}
 	void OnDisable ()
-		{
+	{
 		RemoveListener(continueButton, OnContinue);
-		RemoveListener(resetCarButton, OnResetCar);
-		RemoveListener(resetDemoButton, OnResetDemo);
-		RemoveListener(quitDemoButton, OnQuitDemo);
-
-		// Time.timeScale = m_currentTimeScale;
-		}
-
+		RemoveListener(resetButton, OnReset);
+		RemoveListener(quitButton, OnQuit);
+	}
+		
 
 	void Update ()
-		{
+	{
 		if (Input.GetKeyDown(escapeKey))
+		{
+			carController.isPaused = false;
 			this.gameObject.SetActive(false);
 		}
+	}
 
 
 	// Listeners
 
 
 	void OnContinue ()
-		{
+	{
 		this.gameObject.SetActive(false);
-		}
+	}
 
 
-	void OnResetCar ()
-		{/*
+	void OnReset ()
+	{/*
+		Scene.Reload() ???????
 		if (vehicle != null)
 			{
 			VPResetVehicle resetScript = vehicle.GetComponent<VPResetVehicle>();
@@ -80,34 +72,23 @@ public class EscapeDialog : MonoBehaviour
 				this.gameObject.SetActive(false);
 				}
 			}*/
-		}
+	}
 
 
-	void OnResetDemo ()
-		{
-		//EdyCommonTools.SceneReload.Reload();
-		}
-
-
-	void OnQuitDemo ()
-		{
+	void OnQuit ()
+	{
 		Application.Quit();
-		}
+	}
 
 
 	void AddListener (Button button, UnityAction method)
-		{
+	{
 		if (button != null) button.onClick.AddListener(method);
-		}
+	}
 
 
 	void RemoveListener (Button button, UnityAction method)
-		{
+	{
 		if (button != null) button.onClick.RemoveListener(method);
-		}
-
-
-
-
 	}
 }

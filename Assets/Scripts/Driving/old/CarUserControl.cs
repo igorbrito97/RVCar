@@ -41,7 +41,7 @@ namespace UnityStandardAssets.Vehicles.Car
             rangeMarchas = initRangeMarcha();
             rpm = rpmaux = 0;
             marchaAtual = -1;
-            speedometer.gameObject.SetActive(true);
+            //speedometer.gameObject.SetActive(true);
             if (volante)
             {
                 switch (rotacao)

@@ -26,6 +26,8 @@ public class MainCarController : MonoBehaviour
     private Rigidbody carRigidbody;
     private float horizontalInput;
     private float verticalInput;
+    private float accelInput;
+    private float brakeInput;
     private float angle;
     private float steeringAngle;
     private float initialSteeringRotation;
@@ -33,6 +35,12 @@ public class MainCarController : MonoBehaviour
     private float steerOldRotation;
     private bool isOnGroundL;
     private bool isOnGroundR;
+    private bool isCarOn;
+    private bool startButtonPressed;
+
+    [HideInInspector] public bool isPaused;
+    [HideInInspector] public float currentSpeed;
+    [HideInInspector] public float currentRpm;
 
     [SerializeField] public WheelCollider frontRightWC;
     [SerializeField] public WheelCollider frontLeftWC;
@@ -44,6 +52,7 @@ public class MainCarController : MonoBehaviour
     [SerializeField] public Transform rearLeftT;
     [SerializeField] public float maxSteerAngle = 35f;
     [SerializeField] public float motorForce = 500f;
+    [SerializeField] public float brakeForce = 500f;
     [SerializeField] private WheelType rotation = WheelType.TurnInZ;
     [SerializeField] private GameObject steeringWheel;
     [SerializeField] [Range(0.4f, 5.0f)] private float wheelSpeedTurn = 2.0f;
@@ -98,39 +107,51 @@ public class MainCarController : MonoBehaviour
     private void Start()
     {
         carRigidbody.centerOfMass += new Vector3(0,-0.3f,-0.3f);
+        isCarOn = false;
+        startButtonPressed = false;
+        accelInput = 0;
+        brakeInput = 0;
+        currentSpeed = 0;
+        isPaused = false;
     }
 
     private void Update()
     {
-        //stabilizer
-        float powerRearLeft, powerRearRight;
-        powerRearLeft = powerRearRight = 1;
-        //check colission
-        WheelHit hit;
-        isOnGroundL = rearLeftWC.GetGroundHit(out hit);
-        if(isOnGroundL)
+        if(isCarOn && !isPaused)
         {
-            powerRearLeft = (-rearLeftWC.transform.InverseTransformPoint(hit.point).y - rearLeftWC.radius) / rearLeftWC.suspensionDistance;
-        }
-        isOnGroundR = rearRightWC.GetGroundHit(out hit);
-        if(isOnGroundR)
-        {
-            powerRearRight = (-rearRightWC.transform.InverseTransformPoint(hit.point).y - rearRightWC.radius) / rearRightWC.suspensionDistance;
-        }
-        //apply forces
-        float antiRollForce = (powerRearLeft-powerRearRight) * power;
-        if(isOnGroundL)
-        {
-            carRigidbody.AddForceAtPosition(rearLeftWC.transform.up * -antiRollForce, rearLeftWC.transform.position);
-        }
-        if(isOnGroundR)
-        {
-            carRigidbody.AddForceAtPosition(rearRightWC.transform.up * -antiRollForce, rearRightWC.transform.position);
-        }
+            //stabilizer
+            float powerRearLeft, powerRearRight;
+            powerRearLeft = powerRearRight = 1;
+            //check colission
+            WheelHit hit;
+            isOnGroundL = rearLeftWC.GetGroundHit(out hit);
+            if(isOnGroundL)
+            {
+                powerRearLeft = (-rearLeftWC.transform.InverseTransformPoint(hit.point).y - rearLeftWC.radius) / rearLeftWC.suspensionDistance;
+            }
+            isOnGroundR = rearRightWC.GetGroundHit(out hit);
+            if(isOnGroundR)
+            {
+                powerRearRight = (-rearRightWC.transform.InverseTransformPoint(hit.point).y - rearRightWC.radius) / rearRightWC.suspensionDistance;
+            }
+            //apply forces
+            float antiRollForce = (powerRearLeft-powerRearRight) * power;
+            if(isOnGroundL)
+            {
+                carRigidbody.AddForceAtPosition(rearLeftWC.transform.up * -antiRollForce, rearLeftWC.transform.position);
+            }
+            if(isOnGroundR)
+            {
+                carRigidbody.AddForceAtPosition(rearRightWC.transform.up * -antiRollForce, rearRightWC.transform.position);
+            }
+        }        
     }
 
     void FixedUpdate()
     {
+        if(isPaused)
+            return;
+            
         if (LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.DIJOYSTATE2ENGINES rec;
@@ -138,14 +159,24 @@ public class MainCarController : MonoBehaviour
             //int e, marchaEngatada, op;
             //bool flagMarcha = false;
             rec = LogitechGSDK.LogiGetStateUnity(0);
-            horizontalInput = (float)rec.lX / 32768;//volante
-            verticalInput = (float)(rec.lY - rec.lRz) / -65534; //rec.lY acelerador / rec.lRz freio
-            int e = rec.rglSlider[0]; //embreagemSteer();
+            horizontalInput = (float) rec.lX / 32768;//volante
             Steer();
+            TurnSteeringWheel();
+
+            if(!isCarOn) //se carro estiver desligado não faz nada, só mexe o volante
+            {
+                CheckCarStart();
+                return;
+            }
+
+            accelInput = (float) (rec.lY - 32768) / -65536;
+            brakeInput = 32767 - rec.lRz;
+            //verticalInput = (float)(rec.lY - rec.lRz) / -65534; //rec.lY acelerador / rec.lRz freio
+            int e = rec.rglSlider[0]; //embreagemSteer();
+            currentSpeed = carRigidbody.velocity.magnitude * 3.6f;
             Accelerate();
             UpdateWheelPoses();
             Stabilize();
-            TurnSteeringWheel();
             /*
             // velo = m_Car.CurrentSpeed;
             //marchaEngatada = getMarchaEngatada();
@@ -227,31 +258,45 @@ public class MainCarController : MonoBehaviour
         return LogitechGSDK.LogiButtonIsPressed(0, 11 + idx) && velo >= vetMarchas[idx].vel_ini && velo < vetMarchas[idx].vel_max;
     }*/
 
+    private void CheckCarStart()
+    {
+        if(LogitechGSDK.LogiButtonIsPressed(0, 10)) //start button
+            startButtonPressed = true;
+
+        if(startButtonPressed)
+        {
+            currentRpm = Mathf.Lerp(currentRpm,1000,Time.deltaTime*7f); 
+            if(currentRpm > 995) //close enough
+            {
+                isCarOn = true;
+                currentRpm = 1000;
+            }
+        }
+    }
+
      public void Steer()
     {
-        //se estiver pressionando tudo ele vai de um ponto até outro em tanto tempo - suaviza
-        if(horizontalInput > 0.7f || horizontalInput < -0.7f) {
-            angle = Mathf.Lerp(angle, horizontalInput, Time.deltaTime*4);
-        } 
-        else {
-            angle = Mathf.Lerp(angle, horizontalInput, Time.deltaTime*2);
-        }
-        // OU
         steeringAngle = horizontalInput*maxSteerAngle;
-
-        //por enquanto estou usando o steering, ver se suaviza mesmo com o angle
-        Debug.Log("VER:" + verticalInput);
-        Debug.Log("Steering + " + steeringAngle + " ANGLEEEE: " + angle * maxSteerAngle);
         frontRightWC.steerAngle = steeringAngle;
         frontLeftWC.steerAngle = steeringAngle;
     }
 
     public void Accelerate()
     {
-        frontRightWC.motorTorque = verticalInput * motorForce;
-        frontLeftWC.motorTorque = verticalInput * motorForce;
-        rearRightWC.motorTorque = verticalInput * motorForce;
-        rearLeftWC.motorTorque = verticalInput * motorForce;
+        if(brakeInput > 0)//is braking
+        {
+            rearRightWC.brakeTorque = brakeInput * brakeForce;
+            rearLeftWC.brakeTorque = brakeInput * brakeForce;            
+        }
+        else 
+        {
+            rearRightWC.brakeTorque = 0;
+            rearLeftWC.brakeTorque = 0;
+            frontRightWC.motorTorque = accelInput * motorForce;
+            frontLeftWC.motorTorque = accelInput * motorForce;
+            rearRightWC.motorTorque = accelInput * motorForce;
+            rearLeftWC.motorTorque = accelInput * motorForce;
+        }
     }
 
     public void UpdateWheelPoses()

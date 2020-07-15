@@ -18,7 +18,7 @@ namespace VehiclePhysics.UI
 public class Dashboard : MonoBehaviour
 	{
 
-		[SerializeField] Font font;
+	[SerializeField] Font font;
 	public MainCarController carController;
 
 	[Header("Needles")]
@@ -70,6 +70,11 @@ public class Dashboard : MonoBehaviour
 			carController = GetComponentInParent<MainCarController>();*/
 		}
 
+	void Start()
+	{
+		carController = GameObject.FindObjectOfType (typeof(MainCarController))as MainCarController;
+	}
+
 
 	void FixedUpdate ()
 		{/*
@@ -77,8 +82,13 @@ public class Dashboard : MonoBehaviour
 
 		//m_speedMs.Set(vehicle.data.Get(Channel.Vehicle, VehicleData.Speed) / 1000.0f);
 		//m_engineRpm.Set(vehicle.data.Get(Channel.Vehicle, VehicleData.EngineRpm) / 1000.0f);
-			m_speedMs = 20f;
-			m_engineRpm = 1000f;
+			if(carController)
+			{
+				m_speedMs = carController.currentSpeed;
+				m_engineRpm = carController.currentRpm;
+			}
+			//m_speedMs = 20f;
+			//m_engineRpm = 5000f;
 		}
 
 
@@ -96,85 +106,72 @@ public class Dashboard : MonoBehaviour
 
 			m_lastVehicleTime = -1.0f;
 			return;
-			}
-
-		// Needles use interpolated values computed at visual frame rate
-
-		float frameRatio = InterpolatedFloat.GetFrameRatio();
-
-		float speedMs = m_speedMs.GetInterpolated(frameRatio);
-		float engineRpm = m_engineRpm.GetInterpolated(frameRatio);
-		if (speedMs < 0) speedMs = 0.0f;
-		if (engineRpm < 0) engineRpm = 0.0f;*/
+			}*/
 
 		speedNeedle.SetValue(m_speedMs);//speedMs * 3.6f);
 		rpmNeedle.SetValue(m_engineRpm);
 
 
-			// Gear label
+		// Gear label
 
-			if (gearLabel != null)
+		if (gearLabel != null)
+		{
+			int gearId = 0;//marcha (script)
+			int gearMode = 0;// se é manual 0 ou automatico 1 (script)
+			bool switchingGear = true;//se esta mudando de marcha (script)
+			gearLabel.font = font;
+
+			switch (gearMode)
 				{
-				int gearId = 3;//marcha
-				int gearMode = 0;// se é manual 0 ou automatico 1
-				bool switchingGear = false;//se esta mudando de marcha
-				gearLabel.font = font;
-
-				switch (gearMode)
-					{
-					case 0:		// M
-						if (gearId == 0)
-							gearLabel.text = switchingGear? " " : "N";
-						else
-						if (gearId > 0)
-							gearLabel.text = gearId.ToString();
-						else
-							{
-							if (gearId == -1)
-								gearLabel.text = "R";
-							else
-								gearLabel.text = "R" + (-gearId).ToString();
-							}
-						break;
-
-					case 1:		// P
-						gearLabel.text = "P";
-						break;
-						/*
-					case 2:		// R
-						if (gearId < -1)
-							gearLabel.text = "R" + (-gearId).ToString();
-						else
+				case 0:		// M
+					if (gearId == 0)
+						gearLabel.text = switchingGear? " " : "N";
+					else
+					if (gearId > 0)
+						gearLabel.text = gearId.ToString();
+					else
+						{
+						if (gearId == -1)
 							gearLabel.text = "R";
-						break;
-
-					case 3:		// N
-						gearLabel.text = "N";
-						break;
-
-					case 4:		// D
-						if (gearId > 0)
-							gearLabel.text = "D" + gearId.ToString();
 						else
-							gearLabel.text = "D";
-						break;
+							gearLabel.text = "R" + (-gearId).ToString();
+						}
+					break;
 
-					case 5:		// L
-						if (gearId > 0)
-							gearLabel.text = "L" + gearId.ToString();
-						else
-							gearLabel.text = "L";
-						break;
-						*/
-					default:
-						gearLabel.text = "-";
-						break;
-					}
+				case 1:		// P
+					gearLabel.text = "";
+					break;
+					/*
+				case 2:		// R
+					if (gearId < -1)
+						gearLabel.text = "R" + (-gearId).ToString();
+					else
+						gearLabel.text = "R";
+					break;
+
+				case 3:		// N
+					gearLabel.text = "N";
+					break;
+
+				case 4:		// D
+					if (gearId > 0)
+						gearLabel.text = "D" + gearId.ToString();
+					else
+						gearLabel.text = "D";
+					break;
+
+				case 5:		// L
+					if (gearId > 0)
+						gearLabel.text = "L" + gearId.ToString();
+					else
+						gearLabel.text = "L";
+					break;
+					*/
+				default:
+					gearLabel.text = "-";
+					break;
 				}
-
-
-			//m_lastVehicleTime = vehicle.time;
-			//}
+			}
 		}
 
 

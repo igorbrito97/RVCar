@@ -126,6 +126,7 @@ public class SessionControlller : MonoBehaviour
     private KeyValuePair<int,string> currentCar;
     private int currentGear = -1; // 1: manual - 2: automatic
     private KeyValuePair<int,string>[] arrayAllCars;
+    private Session previousSession = null;
 
     // paineis da tela
     [SerializeField] private GameObject panelRun;
@@ -420,6 +421,18 @@ public class SessionControlller : MonoBehaviour
             sliderQuantity.interactable = false;
             textSliderQuantity.text = "1";
             state = 0;
+
+            
+            //reset table
+            var clones = new Transform[rowsComp.transform.childCount];
+            for (var i = 1; i < clones.Length; i++)
+            {
+                clones[i] = rowsComp.transform.GetChild(i);
+                Destroy(clones[i].gameObject);
+            }
+
+            LoadPage(previousSession);
+            previousSession = null;
         }
         else
             Begin();
@@ -427,6 +440,7 @@ public class SessionControlller : MonoBehaviour
 
     public void AlterClick()
     {
+        Debug.Log("COUNTERA: " + listComponent.Count);
         state = 2;
         textTitle.text = "Gerenciar Sessão - Alterar";
         changePanelEditInteractable(true);//habilita os campos
@@ -435,6 +449,15 @@ public class SessionControlller : MonoBehaviour
         buttonConfirm.gameObject.SetActive(true);
         buttonAlter.gameObject.SetActive(false);
         buttonDuplicate.gameObject.SetActive(false);
+
+        string id = textSessionID.text;
+        string name = inputFieldName.text;
+        string description = inputFieldDescription.text;
+        bool status = toggleStatus.isOn;
+        bool isPubic = toggleIsPublic.isOn;
+        string patName = currentPatient.Name, scenarioName = currentScenario.Name, weatherName = currentWeather.Name;
+        previousSession = new Session(Convert.ToInt32(id),name,description,GameManager.instance.Psychologist,currentPatient,currentScenario,currentWeather, 
+                status ? 1 : 0, isPubic ? 1 : 0, listComponent,new VirtualObject(currentCar.Key,currentCar.Value),currentGear);
     }
 
     public void DuplicateClick()
@@ -455,6 +478,7 @@ public class SessionControlller : MonoBehaviour
     {
         RunSessionController controller = panelRun.GetComponent<RunSessionController>();
         controller.ExecuteClickSessionController(new Session().Search(Convert.ToInt32(textSessionID.text)));
+        panelEdit.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }
 
@@ -530,7 +554,7 @@ public class SessionControlller : MonoBehaviour
 
     public void LoadComponentDropdown()
     {
-        ClearComponentTable();
+        dropdownComponent.ClearOptions();
         List<ScenarioComponent> lista = new ScenarioComponent().GetComponentsByScenario(currentScenario.Id);
         arrayAllComponents = new KeyValuePair<int, string>[lista.Count];
         for(int i = 0; i < lista.Count; i++)
@@ -685,6 +709,8 @@ public class SessionControlller : MonoBehaviour
 
     public void ConfirmScenarioClick()
     {
+        ClearComponentTable();
+
         currentScenario = new Scenario().Search(selectedScenarioId);
         panelScenario2.gameObject.SetActive(false);
         panelScenario1.gameObject.SetActive(false);

@@ -327,6 +327,7 @@
     <Compile Include="Assets\Scripts\Controller\VideoPlayerController.cs" />
     <Compile Include="Assets\Scripts\Controller\WeatherController.cs" />
     <Compile Include="Assets\Scripts\Driving\CarAudio.cs" />
+    <Compile Include="Assets\Scripts\Driving\CarCollider.cs" />
     <Compile Include="Assets\Scripts\Driving\CarControllerAutomatic.cs" />
     <Compile Include="Assets\Scripts\Driving\LogitechGSDK.cs" />
     <Compile Include="Assets\Scripts\Driving\LogitechSteeringWheel.cs" />
@@ -337,6 +338,8 @@
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\Dashboard.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\EscapeDialog.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\Gauge.cs" />
+    <Compile Include="Assets\Scripts\Driving\UI\Scripts\HoverHandler.cs" />
+    <Compile Include="Assets\Scripts\Driving\UI\Scripts\MainCanvasController.cs" />
     <Compile Include="Assets\Scripts\Driving\old\CarController.cs" />
     <Compile Include="Assets\Scripts\Driving\old\CarUserControl.cs" />
     <Compile Include="Assets\Scripts\Driving\old\WheelEffects.cs" />
