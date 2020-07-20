@@ -8,6 +8,8 @@ TagManager:
   - Environment
   - Brake
   - Car
+  - ButtonMessage
+  - TextMessage
   layers:
   - Default
   - TransparentFX

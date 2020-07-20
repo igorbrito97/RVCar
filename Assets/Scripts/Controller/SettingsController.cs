@@ -57,4 +57,11 @@ public class SettingsController : MonoBehaviour {
 		this.gameObject.SetActive(false);
 		gameObjSetting.gameObject.SetActive(false);
 	}
+
+	public void LogOutClick()
+	{
+		this.gameObject.SetActive(false);
+		gameObjSetting.gameObject.SetActive(false);
+		LevelManager.Instance.SignOut();
+	}
 }

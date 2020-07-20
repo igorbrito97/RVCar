@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 08-Jul-2020 às 13:03
+-- Tempo de geração: 20-Jul-2020 às 19:54
 -- Versão do servidor: 10.4.6-MariaDB
 -- versão do PHP: 7.1.32
 
@@ -70,7 +70,6 @@ INSERT INTO `component_scenario` (`scenario_id`, `component_id`) VALUES
 (5, 5),
 (5, 6),
 (5, 7),
-(6, 5),
 (7, 5),
 (7, 6),
 (8, 5),
@@ -97,11 +96,10 @@ INSERT INTO `compsce_execution` (`comp_id`, `sce_id`, `quantmax`, `initialPositi
 (5, 3, 2, '-11.1,1.3,-97,0,90,0/49,1.3,3.3,0,270,0'),
 (5, 7, 3, '111.9,0.03,-230,0,0,0/204.3,0.03,-45.25,0,180,0/1.8,0.03,-354,0,270,0'),
 (5, 5, 7, '124.46,0.6,31.79,0,184,0/137.7,0.6,-38.1,0,4,0/163,0.6,-81.32,0,91,0/85.2,0.6,-61.5,0,270,0/238,0.6,-67.4,0,271,0/68,0.6,132.8,0,271,0/275.4,0.6,79,0,181,0'),
-(5, 6, 15, ''),
 (5, 8, 7, '124.46,0.6,31.79,0,184,0/137.7,0.6,-38.1,0,4,0/163,0.6,-81.32,0,91,0/85.2,0.6,-61.5,0,270,0/238,0.6,-67.4,0,271,0/68,0.6,132.8,0,271,0/275.4,0.6,79,0,181,0'),
-(7, 8, 10, '88,1,-89.1,0,90,0/-52,1,-82,0,93,0/-19.77,1,-22,0,0,0/150.42,1,3.3,0,4,0/119.8,1,57,0,183,0/210,1,135.2,0,271,0/92,1,122.5,0,91,0/2,1,-51.9,0,273,0/268.8,1,-5,0,183,0/270,1,101,0,181,0'),
+(7, 8, 10, '88,1,-87,0,91.6,0/-52,1,-79.9,0,93,0/-21.7,1,-22,0,0,0/148.4,1,3.3,0,3,0/121.9,1,57,0,182,0/210,1,133.2,0,271,0/92,1,124.5,0,91,0/2,1,-54,0,273,0/270.8,1,-5,0,182,0/272.1,1,101,0,181,0'),
 (7, 3, 5, '25,1.3,-106,0,90,0/50,1.3,11.65,0,270,0/-59,1.3,-11.6,0,90,0/-52,1.3,11.65,0,270,0/-66,1.3,-82.7,0,270,0'),
-(7, 5, 10, '88,1,-89.1,0,90,0/-52,1,-82,0,93,0/-19.77,1,-22,0,0,0/150.42,1,3.3,0,4,0/119.8,1,57,0,183,0/210,1,135.2,0,271,0/92,1,122.5,0,91,0/2,1,-51.9,0,273,0/268.8,1,-5,0,183,0/270,1,101,0,181,0');
+(7, 5, 10, '88,1,-87,0,91.6,0/-52,1,-79.9,0,93,0/-21.7,1,-22,0,0,0/148.4,1,3.3,0,3,0/121.9,1,57,0,182,0/210,1,133.2,0,271,0/92,1,124.5,0,91,0/2,1,-54,0,273,0/270.8,1,-5,0,182,0/272.1,1,101,0,181,0');
 
 -- --------------------------------------------------------
 
@@ -222,7 +220,8 @@ INSERT INTO `patient` (`pat_id`, `pat_name`, `pat_cpf`, `pat_phone`, `pat_email`
 (2, 'Iguinho', '111', '123123', 'eaae@asd', '', 'M', '1968-01-01', 0),
 (3, 'Pacitizo', '123', '00002', 'eme.com', 'observation', 'M', '1987-01-01', 0),
 (4, 'Stella', '12313', '123123', 'stel.com', 'paciente fera demais', 'F', '2001-04-12', 1),
-(5, 'Mensageiro', '123123123', '222222', 'msg@email.com', 'aaa', 'M', '1991-01-01', 1);
+(5, 'Mensageiro', '123123123', '222222', 'msg@email.com', 'aaa', 'M', '1991-01-01', 1),
+(6, 'Leandro', '4538566', '123123', 'leandrao@email.com', '', 'M', '1990-01-01', 1);
 
 -- --------------------------------------------------------
 
@@ -248,10 +247,11 @@ CREATE TABLE `psychologist` (
 --
 
 INSERT INTO `psychologist` (`psyc_id`, `psyc_name`, `psyc_cpf`, `psyc_email`, `psyc_phone`, `psyc_birthday`, `psyc_gender`, `psyc_crp`, `psyc_status`, `psyc_password`) VALUES
-(1, 'Igor', '456123', 'email@.com', '123', '1998-01-01', 'M', '123', 1, 'senha'),
+(1, 'Igor', '456123', 'igor@igor.com', '123', '1998-01-01', 'M', '123', 1, 'senha'),
 (2, 'Stellinha', '555', 'email@igor.com', '555', '2001-04-12', 'F', '123', 1, 'igor123'),
-(3, 'Novo Psic Do Trabalho', '111111', 'email@email.com', '15334', '1965-06-24', 'F', '25896', 0, 'senha'),
-(4, 'Psicologu', '123', 'eme@eme.com.br', '1234598730', '1997-12-30', 'F', '123456789', 1, '123');
+(3, 'Manoela', '111111', 'email@email.com', '15334', '1965-06-24', 'F', '25896', 1, 'senha'),
+(4, 'Jonas', '123', 'eme@eme.com.br', '1234598730', '1997-12-30', 'M', '123456789', 1, '123'),
+(5, 'Regina', '45789543', 'regina@email.com', '15617123', '1966-04-02', 'F', '51212', 1, 'senha');
 
 -- --------------------------------------------------------
 
@@ -309,12 +309,19 @@ CREATE TABLE `session` (
 INSERT INTO `session` (`session_id`, `psychologist_id`, `patient_id`, `weather_id`, `scenario_id`, `session_name`, `session_description`, `session_status`, `session_public`, `car_id`, `session_gear`) VALUES
 (1, 1, 1, 3, 1, 'Primeira sessao', 'Sessao numero 1 do programa', 0, 1, 1, 0),
 (2, 1, 4, 3, 4, 'Segunda sessao', 'Agora vamos de segundona', 0, 1, 2, 0),
-(3, 1, 4, 4, 6, 'Testezaaaa', '1231231231231', 1, 0, 1, 1),
+(3, 1, 4, 4, 6, 'Testezaaaa', '1231231231231', 0, 0, 1, 1),
 (4, 1, 1, 3, 7, 'qqq', 'qqq', 0, 1, 3, 1),
-(5, 1, 1, 5, 3, 'Sessão garagT', '22', 1, 1, 2, 0),
-(6, 1, 5, 3, 7, 'CityT', '3', 1, 1, 3, 0),
-(7, 1, 4, 4, 5, 'Cityzda', '1', 1, 1, 1, 0),
-(8, 1, 5, 3, 8, 'Cter', 'a', 1, 1, 2, 0);
+(5, 1, 1, 7, 3, 'Simulação de garagem', 'Sessão inicial para o Igor. Começando com uma garagem simples e tempo limpo', 1, 1, 2, 0),
+(6, 1, 5, 3, 7, 'Cidade simples - Chuva', 'Teste de cidade simples com chuva', 1, 1, 3, 0),
+(7, 1, 4, 7, 5, 'Cityzda', '1', 0, 1, 1, 0),
+(8, 1, 5, 3, 8, 'Centro', 'Simulação do centro da cidade', 1, 1, 2, 0),
+(9, 1, 1, 5, 8, 'Sessão para teste', 'description', 1, 1, 1, 0),
+(10, 3, 5, 7, 8, 'Sessão para teste', 'description', 1, 1, 1, 0),
+(11, 1, 4, 5, 6, 'Simulção de Rodovia - Noite', 'Cenário de estrada para a Stella, com tempestade a noite', 1, 1, 1, 0),
+(12, 5, 4, 5, 6, 'Rodovia ', 'Simulçaõ de rodo com tesmpestade', 1, 1, 2, 1),
+(13, 1, 5, 4, 6, 'Rodovia - Dia', 'Simulçaõ de rodo com dia nublado', 1, 1, 2, 1),
+(14, 1, 6, 7, 6, 'Sessão apresentação', 'Teste', 1, 1, 1, 1),
+(15, 1, 6, 5, 6, 'Rodovia ', 'Simulçaõ de rodo com tesmpestade', 1, 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -336,14 +343,15 @@ INSERT INTO `session_component` (`session_id`, `component_id`, `sescomp_quantity
 (2, 3, 1),
 (2, 4, 1),
 (3, 5, 15),
-(5, 5, 2),
 (5, 7, 3),
-(6, 5, 3),
+(6, 5, 2),
 (6, 6, 1),
-(7, 5, 2),
-(7, 7, 10),
-(8, 5, 3),
-(8, 7, 4);
+(8, 5, 4),
+(8, 7, 10),
+(9, 5, 3),
+(9, 7, 6),
+(10, 5, 3),
+(10, 7, 6);
 
 -- --------------------------------------------------------
 
@@ -368,7 +376,9 @@ INSERT INTO `weather` (`weather_id`, `weather_name`, `weather_description`, `wea
 (3, 'Chuva leve', 'Pequena quantidade de chuva', 1, 2, 10),
 (4, 'Dia nublado', 'Dia muito nublado, dificultando a visao', 1, 4, 20),
 (5, 'Tempestade a noite', 'Tempestade no período noturno', 1, 3, 22),
-(6, 'Dia ensolarado', 'Tarde de sol', 1, 1, 14);
+(6, 'Dia ensolarado', 'Tarde de sol', 1, 1, 14),
+(7, 'Noite com céu limpo', 'Clima que representa uma noite com clima agradável', 1, 1, 19),
+(8, 'Verão', 'Clima com sol no periodo da tarde', 1, 1, 13);
 
 -- --------------------------------------------------------
 
@@ -513,13 +523,13 @@ ALTER TABLE `objscenario`
 -- AUTO_INCREMENT de tabela `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `pat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `psychologist`
 --
 ALTER TABLE `psychologist`
-  MODIFY `psyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `psyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `scenario`
@@ -531,13 +541,13 @@ ALTER TABLE `scenario`
 -- AUTO_INCREMENT de tabela `session`
 --
 ALTER TABLE `session`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de tabela `weather`
 --
 ALTER TABLE `weather`
-  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `weather_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `weathertype`

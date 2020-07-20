@@ -48,8 +48,7 @@ public class LoginController : MonoBehaviour {
         Debug.Log("SQL: " + sql);
         try
         {
-            GameObject database = new GameObject();    
-            DatabaseController db = database.AddComponent<DatabaseController>();
+            DatabaseController db = new GameObject().AddComponent<DatabaseController>();
             db.Connect();
             connection = db.GetConnection();
             connection.Open();
@@ -76,12 +75,13 @@ public class LoginController : MonoBehaviour {
 
                 data.Close();
                 SceneManager.LoadScene("Menu");
+                SceneManager.sceneLoaded += OnSceneLoaded;
             }
             else
             {
                 data.Close();
                 connection.Close();
-                errorText.text = "Erro ao conectar no banco! ";
+                errorText.text = "Erro! E-mail ou senha inválidos!";
                 errorText.gameObject.SetActive(true);
                 return;
             }
@@ -89,7 +89,15 @@ public class LoginController : MonoBehaviour {
         catch (Exception ex)
         {
             Debug.Log(ex.Message);
+            errorText.text = "Erro ao conectar no banco! " + ex.Message;
+            errorText.gameObject.SetActive(true);
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+        if(scene.name == "Menu")
+            LevelManager.Instance.StartMenuManager();
     }
 
     public void CloseApplication()

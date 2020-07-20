@@ -25,21 +25,7 @@ public class EscapeDialog : MonoBehaviour
 	void Start()
 	{
 		carController = GameObject.FindObjectOfType (typeof(MainCarController))as MainCarController;
-	}
-
-	void OnEnable ()
-	{
-		AddListener(continueButton, OnContinue);
-		AddListener(resetButton, OnReset);
-		AddListener(quitButton, OnQuit);
-	}
-	void OnDisable ()
-	{
-		RemoveListener(continueButton, OnContinue);
-		RemoveListener(resetButton, OnReset);
-		RemoveListener(quitButton, OnQuit);
-	}
-		
+	}	
 
 	void Update ()
 	{
@@ -48,47 +34,21 @@ public class EscapeDialog : MonoBehaviour
 			carController.isPaused = false;
 			this.gameObject.SetActive(false);
 		}
+		else if(Input.GetKeyDown(KeyCode.Return))
+		{
+			LevelManager.Instance.ExitSession();
+		}
 	}
 
-
-	// Listeners
-
-
-	void OnContinue ()
+	public void onContinue()
 	{
+		Debug.Log("clicou111!");
 		this.gameObject.SetActive(false);
 	}
 
-
-	void OnReset ()
-	{/*
-		Scene.Reload() ???????
-		if (vehicle != null)
-			{
-			VPResetVehicle resetScript = vehicle.GetComponent<VPResetVehicle>();
-			if (resetScript != null)
-				{
-				resetScript.DoReset();
-				this.gameObject.SetActive(false);
-				}
-			}*/
-	}
-
-
-	void OnQuit ()
+	public void OnQuit()
 	{
-		Application.Quit();
-	}
-
-
-	void AddListener (Button button, UnityAction method)
-	{
-		if (button != null) button.onClick.AddListener(method);
-	}
-
-
-	void RemoveListener (Button button, UnityAction method)
-	{
-		if (button != null) button.onClick.RemoveListener(method);
+		Debug.Log("clicou2222!");
+		LevelManager.Instance.ExitSession();
 	}
 }

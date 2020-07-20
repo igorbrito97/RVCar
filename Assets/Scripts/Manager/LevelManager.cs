@@ -69,6 +69,12 @@ public class LevelManager : MonoBehaviour {
         }
 	}
 
+	public void StartMenuManager()
+	{
+		buttonMessage = GameObject.FindGameObjectWithTag("ButtonMessage").GetComponent<Button>();
+		textMessage = GameObject.FindGameObjectWithTag("TextMessage").GetComponent<Text>();
+	}
+
     public void AlterMessage(string text, Color color)
     {
         var colors = buttonMessage.colors;
@@ -104,52 +110,51 @@ public class LevelManager : MonoBehaviour {
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
 		SceneManager.SetActiveScene(scene);
-		
-		//carro
-		mainCar = InstantiateCar(currentSession.Car);
-		//marcha
-
-		//tempo e clima
-		timeController = GameObject.Find("TimeOfDay");
-		Debug.Log("STARTING HOUR: " + currentSession.Weather.Time);
-		timeController.GetComponent<ToD_Base>().GetSet_iStartHour = currentSession.Weather.Time;
-		weatherController = GameObject.Find("WeatherMaster");
-		Debug.Log("WEATHERZADA: " + currentSession.Weather.Type.Id);
-		weatherController.GetComponent<Weather_Controller>().BeginLevelWeather(currentSession.Weather.Type.Id);
-
-
-		//componentes
-		for(int i=0;i<currentSession.ListComponents.Count;i++)
+		if(scene.name != "Menu" && scene.name != "Login")
 		{
-			if(currentSession.ListComponents[i].Key == 6)//garage
-			{
-				KeyValuePair<Vector3,Quaternion> position = 
-					GetPosition(new VirtualObject().GetGaragePositionByScenarioId(currentSession.Scenario.Id));
+			//carro
+			mainCar = InstantiateCar(currentSession.Car);
+			//marcha
 
-                GameObject garage = Instantiate(componentGarage, position.Key, position.Value) as GameObject;
-			}
-			else if(currentSession.ListComponents[i].Key == 5)//moving car
+			//tempo e clima
+			timeController = GameObject.Find("TimeOfDay");
+			timeController.GetComponent<ToD_Base>().GetSet_iStartHour = currentSession.Weather.Time;
+			weatherController = GameObject.Find("WeatherMaster");
+			weatherController.GetComponent<Weather_Controller>().BeginLevelWeather(currentSession.Weather.Type.Id);
+
+
+			//componentes
+			for(int i=0;i<currentSession.ListComponents.Count;i++)
 			{
-				//ver quantidade, instaciar(pos inicial), selecionar o caminho e qual carro para todos
-				// as posicoes estao no banco separadas por /
-				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
-				listCarPos = Shuffle(listCarPos);
-				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
+				if(currentSession.ListComponents[i].Key == 6)//garage
 				{
-					Instantiate(componentMovingCars[0], listCarPos[j].Key, listCarPos[j].Value);
+					KeyValuePair<Vector3,Quaternion> position = 
+						GetPosition(new VirtualObject().GetGaragePositionByScenarioId(currentSession.Scenario.Id));
+
+					GameObject garage = Instantiate(componentGarage, position.Key, position.Value) as GameObject;
 				}
-			}
-			else if(currentSession.ListComponents[i].Key == 7)//parked car
-			{
-				List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
-				listCarPos = Shuffle(listCarPos);
-				for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
+				else if(currentSession.ListComponents[i].Key == 5)//moving car
 				{
-					Instantiate(componentParkedCars[Random.Range(0,componentParkedCars.Length)], listCarPos[j].Key, listCarPos[j].Value);
+					//ver quantidade, instaciar(pos inicial), selecionar o caminho e qual carro para todos
+					// as posicoes estao no banco separadas por /
+					List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
+					listCarPos = Shuffle(listCarPos);
+					for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
+					{
+						Instantiate(componentMovingCars[0], listCarPos[j].Key, listCarPos[j].Value);
+					}
+				}
+				else if(currentSession.ListComponents[i].Key == 7)//parked car
+				{
+					List<KeyValuePair<Vector3,Quaternion>> listCarPos = GetCarInitialPositions(currentSession.ListComponents[i].Key);
+					listCarPos = Shuffle(listCarPos);
+					for(int j = 0; j < currentSession.ListComponents[i].Value.Value; j++)
+					{
+						Instantiate(componentParkedCars[Random.Range(0,componentParkedCars.Length)], listCarPos[j].Key, listCarPos[j].Value);
+					}
 				}
 			}
 		}
-
 	}
 
 	private List<KeyValuePair<Vector3,Quaternion>> Shuffle(List<KeyValuePair<Vector3,Quaternion>> list)
@@ -212,6 +217,18 @@ public class LevelManager : MonoBehaviour {
 		return new KeyValuePair<Vector3, Quaternion>(pos,quat);
 
 	}
+    public void ExitSession()
+    {
+		SceneManager.LoadScene("Menu");
+        Destroy(mainCar);
+        //Destroy(this.gameObject);
+    }
 
+	public void SignOut()
+	{
+		GameManager.instance.Psychologist = null;
+		GameManager.instance.Con = null;
+		SceneManager.LoadScene("Login");
+	}
 	
 }

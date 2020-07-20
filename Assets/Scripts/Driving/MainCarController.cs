@@ -35,12 +35,12 @@ public class MainCarController : MonoBehaviour
     private float steerOldRotation;
     private bool isOnGroundL;
     private bool isOnGroundR;
-    private bool isCarOn;
     private bool startButtonPressed;
 
     [HideInInspector] public bool isPaused;
     [HideInInspector] public float currentSpeed;
     [HideInInspector] public float currentRpm;
+    [HideInInspector] public bool isCarOn;
 
     [SerializeField] public WheelCollider frontRightWC;
     [SerializeField] public WheelCollider frontLeftWC;
@@ -290,12 +290,17 @@ public class MainCarController : MonoBehaviour
         }
         else 
         {
+            int multiplier = 1;
             rearRightWC.brakeTorque = 0;
             rearLeftWC.brakeTorque = 0;
-            frontRightWC.motorTorque = accelInput * motorForce;
-            frontLeftWC.motorTorque = accelInput * motorForce;
-            rearRightWC.motorTorque = accelInput * motorForce;
-            rearLeftWC.motorTorque = accelInput * motorForce;
+
+            if(LogitechGSDK.LogiButtonIsPressed(0,11))//ré
+                multiplier = -1;
+                
+            frontRightWC.motorTorque = multiplier * accelInput * motorForce;
+            frontLeftWC.motorTorque = multiplier * accelInput * motorForce;
+            rearRightWC.motorTorque = multiplier * accelInput * motorForce;
+            rearLeftWC.motorTorque = multiplier * accelInput * motorForce;
         }
     }
 

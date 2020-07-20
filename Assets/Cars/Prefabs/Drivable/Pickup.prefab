@@ -8782,7 +8782,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7364133860484214751}
   serializedVersion: 2
-  m_Mass: 1500
+  m_Mass: 3500
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -8802,6 +8802,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a518820c9b823f4b935fb50671a8e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPaused: 0
+  currentSpeed: 0
+  currentRpm: 0
+  isCarOn: 0
   frontRightWC: {fileID: 7364133860676121791}
   frontLeftWC: {fileID: 7364133861430414948}
   rearRightWC: {fileID: 7364133860725018182}
@@ -8812,6 +8816,7 @@ MonoBehaviour:
   rearLeftT: {fileID: 4127249211873529842}
   maxSteerAngle: 35
   motorForce: 500
+  brakeForce: 500
   rotation: 1
   steeringWheel: {fileID: 4127249211873563556}
   wheelSpeedTurn: 3.5

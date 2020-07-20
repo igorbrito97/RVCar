@@ -17,12 +17,12 @@ public class GameManager : MonoBehaviour {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
             //para teste conecta aqui, porem na versão final: não tem GameManager no Menu, só no Login - conecta ao logar e la faz isso e da set na conexão       
-            GameObject database = new GameObject();    
+            /*GameObject database = new GameObject();    
             DatabaseController db = database.AddComponent<DatabaseController>();
             db.Connect();
             con = db.GetConnection();
             con.Open();
-            psychologist = new Psychologist().Search(1);
+            psychologist = new Psychologist().Search(1);*/
         }
         else
         {
