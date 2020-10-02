@@ -21,6 +21,9 @@ public class EscapeDialog : MonoBehaviour
 	public Button continueButton;
 	public Button resetButton;
 	public Button quitButton;
+	[SerializeField] private Text ConfirmText;
+	[SerializeField] private GameObject AreYouSurePanel;
+	
 
 	void Start()
 	{
@@ -29,26 +32,51 @@ public class EscapeDialog : MonoBehaviour
 
 	void Update ()
 	{
+		//https://answers.unity.com/questions/174448/stop-physics-without-using-timetimescale-0.html
+		//salvar a velocity e voltar depois - verificar se tem componente que se movimenta, se tiver faz deles tbm (antes acho que tem que salvar sessão - ai ja usa para reiniciar)
+		// nao vai dar nao -> ver de colocar o Time.deltaTime no CarEngine Direção - quanto tem que multiplicar pra ficar bom (*descobrir*)
 		if (Input.GetKeyDown(escapeKey))
 		{
-			carController.isPaused = false;
-			this.gameObject.SetActive(false);
+			if(carController.isPaused)
+				OnContinue();
+			else {
+				carController.isPaused = true;
+				//carVelocity = carController.CarRigidbody.velocity;
+				//carController.CarRigidbody.Sleep();
+				//carController.CarRigidbody.isKinematic = true;
+				Time.timeScale = 0;
+				this.gameObject.SetActive(true);
+			}
 		}
 		else if(Input.GetKeyDown(KeyCode.Return))
-		{
-			LevelManager.Instance.ExitSession();
-		}
+			OnQuit();
+		else if(Input.GetKeyDown(KeyCode.Space))
+			OnRestart();
 	}
 
-	public void onContinue()
+	public void OnContinue()
 	{
-		Debug.Log("clicou111!");
+		//carController.CarRigidbody.velocity = carVelocity;
+		//carController.CarRigidbody.isKinematic = false;
+		//carController.CarRigidbody.WakeUp();
+		carController.isPaused = false;
+		this.gameObject.SetActive(false);
+		Time.timeScale = 1;
+	}
+
+	public void OnRestart()
+	{
+		ConfirmText.text = "Deseja realmente reiniciar a sessão?";
+		AreYouSurePanel.GetComponent<ConfirmSessionAction>().Action = 0;
+		AreYouSurePanel.gameObject.SetActive(true);
 		this.gameObject.SetActive(false);
 	}
 
 	public void OnQuit()
 	{
-		Debug.Log("clicou2222!");
-		LevelManager.Instance.ExitSession();
+		ConfirmText.text = "Deseja realmente encerrar a sessão?";
+		AreYouSurePanel.GetComponent<ConfirmSessionAction>().Action = 1;
+		AreYouSurePanel.gameObject.SetActive(true);
+		this.gameObject.SetActive(false);
 	}
 }

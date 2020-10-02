@@ -3752,10 +3752,10 @@ Transform:
   - {fileID: 4127249211873529818}
   - {fileID: 4137833503351883635}
   - {fileID: 4127249211873529734}
-  - {fileID: 4127249211873529732}
   - {fileID: 6439165598847658048}
   - {fileID: 4127249211873529812}
   - {fileID: 4127249211873529810}
+  - {fileID: 4127249211873529732}
   m_Father: {fileID: 4127249211873529486}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3995,7 +3995,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4127249211873529726}
-  m_RootOrder: 13
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4127249211870662568
 MeshFilter:
@@ -6625,7 +6625,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4127249211873529726}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4127249211870662646
 MeshFilter:
@@ -6704,7 +6704,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4127249211873529726}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4127249211870662648
 MeshFilter:
@@ -7629,7 +7629,7 @@ Transform:
   - {fileID: 4127249211873529838}
   - {fileID: 3396373084186377237}
   m_Father: {fileID: 4127249211873529726}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5107541483398490167
 GameObject:
@@ -8743,6 +8743,7 @@ GameObject:
   - component: {fileID: 7364133860483943473}
   - component: {fileID: 7364133860487387977}
   - component: {fileID: 7364133861224777012}
+  - component: {fileID: -8566368769094200259}
   m_Layer: 8
   m_Name: Pickup
   m_TagString: Car
@@ -8771,6 +8772,7 @@ Transform:
   - {fileID: 7364133860484021329}
   - {fileID: 4712603220583782060}
   - {fileID: 7364133860722292991}
+  - {fileID: 7257341174776622281}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -8805,6 +8807,7 @@ MonoBehaviour:
   isPaused: 0
   currentSpeed: 0
   currentRpm: 0
+  currentGear: 0
   isCarOn: 0
   frontRightWC: {fileID: 7364133860676121791}
   frontLeftWC: {fileID: 7364133861430414948}
@@ -8817,6 +8820,41 @@ MonoBehaviour:
   maxSteerAngle: 35
   motorForce: 500
   brakeForce: 500
+  rotation: 1
+  steeringWheel: {fileID: 4127249211873563556}
+  wheelSpeedTurn: 3.5
+  numTurns: 1
+  reverseTurn: 1
+  steerHelper: 0.644
+  power: 10000
+  stabilizerXspeed: 800
+--- !u!114 &-8566368769094200259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7364133860484214751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a95b88e9e77c48442b3629b641bf91bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  currentSpeed: 0
+  currentRpm: 0
+  isCarOn: 0
+  frontRightWC: {fileID: 7364133860676121791}
+  frontLeftWC: {fileID: 7364133861430414948}
+  rearRightWC: {fileID: 7364133860725018182}
+  rearLeftWC: {fileID: 7364133860885098180}
+  frontRightT: {fileID: 4127249211873529844}
+  frontLeftT: {fileID: 4127249211873529846}
+  rearRightT: {fileID: 4127249211873529840}
+  rearLeftT: {fileID: 4127249211873529842}
+  maxSteerAngle: 35
+  motorForce: 350
+  brakeForce: 400
   rotation: 1
   steeringWheel: {fileID: 4127249211873563556}
   wheelSpeedTurn: 3.5
@@ -9254,7 +9292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7364133860722292991
 Transform:
   m_ObjectHideFlags: 0
@@ -9446,3 +9484,66 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!1001 &7257341174777017933
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7364133860483943473}
+    m_Modifications:
+    - target: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_Name
+      value: OVRCameraRig
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.3744126
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2430584
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.3723602
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0056851846
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0059983423
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.00003497465
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.9999659
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+--- !u!4 &7257341174776622281 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7257341174777017933}
+  m_PrefabAsset: {fileID: 0}

@@ -5,15 +5,10 @@
 //--------------------------------------------------------------
 
 // Dashboard: handles a dashboard UI with signals and gauges
-
-
 using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-
-namespace VehiclePhysics.UI
-{
 
 public class Dashboard : MonoBehaviour
 	{
@@ -73,15 +68,12 @@ public class Dashboard : MonoBehaviour
 	void Start()
 	{
 		carController = GameObject.FindObjectOfType (typeof(MainCarController))as MainCarController;
+		Debug.Log("STARTANDO O DASHBOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD");
 	}
 
 
 	void FixedUpdate ()
-		{/*
-		if (vehicle == null || !vehicle.isActiveAndEnabled) return;*/
-
-		//m_speedMs.Set(vehicle.data.Get(Channel.Vehicle, VehicleData.Speed) / 1000.0f);
-		//m_engineRpm.Set(vehicle.data.Get(Channel.Vehicle, VehicleData.EngineRpm) / 1000.0f);
+		{
 			if(carController)
 			{
 				m_speedMs = carController.currentSpeed;
@@ -181,4 +173,3 @@ public class Dashboard : MonoBehaviour
 		}
 	}
 
-}

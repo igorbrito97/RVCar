@@ -249,7 +249,9 @@
     <Compile Include="Assets\Scripts\Driving\SelfDriving\CarEngine.cs" />
     <Compile Include="Assets\Scripts\Driving\SelfDriving\CarPath.cs" />
     <Compile Include="Assets\Scripts\Driving\SelfDriving\CarWheel.cs" />
+    <Compile Include="Assets\Scripts\Driving\UI\Scripts\ConfirmSessionAction.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\Dashboard.cs" />
+    <Compile Include="Assets\Scripts\Driving\UI\Scripts\DashboardAutomatic.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\EscapeDialog.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\Gauge.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\HoverHandler.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Assets\Scripts\Model\VirtualObject.cs" />
     <Compile Include="Assets\Scripts\Model\Weather.cs" />
     <Compile Include="Assets\Scripts\Model\WeatherType.cs" />
+    <Compile Include="Assets\Scripts\VR\StartPanelOverlay.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -379,9 +382,6 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Editor">
-      <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -396,9 +396,6 @@
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-weaver.Editor">
-      <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
@@ -417,9 +414,6 @@
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>D:/Igor/RVCar/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

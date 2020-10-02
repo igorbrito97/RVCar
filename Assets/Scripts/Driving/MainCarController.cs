@@ -22,8 +22,9 @@ public class MainCarController : MonoBehaviour
     {
         TurnInX, TurnInZ
     }
-
+    public const int MINRPM = 1000,MAXRPM = 8000, MAXSPEED = 140; 
     private Rigidbody carRigidbody;
+    public Rigidbody CarRigidbody { get => carRigidbody; set => carRigidbody = value; }
     private float horizontalInput;
     private float verticalInput;
     private float accelInput;
@@ -36,10 +37,13 @@ public class MainCarController : MonoBehaviour
     private bool isOnGroundL;
     private bool isOnGroundR;
     private bool startButtonPressed;
+    private float[,] gearRange;
+    private float newRpm;
 
     [HideInInspector] public bool isPaused;
     [HideInInspector] public float currentSpeed;
     [HideInInspector] public float currentRpm;
+    [HideInInspector] public int currentGear;
     [HideInInspector] public bool isCarOn;
 
     [SerializeField] public WheelCollider frontRightWC;
@@ -62,11 +66,12 @@ public class MainCarController : MonoBehaviour
     [SerializeField] private float power = 10000f;
     [SerializeField] private float stabilizerXspeed = 800f;
 
+
     private void Awake()
     {
         Debug.Log(LogitechGSDK.LogiSteeringInitialize(false));
-        carRigidbody = GetComponent<Rigidbody>();
-        //rangeMarchas = initRangeMarcha();
+        CarRigidbody = GetComponent<Rigidbody>();
+        gearRange = initGearRange();
         //rpm = rpmaux = 0;
         //marchaAtual = -1;
         //speedometer.gameObject.SetActive(true);
@@ -84,34 +89,37 @@ public class MainCarController : MonoBehaviour
         }
     }
 
-    private float[,] initRangeMarcha()
+    private float[,] initGearRange()
     {
-        float[,] array = new float[7,2]; //matriz, col1 = min(2k rpm), col2 = max(5k rpm)
+        float[,] array = new float[7,2]; //matriz, col1 = min(2k rpm), col2 = max(6k rpm)
         array[0,0] = 0.0f;
         array[0,1] = 50.0f;
         array[1,0] = 0.0f;
-        array[1,1] = 20.0f;
-        array[2,0] = 10.0f;
+        array[1,1] = 25.0f;
+        array[2,0] = 15.0f;
         array[2,1] = 40.0f;
-        array[3,0] = 25.0f;
-        array[3,1] = 50.0f;
-        array[4,0] = 40.0f;
-        array[4,1] = 65.0f;
-        array[5,0] = 50.0f;
+        array[3,0] = 30.0f;
+        array[3,1] = 65.0f;
+        array[4,0] = 45.0f;
+        array[4,1] = 70.0f;
+        array[5,0] = 60.0f;
         array[5,1] = 90.0f;
-        array[6,0] = 60.0f;
-        array[6,1] = 110.0f;
+        array[6,0] = 75.0f;
+        array[6,1] = 140.0f;
         return array;
     }
 
     private void Start()
     {
-        carRigidbody.centerOfMass += new Vector3(0,-0.3f,-0.3f);
+        CarRigidbody.centerOfMass += new Vector3(0,-0.3f,-0.3f);
         isCarOn = false;
         startButtonPressed = false;
         accelInput = 0;
         brakeInput = 0;
         currentSpeed = 0;
+        currentGear = -1;
+        currentRpm = 0;
+        newRpm = 0;
         isPaused = false;
     }
 
@@ -138,11 +146,11 @@ public class MainCarController : MonoBehaviour
             float antiRollForce = (powerRearLeft-powerRearRight) * power;
             if(isOnGroundL)
             {
-                carRigidbody.AddForceAtPosition(rearLeftWC.transform.up * -antiRollForce, rearLeftWC.transform.position);
+                CarRigidbody.AddForceAtPosition(rearLeftWC.transform.up * -antiRollForce, rearLeftWC.transform.position);
             }
             if(isOnGroundR)
             {
-                carRigidbody.AddForceAtPosition(rearRightWC.transform.up * -antiRollForce, rearRightWC.transform.position);
+                CarRigidbody.AddForceAtPosition(rearRightWC.transform.up * -antiRollForce, rearRightWC.transform.position);
             }
         }        
     }
@@ -155,6 +163,7 @@ public class MainCarController : MonoBehaviour
         if (LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.DIJOYSTATE2ENGINES rec;
+            int gearAux;
             //float h, v;, velo;
             //int e, marchaEngatada, op;
             //bool flagMarcha = false;
@@ -169,86 +178,69 @@ public class MainCarController : MonoBehaviour
                 return;
             }
 
-            accelInput = (float) (rec.lY - 32768) / -65536;
+            accelInput = (float) (rec.lY - 32768) / -65536;//rec.lY acelerador / rec.lRz freio
             brakeInput = 32767 - rec.lRz;
-            //verticalInput = (float)(rec.lY - rec.lRz) / -65534; //rec.lY acelerador / rec.lRz freio
             int e = rec.rglSlider[0]; //embreagemSteer();
-            currentSpeed = carRigidbody.velocity.magnitude * 3.6f;
-            Accelerate();
-            UpdateWheelPoses();
-            Stabilize();
-            /*
-            // velo = m_Car.CurrentSpeed;
-            //marchaEngatada = getMarchaEngatada();
-            if (e < 0)
+            currentSpeed = CarRigidbody.velocity.magnitude * 3.6f;
+            gearAux = getActiveGear();
+            if (e < 0) //pisou na embreagem
             {
-                rpmaux = rpm > rpmaux ? rpm : rpmaux; //pega o maior rpm depois de pisar na embreagem
-                rpm = changeRpm(-7, 1);//rotacao cai
-                if (marchaEngatada > -1)// && velo > rangeMarchas[marchaEngatada,0])
+                if (gearAux > -1)// && velo > rangeMarchas[marchaEngatada,0])
                 {
-                    //calcula nova rotacao - se a rotacao anterior estiver baixa come�a com pouco, se tiver alta come�a com alto - ver se esta dentro da raange normal
+                    //calcula nova rotacao - se a rotacao anterior estiver baixa come�a com pouco, se tiver alta come�a com alto - ver se esta dentro da range normal
                     //coloca uma marcha verifica se a velo ta no range, se tiver abaixo reduz, se tiver acima acelera pouco, se tiver entre normal
-                    if (marchaAtual != marchaEngatada)
+                    if (gearAux != currentGear)
                     {
-                        
-                        if (velo > rangeMarchas[marchaEngatada, 0] && velo < rangeMarchas[marchaEngatada, 1]) //velocidade normal - rotacao normal
-                            op = 0;
-                        else if (velo > rangeMarchas[marchaEngatada, 1]) //velocidade acima do range - rotacao fica alta
-                            op = 1;
+                        currentGear = gearAux;
+                        Debug.Log("RPM NOVO: " +  currentRpm * (float)currentSpeed / (float)gearRange[currentGear,1]);
+                        newRpm = Mathf.Max(MINRPM, currentRpm * (float)currentSpeed / (float)gearRange[currentGear,1]);
+                        /*if (currentSpeed > gearRange[currentGear, 0] && currentSpeed < gearRange[gearAux, 1]) //velocidade normal - rotacao normal
+                            return;
+                        else if (currentSpeed > gearRange[currentGear, 1]) //velocidade acima do range - rotacao fica alta
+                            return;
                         else //velocidade abaixo do range - rotacao fica baixa
-                            op = 2;
-                        //Debug.Log("op = " + op);
-                        //Debug.Log("marcha atual = " + marchaAtual + " marcha engatada = " + marchaEngatada);
-                        rpm = newRpm(op, marchaAtual - marchaEngatada, rpmaux);
-                        marchaAtual = marchaEngatada;
-                        
+                            return;
+                            */
+                        //currentRpm = newRpm(op, marchaAtual - currentGear, rpmaux);
+                        //CALCULAR NOVO (TESTE) rpm = max(maxRPM,(float) RPMATUAL * (float)speed / (float)maxSpeedsPerGear[gear - 1]);
                     }
+                    currentRpm = Mathf.Lerp(currentRpm,newRpm,Time.deltaTime*3);
                 }
-
+                else {
+                    currentRpm = Mathf.Lerp(currentRpm,MINRPM,Time.deltaTime*0.4f);
+                }
             }
             else
             {
-                rpmaux = 0;
-                if (marchaAtual == marchaEngatada) //engatou a marcha
+                if(currentGear > -1) //alguma esta engatada, ai coloca o rpm novo de acordo com a marcha (nos returns ali em cima colocar uma variavel de rpm novo e alterar aqui (?))
                 {
-                    if (marchaAtual == 0) // ré
-                        v *= -1;
-
-                    if (v < 0)//freiando
+                    //IDEIA: ve quão diferente ta a velocidade e retorna multiplicador (valor não esta legal) -> se speed estiver acima: (curr - maxMarcha) / MAXS [not ok]
+                    //outra ideia: ver em qual marcha que deveria estar com essa speed e ir tirando x por cada marcha
+                    float multiplier = CheckSpeedGear(); // retorna multiplicador -> 1 normal
+                    // ai muda em uma variavel multiplicadora [0 - 1]
+                    //Debug.Log("MULTI:::::::::: " + multiplier);
+                    Accelerate(multiplier);
+                    newRpm = MINRPM;
+                    if(brakeInput > 0) //freiando
                     {
-                        brakerate -= 0.1f;
-                        rpm = changeRpm(-10, v * brakerate);
-                        //Debug.Log("brakerate = "+ brakerate + " v = " + v);
+                        //Debug.Log("BRA: " + brakeInput);
+                        currentRpm = Mathf.Lerp(currentRpm,MINRPM,Time.deltaTime*brakeInput*0.0002f);
                     }
                     else
                     {
-                        brakerate = 0;
-                        rpm = changeRpm(10, v);
-                    }
-
+                        //Debug.Log("ACCE: " + accelInput);
+                        currentRpm = Mathf.Lerp(currentRpm,MAXRPM,Time.deltaTime*accelInput*0.2f);
+                    }                   
                 }
-                else if (marchaEngatada == -1)//ponto morto
+                else 
                 {
-
+                    currentRpm = Mathf.Lerp(currentRpm,MINRPM,Time.deltaTime*0.02f);
                 }
-
             }
-            // o que fazer = reduzir drasticamente ou esgasgar o motor / deixar acelerar devagar [marchas erradas] & manter marcha nao engatada & r�
-            //quando freia tem que perder rpm tbm
-
-            /*
-            if (marchaEngatada >= 0)
-                m_Car.Move(h, v, v, 0);
-            else
-                m_Car.Move(h, 0, 0, 0);// o ultimo � o freio de mao
-            */
-
-            //Debug.Log("velo = " + velo);
-            //Debug.Log("marcha atual = " + marchaAtual + "marcha engatada = " + marchaEngatada);
-            //Debug.Log("h = " + h + "v = " + v);
-            //moverVolante(h);
-            //speedometer.text = string.Format("{0,00}", velo) + " - " + marchaAtual;
-            //rotationsPerMinute.text = "rpm = " + rpm;
+            
+            
+            UpdateWheelPoses();
+            Stabilize();
         }
 
     }
@@ -281,7 +273,7 @@ public class MainCarController : MonoBehaviour
         frontLeftWC.steerAngle = steeringAngle;
     }
 
-    public void Accelerate()
+    public void Accelerate(float gearMultiplier)
     {
         if(brakeInput > 0)//is braking
         {
@@ -290,17 +282,17 @@ public class MainCarController : MonoBehaviour
         }
         else 
         {
-            int multiplier = 1;
+            int reverseMultiplier = 1;
             rearRightWC.brakeTorque = 0;
             rearLeftWC.brakeTorque = 0;
 
             if(LogitechGSDK.LogiButtonIsPressed(0,11))//ré
-                multiplier = -1;
+                reverseMultiplier = -1;
                 
-            frontRightWC.motorTorque = multiplier * accelInput * motorForce;
-            frontLeftWC.motorTorque = multiplier * accelInput * motorForce;
-            rearRightWC.motorTorque = multiplier * accelInput * motorForce;
-            rearLeftWC.motorTorque = multiplier * accelInput * motorForce;
+            frontRightWC.motorTorque = reverseMultiplier * accelInput * motorForce * gearMultiplier;
+            frontLeftWC.motorTorque = reverseMultiplier * accelInput * motorForce * gearMultiplier;
+            rearRightWC.motorTorque = reverseMultiplier * accelInput * motorForce * gearMultiplier;
+            rearLeftWC.motorTorque = reverseMultiplier * accelInput * motorForce * gearMultiplier;
         }
     }
 
@@ -326,53 +318,11 @@ public class MainCarController : MonoBehaviour
     {
         if(isOnGroundL || isOnGroundR) 
         {
-            carRigidbody.AddForce(-transform.up * (5000 + stabilizerXspeed * Mathf.Abs((carRigidbody.velocity.magnitude * 3.6f))));
+            CarRigidbody.AddForce(-transform.up * (5000 + stabilizerXspeed * Mathf.Abs((CarRigidbody.velocity.magnitude * 3.6f))));
         }
-        carRigidbody.velocity = Vector3.ClampMagnitude(carRigidbody.velocity, 300);
+        CarRigidbody.velocity = Vector3.ClampMagnitude(CarRigidbody.velocity, 300);
     }
-
-    /*
-
-    private int changeRpm(int mult,float v) 
-    {
-        if (mult > 0) //v nao pode ser zero - (se nao acelerar)
-            v = v == 0 ? -0.5f : v;
-        rpm += Convert.ToInt32(mult * v);
-
-        if (rpm < MINRPM)
-            return MINRPM;
-        else if (rpm > MAXRPM)
-            return MAXRPM;
-        else return rpm;
-    }
-
-    private int newRpm(int op,int dif,int aux)
-    {
-        Debug.Log("dif = " + dif + " aux = " + aux);
-        switch(op)//coloca uma marcha verifica se a velo ta no range, se tiver abaixo reduz, se tiver acima acelera pouco, se tiver entre normal
-        {
-            case 0://entre
-                rpm /= 2;
-                break;
-            case 1://abaixo
-                rpm = Convert.ToInt32(aux * -1.5 * dif);
-                break;
-            case 2://acima
-                rpm = Convert.ToInt32(aux / -1.5 / dif);
-                break;
-        }
-        if (dif > 0) //up
-            return (rpm > MAXRPM) ? MAXRPM : rpm;
-        else //down
-            return (rpm < MINRPM) ? MINRPM : rpm;
-    }
-
-    private void checkBrake(float velo)
-    {
-
-    }
-
-    private int getMarchaEngatada()
+    private int getActiveGear()
     {
         int i = 0;
         while(i<=6)
@@ -383,7 +333,31 @@ public class MainCarController : MonoBehaviour
         }
         return -1;
     }
-    */
+
+    private float CheckSpeedGear()
+    {
+        //Debug.Log("currentGear: " + currentGear);        
+        //Debug.Log("currentSpeed: " + currentSpeed);
+        if(currentSpeed > gearRange[currentGear,0] && currentSpeed < gearRange[currentGear,1]) //dentro do range, senao ver diferença de speed e joga pra aceleracao (multiplicador acho)
+            return 1;
+        //nova: a cada 3 de diferenca de speed ele diminui 0,07 do multiplicador -> ve se ta acima e comparada com menor e abaixo com maior 
+        // TA AI CONTRARIO = quanto mais pra cima maior fica
+        else if(currentSpeed < gearRange[currentGear,0])//abaixo -> quanto mais perto chegar da speed minima pra marcha maior valor - speed muito abaixo fica valor menor
+        {
+            //Debug.Log("ABAIXO!");
+            //Debug.Log("curSpeed: " + currentSpeed + " range: " + gearRange[currentGear,0]);
+            return 1 - (gearRange[currentGear,0] - currentSpeed) / 3f * 0.1f;
+        }
+        
+        else if(currentSpeed > gearRange[currentGear,1]) //acima -> quanto mais perto da speed maxima mais rapido - vai aumentando speed e diminui o valor
+        {
+            //Debug.Log("ACIMA!");
+            //Debug.Log("curSpeed: " + currentSpeed + " range: " + gearRange[currentGear,1]);
+            return 1 - (currentSpeed - gearRange[currentGear,1]) / 5f * 0.1f;
+        }
+        else return 0;
+    }
+    
 
     private void TurnSteeringWheel()
     {

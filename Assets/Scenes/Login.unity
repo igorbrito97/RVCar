@@ -414,6 +414,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8946014687915406879, guid: b3b1d1e4c9a36e8458f1d5dc96e8fbf8,
         type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: mainCanvas
+      value: 
+      objectReference: {fileID: 6310667091372016345, guid: 7547daf9a8561b547a440f098b051ce3,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: dashboardManual
+      value: 
+      objectReference: {fileID: 3187415643268336432, guid: 7c37a49227386ab4096782be2a4a6200,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: dashboardAutomatic
+      value: 
+      objectReference: {fileID: 7966082778659586996, guid: 61099b26c02e8c5438839749ffd019dc,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: canvasManual
+      value: 
+      objectReference: {fileID: 4025336593071405193, guid: 780edc3f7f5e9774caa2b3f6a576d09b,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: canvasAutomatic
+      value: 
+      objectReference: {fileID: 1741655091882535869, guid: 9759688fd1b415a48a0b03a52bad628d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3dde099dfc0270642b43128239138e4c, type: 3}
 --- !u!1001 &1492949112

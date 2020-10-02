@@ -227,6 +227,7 @@ public class RunSessionController : MonoBehaviour {
 
     public void ExecuteClick()
     {
+        Debug.Log("EXECUTE CLICK!");
         LevelManager.Instance.LoadSession(new Session().Search(Convert.ToInt32(textSessionID.text)));
     }
 
@@ -237,7 +238,7 @@ public class RunSessionController : MonoBehaviour {
         textIDBComponent.text = item.Key.ToString();
         textNameBComponent.text = item.Value.Key;
         textQuantityBComponent.text = item.Value.Value.ToString();
-        Debug.Log("2QUANT: " + textQuantityBComponent.text);
+        //Debug.Log("2QUANT: " + textQuantityBComponent.text);
         newRow = Instantiate(rowComponent) as Button; 
         newRow.transform.SetParent(rowComponent.transform.parent,false);
         newRow.onClick.AddListener(() => RowClickComp(newRow,item.Value.Value));
@@ -260,7 +261,6 @@ public class RunSessionController : MonoBehaviour {
     {
         //mostra imagem com componente
         panelComponentInfo.gameObject.SetActive(true);
-        Debug.Log("QUANT: " + br.gameObject.GetComponentInChildren<Text>(textQuantityBComponent).text);
         ScenarioComponent component = new ScenarioComponent().SimpleSearch(Convert.ToInt32(br.gameObject.GetComponentInChildren<Text>(textIDBComponent).text));
         inputFieldComponentName.text = component.Name;
         inputFieldComponentQuantity.text = quant.ToString();

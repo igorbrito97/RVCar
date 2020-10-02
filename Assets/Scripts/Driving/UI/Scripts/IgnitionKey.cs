@@ -47,9 +47,7 @@ public class IgnitionKey : MonoBehaviour
 	{
 		if(carController.isCarOn != carStarted)//isON
 		{
-			Debug.Log("MUDOU IS ON : " + carStarted);
 			carStarted = carController.isCarOn;
-			Debug.Log("MUDOU IS ONsasdasdasd : " + carStarted);
 			SetHighlight(start, true);
 			SetHighlight(off, false);
 		}

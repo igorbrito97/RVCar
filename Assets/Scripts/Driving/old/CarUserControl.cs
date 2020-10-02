@@ -155,8 +155,8 @@ namespace UnityStandardAssets.Vehicles.Car
                 //Debug.Log("marcha atual = " + marchaAtual + "marcha engatada = " + marchaEngatada);
                 //Debug.Log("h = " + h + "v = " + v);
                 moverVolante(h);
-                speedometer.text = string.Format("{0,00}", velo) + " - " + marchaAtual;
-                rotationsPerMinute.text = "rpm = " + rpm;
+                //speedometer.text = string.Format("{0,00}", velo) + " - " + marchaAtual;
+                //rotationsPerMinute.text = "rpm = " + rpm;
                 
                 m_Car.Move(h, v, v, 0);
             }

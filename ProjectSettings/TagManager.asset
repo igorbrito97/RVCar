@@ -10,6 +10,9 @@ TagManager:
   - Car
   - ButtonMessage
   - TextMessage
+  - MainCanvas
+  - DashboardAutomatic
+  - DashboardManual
   layers:
   - Default
   - TransparentFX

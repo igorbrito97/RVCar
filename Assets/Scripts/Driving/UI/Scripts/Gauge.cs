@@ -76,6 +76,7 @@ public class Gauge : MonoBehaviour
 		go.transform.SetParent(transform);
 		go.transform.SetSiblingIndex(0);
 		go.transform.localScale = Vector3.one;
+		go.transform.rotation = new Quaternion(0,0,0,0);
 
 		// Configure the new RectTransform to match the current one.
 		// Pivot and position first; SetInsetAndSizeFromParentEdge use those as base.

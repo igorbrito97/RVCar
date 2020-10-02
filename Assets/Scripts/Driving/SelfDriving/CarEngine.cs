@@ -105,7 +105,7 @@ public class CarEngine : MonoBehaviour
         sensorStartPos += transform.right * frontSideSensorPosition;
         if(Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
         {
-            if(hit.collider.CompareTag("Environment"))
+            if(hit.collider.CompareTag("Environment") || hit.collider.CompareTag("Car"))
             {
                 Debug.DrawLine(sensorStartPos,hit.point);
                 isAvoiding = true;
@@ -116,7 +116,7 @@ public class CarEngine : MonoBehaviour
         //front right angle sensor
         else if(Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
         {
-            if(hit.collider.CompareTag("Environment"))
+            if(hit.collider.CompareTag("Environment"))// || hit.collider.CompareTag("Car"))
             {
                 Debug.DrawLine(sensorStartPos,hit.point);
                 isAvoiding = true;
@@ -128,7 +128,7 @@ public class CarEngine : MonoBehaviour
         sensorStartPos -= transform.right * frontSideSensorPosition * 2;
         if(Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
         {
-            if(hit.collider.CompareTag("Environment"))
+            if(hit.collider.CompareTag("Environment") || hit.collider.CompareTag("Car"))
             {
                 Debug.DrawLine(sensorStartPos,hit.point);
                 isAvoiding = true;
@@ -140,7 +140,7 @@ public class CarEngine : MonoBehaviour
         //front left angle sensor
         else if(Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
         {
-            if(hit.collider.CompareTag("Environment"))
+            if(hit.collider.CompareTag("Environment"))// || hit.collider.CompareTag("Car"))
             {
                 Debug.DrawLine(sensorStartPos,hit.point);
                 isAvoiding = true;
@@ -153,7 +153,7 @@ public class CarEngine : MonoBehaviour
         {
             if(Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
             {
-                if(hit.collider.CompareTag("Environment"))
+                if(hit.collider.CompareTag("Environment"))// || hit.collider.CompareTag("Car"))
                 {
                     Debug.DrawLine(sensorStartPos,hit.point);
                     isAvoiding = true;
@@ -182,11 +182,12 @@ public class CarEngine : MonoBehaviour
 
     private void Drive()
     {
+        //Debug.Log("TIME: " + (maxMotorTorque * Time.deltaTime * 90));
         currentSpeed = 2 * Mathf.PI * wheelFR.radius * wheelFR.rpm * 60 / 1000;
         if(currentSpeed < maxSpeed && !isBraking)
         {
-            wheelFR.motorTorque = maxMotorTorque;
-            wheelFL.motorTorque = maxMotorTorque;
+            wheelFR.motorTorque = maxMotorTorque * Time.deltaTime * 90;
+            wheelFL.motorTorque = maxMotorTorque * Time.deltaTime * 90;
         }
         else {
             wheelFR.motorTorque = 0;
@@ -204,13 +205,13 @@ public class CarEngine : MonoBehaviour
             }
             else isBraking = false;
 
-            Debug.Log("CHEGOU PERTO: " + currentNode);
+            //Debug.Log("CHEGOU PERTO: " + currentNode);
             if(currentNode == nodes.Count -1)
                 currentNode = 0;
             else 
                 currentNode++;
             
-            Debug.Log("MUDANDO: " + currentNode);
+            Debug.Log("próximo: " + currentNode + " - " + this.gameObject.name);
         }
     }
 

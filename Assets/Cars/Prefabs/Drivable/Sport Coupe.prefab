@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2740549831751604797
 Transform:
   m_ObjectHideFlags: 0
@@ -306,6 +306,7 @@ GameObject:
   - component: {fileID: 4229187268338401427}
   - component: {fileID: 4229187268338401426}
   - component: {fileID: 2740549831654752461}
+  - component: {fileID: 5588053316187963743}
   m_Layer: 8
   m_Name: Sport Coupe
   m_TagString: Car
@@ -334,6 +335,7 @@ Transform:
   - {fileID: 4229187267681177474}
   - {fileID: 8996000693882803042}
   - {fileID: 2740549831751604797}
+  - {fileID: 1933742571025073330}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -368,6 +370,7 @@ MonoBehaviour:
   isPaused: 0
   currentSpeed: 0
   currentRpm: 0
+  currentGear: 0
   isCarOn: 0
   frontRightWC: {fileID: 2740549831367580003}
   frontLeftWC: {fileID: 2740549832285816118}
@@ -380,6 +383,41 @@ MonoBehaviour:
   maxSteerAngle: 35
   motorForce: 500
   brakeForce: 500
+  rotation: 1
+  steeringWheel: {fileID: 4229187268183991381}
+  wheelSpeedTurn: 3.5
+  numTurns: 1
+  reverseTurn: 1
+  steerHelper: 0.644
+  power: 10000
+  stabilizerXspeed: 800
+--- !u!114 &5588053316187963743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4229187268338401425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a95b88e9e77c48442b3629b641bf91bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  currentSpeed: 0
+  currentRpm: 0
+  isCarOn: 0
+  frontRightWC: {fileID: 2740549831367580003}
+  frontLeftWC: {fileID: 2740549832285816118}
+  rearRightWC: {fileID: 2740549830717680052}
+  rearLeftWC: {fileID: 2740549831285453913}
+  frontRightT: {fileID: 4229187268183701575}
+  frontLeftT: {fileID: 4229187268183701569}
+  rearRightT: {fileID: 4229187268183701587}
+  rearLeftT: {fileID: 4229187268183701597}
+  maxSteerAngle: 35
+  motorForce: 350
+  brakeForce: 400
   rotation: 1
   steeringWheel: {fileID: 4229187268183991381}
   wheelSpeedTurn: 3.5
@@ -758,6 +796,73 @@ Transform:
   m_Father: {fileID: 3559450254812240437}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1933742571025473078
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4229187268338401427}
+    m_Modifications:
+    - target: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_Name
+      value: OVRCameraRig
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0957713
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.15543385
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0547994
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.008635334
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.98628736
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+--- !u!4 &1933742571025073330 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1933742571025473078}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4229187268184089225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1334,12 +1439,6 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d5ccdc922f67f64eaa311fe8cade903, type: 3}
---- !u!4 &4229187268183701569 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400072, guid: 0d5ccdc922f67f64eaa311fe8cade903,
-    type: 3}
-  m_PrefabInstance: {fileID: 4229187268184089225}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4229187268183701587 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400090, guid: 0d5ccdc922f67f64eaa311fe8cade903,
@@ -1358,15 +1457,21 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4229187268184089225}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4229187268183991381 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100060, guid: 0d5ccdc922f67f64eaa311fe8cade903,
+--- !u!4 &4229187268183701569 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400072, guid: 0d5ccdc922f67f64eaa311fe8cade903,
     type: 3}
   m_PrefabInstance: {fileID: 4229187268184089225}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4229187268183701579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400066, guid: 0d5ccdc922f67f64eaa311fe8cade903,
+    type: 3}
+  m_PrefabInstance: {fileID: 4229187268184089225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4229187268183991381 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100060, guid: 0d5ccdc922f67f64eaa311fe8cade903,
     type: 3}
   m_PrefabInstance: {fileID: 4229187268184089225}
   m_PrefabAsset: {fileID: 0}

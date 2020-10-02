@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class GameManager : MonoBehaviour {
 
@@ -22,12 +22,39 @@ public class GameManager : MonoBehaviour {
             db.Connect();
             con = db.GetConnection();
             con.Open();
-            psychologist = new Psychologist().Search(1);*/
+            psychologist = new Psychologist().Search(1);
+            */
+
+            //deixa a rv desligada, liga somente quando começar a sessão, e quando voltar tem que desligar de novo
+            DisableVR();
+            /*Debug.Log("LAOADED: "+ XRSettings.loadedDeviceName);
+            foreach(string i in XRSettings.supportedDevices)
+                Debug.Log("! = "+ i);
+                */
         }
         else
         {
             // DestroyImmediate(gameObject);
         }
+    }
+
+    public void EnableVR()
+    {
+        StartCoroutine(ChangeVRConfig("Oculus",true));
+    }
+
+    public void DisableVR()
+    {
+        StartCoroutine(ChangeVRConfig("",false));
+    }
+
+    IEnumerator ChangeVRConfig(string deviceName, bool flag)
+    {
+        XRSettings.LoadDeviceByName(deviceName);
+        XRSettings.enabled = flag;
+        yield return null;
+        //Debug.Log("CHANGINGGGGGGGGGGGGGGGGGGGGGGGG: " + deviceName + " " + flag);
+        //Debug.Log("LAOADED2: "+ XRSettings.loadedDeviceName);
     }
 
     public int GetMaxPK(string table, string key)

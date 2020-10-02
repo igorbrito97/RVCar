@@ -36,6 +36,8 @@ public class LevelManager : MonoBehaviour {
 	[SerializeField] GameObject componentGarage;
 	[SerializeField] GameObject[] componentMovingCars; // carros que ficam movimentando
 	[SerializeField] GameObject[] componentParkedCars; // carros que ficam movimentando
+	[SerializeField] GameObject canvasManual;
+	[SerializeField] GameObject canvasAutomatic;
 
 	//para execução
 	public static Session currentSession;
@@ -94,6 +96,7 @@ public class LevelManager : MonoBehaviour {
 
 	public void LoadSession(Session session)
 	{
+        Debug.Log("LOAD SESSIONANNANANANAN");
 		// selecionar cenario, carro com marcha correta, componentes, clima
 		currentSession = session;
 
@@ -102,8 +105,12 @@ public class LevelManager : MonoBehaviour {
 			AlterMessage("Erro ao carregar cenário!",Color.red);
 		else 
 		{
+			//enable VR
+			GameManager.instance.EnableVR();
+			
 			SceneManager.LoadScene(scenarioPrefab);
 			SceneManager.sceneLoaded += OnSceneLoaded;
+
 		}
 	}
 
@@ -112,9 +119,24 @@ public class LevelManager : MonoBehaviour {
 		SceneManager.SetActiveScene(scene);
 		if(scene.name != "Menu" && scene.name != "Login")
 		{
+			Debug.Log("LOADING SCENE: " + scene.name);
+
 			//carro
 			mainCar = InstantiateCar(currentSession.Car);
-			//marcha
+
+			//marcha && velocimetro
+			if(currentSession.Gear == 0)//manual
+			{
+				mainCar.GetComponent<MainCarController>().enabled = true;
+				mainCar.GetComponent<CarControllerAutomatic>().enabled = false;
+				GameObject dashboard = Instantiate(canvasManual) as GameObject;
+			}
+			else //automatic
+			{
+				mainCar.GetComponent<MainCarController>().enabled = false;
+				mainCar.GetComponent<CarControllerAutomatic>().enabled = true;
+				GameObject dashboard = Instantiate(canvasAutomatic) as GameObject;
+			}
 
 			//tempo e clima
 			timeController = GameObject.Find("TimeOfDay");
@@ -219,9 +241,16 @@ public class LevelManager : MonoBehaviour {
 	}
     public void ExitSession()
     {
+        Destroy(mainCar.gameObject);
+		SceneManager.sceneLoaded -= OnSceneLoaded;
 		SceneManager.LoadScene("Menu");
-        Destroy(mainCar);
-        //Destroy(this.gameObject);
+    }
+	
+	public void RestartSession()
+    {
+        //Destroy(mainCar.gameObject);
+		//SceneManager.sceneLoaded -= OnSceneLoaded;
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 	public void SignOut()

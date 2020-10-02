@@ -20195,6 +20195,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2063652467}
+        m_MethodName: EnableVR
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &302242026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35218,7 +35229,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 650, y: -30}
-  m_SizeDelta: {x: 300, y: 25}
+  m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &525205514
 MonoBehaviour:
@@ -37494,6 +37505,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555648597}
   m_CullTransparentMesh: 0
+--- !u!1 &555674205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 555674207}
+  - component: {fileID: 555674206}
+  m_Layer: 0
+  m_Name: LEVEL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &555674206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555674205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878fb84fa5fd6d0478606d9a1d58d047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonMessage: {fileID: 167742686}
+  textMessage: {fileID: 891816537}
+  carPickup1: {fileID: 7364133860484214751, guid: c03a0634addcf04409530e7a35ac75b1,
+    type: 3}
+  carPickup2: {fileID: 8946014687915406879, guid: b3b1d1e4c9a36e8458f1d5dc96e8fbf8,
+    type: 3}
+  carSportCoupe: {fileID: 4229187268338401425, guid: ca09a132c6bfd2544b6a7dd20ccc6f3a,
+    type: 3}
+  componentGarage: {fileID: 0}
+  componentMovingCars: []
+  componentParkedCars: []
+--- !u!4 &555674207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555674205}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 111.11007, y: 0.66090995, z: -78.57002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &555893444
 GameObject:
   m_ObjectHideFlags: 0
@@ -67759,7 +67824,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 128, y: -80}
-  m_SizeDelta: {x: 350, y: 25}
+  m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &990789818
 MonoBehaviour:
@@ -85784,7 +85849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 128, y: -130}
+  m_AnchoredPosition: {x: 128, y: -135}
   m_SizeDelta: {x: 1089.3, y: 120}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1258454865
@@ -86054,7 +86119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1267130526
 RectTransform:
   m_ObjectHideFlags: 0
@@ -92161,7 +92226,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 127.999405, y: -28}
-  m_SizeDelta: {x: 450, y: 25}
+  m_SizeDelta: {x: 450, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1379416110
 MonoBehaviour:
@@ -111580,7 +111645,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 128, y: -115}
+  m_AnchoredPosition: {x: 128, y: -120}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1700895009
@@ -135356,6 +135421,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2061910144}
   m_CullTransparentMesh: 0
+--- !u!1 &2063652466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2063652468}
+  - component: {fileID: 2063652467}
+  m_Layer: 0
+  m_Name: GAMEMANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2063652467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063652466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55daefbed77b2147a6b1dd1eccec125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2063652468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063652466}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.950964, y: -4.5390058, z: -101.011086}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2066974232
 GameObject:
   m_ObjectHideFlags: 0
@@ -138614,7 +138722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1933567930977439
 GameObject:
   m_ObjectHideFlags: 0
@@ -138721,19 +138829,49 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "O sistema inteiro se baseia na montagem e execu\xE7\xE3o da sess\xE3o
-    terap\xEAutica. Para que isso ocorra temos o cadastro b\xE1sico (buscar, adicionar,
-    alterar e apagar) dos seguintes itens: paciente, psic\xF3logo, tipo de ambiente
-    virtual, clima, cen\xE1rio e componente, sendo que cada um tem suas pr\xF3prias
-    propriedades.\r\n\n\nUma sess\xE3o \xE9 composta pelo: nome, descri\xE7\xE3o,
-    status (se est\xE1 ativa ou n\xE3o), se \xE9 p\xFAblica para qualquer um visualizar,
-    psic\xF3logo respons\xE1vel por cri\xE1-la, paciente designado, cen\xE1rio, clima
-    e hor\xE1rio em que o paciente estar\xE1 imersivo, o modelo do carro que ser\xE1
-    dirigido, o tipo de transmiss\xE3o de marcha (manual ou autom\xE1tico) e tamb\xE9m
-    se a cena ter\xE1 componentes extras, que s\xE3o dificultadores que podem ser
-    adicionados com a possibilidade de escolher a quantidade.\n\n \r\nA sess\xE3o
-    somente pode ser executada pelo psic\xF3logo que a criou, por isso tamb\xE9m
-    \xE9 poss\xEDvel de se duplicar uma sess\xE3o que \xE9 p\xFAblica para que possa
-    ser executada por qualquer profissional.\r\n"
+    terap\xEAutica e ele \xE9 dividido nos cadastros b\xE1sicos e a sess\xE3o. \r\nO
+    cadastro b\xE1sico (buscar, adicionar, alterar e apagar) dos seguintes itens
+    podem ser feitos: paciente, psic\xF3logo, tipo de ambiente virtual, clima, cen\xE1rio
+    e componente, sendo que cada um tem suas pr\xF3prias propriedades. Para visualizar
+    basta escolher algum item no menu gerenciar. Todas as telas tem o mesmo padr\xE3o:
+    um bot\xE3o de novo, um campo para texto, um bot\xE3o de pesquisa e uma lista
+    de objetos. \r\n\t- Para buscar, basta digitar e clicar em buscar.\r\n\t- Para
+    adicionar basta clicar em novo, preencher os campos e clicar em confirmar.\r\n\t-
+    Para alterar e apagar deve-se pesquisar, clicar no item desejado e em seguida
+    as informa\xE7\xF5es dele aparecer\xE3o, ent\xE3o \xE9 poss\xEDvel modificar
+    os dados e clicar em confirmar ou clicar em deletar. \r\n\r\nPara a sess\xE3o
+    \xE9 poss\xEDvel de montar, alterar, excluir, executar e duplicar. Uma sess\xE3o
+    \xE9 composta pelo: nome, descri\xE7\xE3o, status (se est\xE1 ativa ou n\xE3o),
+    se \xE9 p\xFAblica para qualquer um visualizar, psic\xF3logo respons\xE1vel por
+    cri\xE1-la, paciente designado, cen\xE1rio, clima e hor\xE1rio em que o paciente
+    estar\xE1 imersivo, o modelo do carro que ser\xE1 dirigido, o tipo de transmiss\xE3o
+    de marcha (manual ou autom\xE1tico) e tamb\xE9m se a cena ter\xE1 componentes
+    extras, que s\xE3o dificultadores que podem ser adicionados com a possibilidade
+    de escolher a quantidade.\r\n\t- Para montar deve-se clicar em montar/alterar
+    no menu sess\xE3o, em seguida clicar no bot\xE3o novo, preencher e selecionar
+    todos os campos e clicar em confirmar.\r\n\t- Para alterar e excluir deve-se
+    clicar em montar/alterar no menu sess\xE3o, digitar no campo e clicar em buscar,
+    em seguida aparecer\xE1 uma lista de sess\xF5es referente a sua busca, ent\xE3o
+    deve-se ou selecionar o item, alterar as informa\xE7\xF5es e clicar em confirmar
+    ou clicar em apagar. Tamb\xE9m \xE9 poss\xEDvel alterar clicando nessa op\xE7\xE3o
+    no momento da execu\xE7\xE3o, ao clicar ser\xE1 encaminhado para a tela que cont\xE9m
+    todas as informa\xE7\xF5es da sess\xE3o, et\xE3o \xE9 s\xF3 modificar e confirmar.\r\n\t-
+    Para executar: deve-se clicar em executar no menu sess\xE3o, escolher se vai
+    buscar por nome ou paciente, digitar e clicar em buscar, ent\xE3o deve-se selecionar
+    o item e ser\xE1 encaminhado para uma tela pr\xE9 execu\xE7\xE3o. Essa tela cont\xE9m
+    todas as informa\xE7\xF5es da sess\xE3o e o bot\xE3o para executar, ao clicar
+    no bot\xE3o uma tela aparece com a foto do cen\xE1rio e para executar basta clicar
+    no bot\xE3o executar agora. A sess\xE3o somente pode ser executada pelo psic\xF3logo
+    que a criou, por isso tamb\xE9m \xE9 poss\xEDvel de se duplicar uma sess\xE3o
+    que \xE9 p\xFAblica para que possa ser executada por qualquer profissional.\r\n\t-
+    Para duplicar deve-se clicar em montar/alterar no menu sess\xE3o, digitar no
+    campo, clicar em buscar, selecionar o item desejado e clicar em duplicar. \r\n\r\nAo
+    executar uma sess\xE3o o ambiente virtual \xE9 processado e uma cena criada com
+    as especifica\xE7\xF5es da sess\xE3o. O paciente deve estar com o capacete e
+    posicionado no volante. Durante a execu\xE7\xE3o \xE9 poss\xEDvel clicar em ESC
+    para pausar e ESC novamente para continuar ou ENTER para sair da execu\xE7\xE3o
+    e voltar para o menu. Para iniciar o motor deve-se clicar no bot\xE3o XBOX do
+    volante. "
 --- !u!114 &114212748017992947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138942,7 +139080,7 @@ MonoBehaviour:
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1810888291794618}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -139236,9 +139374,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224235000724754527
 RectTransform:
@@ -139314,9 +139452,9 @@ RectTransform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &224425074777328823
 RectTransform:
@@ -139332,8 +139470,8 @@ RectTransform:
   m_Father: {fileID: 224287295690897863}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.6568182}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -139413,7 +139551,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -139433,9 +139571,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 20}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224820031194363617
 RectTransform:
