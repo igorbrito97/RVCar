@@ -83,13 +83,14 @@ public class LoginController : MonoBehaviour {
                 connection.Close();
                 errorText.text = "Erro! E-mail ou senha inválidos!";
                 errorText.gameObject.SetActive(true);
+                Destroy(db.gameObject);
                 return;
             }
         }
         catch (Exception ex)
         {
             Debug.Log(ex.Message);
-            errorText.text = "Erro ao conectar no banco! " + ex.Message;
+            errorText.text = "Algo deu errado ao conectar no banco! " + ex.Message + " - " + ex.InnerException;
             errorText.gameObject.SetActive(true);
         }
     }

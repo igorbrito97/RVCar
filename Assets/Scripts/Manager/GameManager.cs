@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
 
     public void EnableVR()
     {
+        Debug.Log("ENABLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         StartCoroutine(ChangeVRConfig("Oculus",true));
     }
 
@@ -51,10 +52,12 @@ public class GameManager : MonoBehaviour {
     IEnumerator ChangeVRConfig(string deviceName, bool flag)
     {
         XRSettings.LoadDeviceByName(deviceName);
-        XRSettings.enabled = flag;
         yield return null;
-        //Debug.Log("CHANGINGGGGGGGGGGGGGGGGGGGGGGGG: " + deviceName + " " + flag);
-        //Debug.Log("LAOADED2: "+ XRSettings.loadedDeviceName);
+        XRSettings.enabled = flag;
+        Debug.Log("CHANGINGGGGGGGGGGGGGGGGGGGGGGGG: " + deviceName + " " + flag);
+        Debug.Log("LAOADED2: "+ XRSettings.loadedDeviceName);
+        Debug.Log("!!!!!!!!!!!!: "+ XRSettings.supportedDevices[1]);
+        
     }
 
     public int GetMaxPK(string table, string key)

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CarControllerAutomatic : MonoBehaviour
 {
@@ -12,23 +13,19 @@ public class CarControllerAutomatic : MonoBehaviour
 
     private Rigidbody carRigidbody;
     private float horizontalInput;
-    private float verticalInput;
     private float accelInput;
     private float brakeInput;
-    private float angle;
     private float steeringAngle;
     private float initialSteeringRotation;
     private float steeringWheelAngle;
-    private float steerOldRotation;
     private bool isOnGroundL;
     private bool isOnGroundR;
-    private bool startButtonPressed;
 
     [HideInInspector] public bool isPaused;
     [HideInInspector] public float currentSpeed;
-    [HideInInspector] public float currentRpm;
     [HideInInspector] public bool isCarOn;
 
+    [SerializeField] public float maxSpeed;
     [SerializeField] public WheelCollider frontRightWC;
     [SerializeField] public WheelCollider frontLeftWC;
     [SerializeField] public WheelCollider rearRightWC;
@@ -45,7 +42,6 @@ public class CarControllerAutomatic : MonoBehaviour
     [SerializeField] [Range(0.4f, 5.0f)] private float wheelSpeedTurn = 2.0f;
     [SerializeField] [Range(0.5f, 3.0f)] private float numTurns = 1.5f;
     [SerializeField] public bool reverseTurn;
-    [Range(0, 1)] [SerializeField] private float steerHelper = 0.644f; // 0 is raw physics , 1 the car will grip in the direction it is facing
     [SerializeField] private float power = 10000f;
     [SerializeField] private float stabilizerXspeed = 800f;
 
@@ -71,11 +67,11 @@ public class CarControllerAutomatic : MonoBehaviour
     {
         carRigidbody.centerOfMass += new Vector3(0,-0.3f,-0.3f);
         isCarOn = false;
-        startButtonPressed = false;
         accelInput = 0;
         brakeInput = 0;
         currentSpeed = 0;
         isPaused = false;
+        maxSpeed = 100f;
     }
 
     private void Update()
@@ -146,17 +142,7 @@ public class CarControllerAutomatic : MonoBehaviour
     private void CheckCarStart()
     {
         if(LogitechGSDK.LogiButtonIsPressed(0, 10)) //start button
-            startButtonPressed = true;
-
-        if(startButtonPressed)
-        {
-            currentRpm = Mathf.Lerp(currentRpm,1000,Time.deltaTime*7f); 
-            if(currentRpm > 995) //close enough
-            {
-                isCarOn = true;
-                currentRpm = 1000;
-            }
-        }
+            isCarOn = true;
     }
 
      public void Steer()
@@ -238,6 +224,5 @@ public class CarControllerAutomatic : MonoBehaviour
             }
         }
     }
-
 
 }

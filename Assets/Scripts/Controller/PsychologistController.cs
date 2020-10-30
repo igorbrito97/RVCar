@@ -226,7 +226,7 @@ public class PsychologistController : MonoBehaviour {
             textID.text = psychologists[i].Id.ToString();
             textNameB.text = psychologists[i].Name;
             textCpfB.text = psychologists[i].Cpf;
-            textBirthdayB.text = psychologists[i].Birthday.ToString();
+            textBirthdayB.text = psychologists[i].Birthday.Day + " - " + psychologists[i].Birthday.Month + " - " + psychologists[i].Birthday.Year; 
             textStatusB.text  = psychologists[i].Status == 1 ? "Ativo" : "Desativado";
             newRow = Instantiate(row) as Button; 
             newRow.transform.SetParent(row.transform.parent,false);

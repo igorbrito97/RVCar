@@ -3543,7 +3543,7 @@ GameObject:
   - component: {fileID: 9046416070137669264}
   m_Layer: 5
   m_Name: OverlayCanvasAutomatic
-  m_TagString: MainCanvas
+  m_TagString: DashboardAutomatic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

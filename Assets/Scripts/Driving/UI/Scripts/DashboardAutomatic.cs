@@ -74,12 +74,7 @@ public class DashboardAutomatic : MonoBehaviour
 	void FixedUpdate ()
 		{
 			if(carController)
-			{
 				m_speedMs = carController.currentSpeed;
-				m_engineRpm = carController.currentRpm;
-			}
-			//m_speedMs = 20f;
-			//m_engineRpm = 5000f;
 		}
 
 

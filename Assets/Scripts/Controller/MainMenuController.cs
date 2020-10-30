@@ -20,7 +20,7 @@ public class MainMenuController : MonoBehaviour {
         active = null;
 
         buttonSession.gameObject.SetActive(true);
-        buttonReport.gameObject.SetActive(true);
+        //buttonReport.gameObject.SetActive(true);
 
         buttonPatient.gameObject.SetActive(true);
         buttonPsychologist.gameObject.SetActive(true);

@@ -4,20 +4,6 @@ using UnityEngine.UI;
 
 public class MainCarController : MonoBehaviour
 {
-    /*
-    public int marchaAtual { get; private set; }
-    public const int MINRPM = 0,MAXRPM = 8000; 
-    [SerializeField] Text speedometer;
-    [SerializeField] Text rotationsPerMinute;
-
-    private float[,] rangeMarchas;
-    private float rotacaoInicialVolante = 0.0f;
-    private float anguloVolante;
-    private int rpm,rpmaux; //0 - 8000
-    private float brakerate = 0,accelrate = 0;
-    */
-
-
     internal enum WheelType
     {
         TurnInX, TurnInZ
@@ -26,14 +12,12 @@ public class MainCarController : MonoBehaviour
     private Rigidbody carRigidbody;
     public Rigidbody CarRigidbody { get => carRigidbody; set => carRigidbody = value; }
     private float horizontalInput;
-    private float verticalInput;
     private float accelInput;
     private float brakeInput;
     private float angle;
     private float steeringAngle;
     private float initialSteeringRotation;
     private float steeringWheelAngle;
-    private float steerOldRotation;
     private bool isOnGroundL;
     private bool isOnGroundR;
     private bool startButtonPressed;
@@ -62,9 +46,11 @@ public class MainCarController : MonoBehaviour
     [SerializeField] [Range(0.4f, 5.0f)] private float wheelSpeedTurn = 2.0f;
     [SerializeField] [Range(0.5f, 3.0f)] private float numTurns = 1.5f;
     [SerializeField] public bool reverseTurn;
-    [Range(0, 1)] [SerializeField] private float steerHelper = 0.644f; // 0 is raw physics , 1 the car will grip in the direction it is facing
     [SerializeField] private float power = 10000f;
     [SerializeField] private float stabilizerXspeed = 800f;
+    //sound
+    [SerializeField] private AudioClip highAccClip;
+    private AudioSource highAccSound; 
 
 
     private void Awake()
@@ -121,6 +107,8 @@ public class MainCarController : MonoBehaviour
         currentRpm = 0;
         newRpm = 0;
         isPaused = false;
+
+        
     }
 
     private void Update()
@@ -158,7 +146,16 @@ public class MainCarController : MonoBehaviour
     void FixedUpdate()
     {
         if(isPaused)
+        {
+            frontRightWC.motorTorque =0;
+            frontLeftWC.motorTorque = 0;
+            rearRightWC.motorTorque = 0;
+            rearLeftWC.motorTorque = 0;
+            rearRightWC.brakeTorque = 10000000;
+            rearLeftWC.brakeTorque = 10000000; 
+            Debug.Log("PAUSADO!!!!!!!!!!!");
             return;
+        }
             
         if (LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0))
         {
@@ -214,11 +211,8 @@ public class MainCarController : MonoBehaviour
             {
                 if(currentGear > -1) //alguma esta engatada, ai coloca o rpm novo de acordo com a marcha (nos returns ali em cima colocar uma variavel de rpm novo e alterar aqui (?))
                 {
-                    //IDEIA: ve quão diferente ta a velocidade e retorna multiplicador (valor não esta legal) -> se speed estiver acima: (curr - maxMarcha) / MAXS [not ok]
-                    //outra ideia: ver em qual marcha que deveria estar com essa speed e ir tirando x por cada marcha
                     float multiplier = CheckSpeedGear(); // retorna multiplicador -> 1 normal
                     // ai muda em uma variavel multiplicadora [0 - 1]
-                    //Debug.Log("MULTI:::::::::: " + multiplier);
                     Accelerate(multiplier);
                     newRpm = MINRPM;
                     if(brakeInput > 0) //freiando
@@ -336,23 +330,17 @@ public class MainCarController : MonoBehaviour
 
     private float CheckSpeedGear()
     {
-        //Debug.Log("currentGear: " + currentGear);        
-        //Debug.Log("currentSpeed: " + currentSpeed);
         if(currentSpeed > gearRange[currentGear,0] && currentSpeed < gearRange[currentGear,1]) //dentro do range, senao ver diferença de speed e joga pra aceleracao (multiplicador acho)
             return 1;
-        //nova: a cada 3 de diferenca de speed ele diminui 0,07 do multiplicador -> ve se ta acima e comparada com menor e abaixo com maior 
-        // TA AI CONTRARIO = quanto mais pra cima maior fica
+        //a cada 3 de diferenca de speed ele diminui x do multiplicador
         else if(currentSpeed < gearRange[currentGear,0])//abaixo -> quanto mais perto chegar da speed minima pra marcha maior valor - speed muito abaixo fica valor menor
         {
             //Debug.Log("ABAIXO!");
-            //Debug.Log("curSpeed: " + currentSpeed + " range: " + gearRange[currentGear,0]);
             return 1 - (gearRange[currentGear,0] - currentSpeed) / 3f * 0.1f;
         }
-        
         else if(currentSpeed > gearRange[currentGear,1]) //acima -> quanto mais perto da speed maxima mais rapido - vai aumentando speed e diminui o valor
         {
             //Debug.Log("ACIMA!");
-            //Debug.Log("curSpeed: " + currentSpeed + " range: " + gearRange[currentGear,1]);
             return 1 - (currentSpeed - gearRange[currentGear,1]) / 5f * 0.1f;
         }
         else return 0;

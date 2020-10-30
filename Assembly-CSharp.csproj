@@ -592,21 +592,6 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="I18N.CJK">
-      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.CJK.dll</HintPath>
-    </Reference>
-    <Reference Include="I18N">
-      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.dll</HintPath>
-    </Reference>
-    <Reference Include="I18N.MidEast">
-      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.MidEast.dll</HintPath>
-    </Reference>
-    <Reference Include="I18N.Other">
-      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.Other.dll</HintPath>
-    </Reference>
-    <Reference Include="I18N.Rare">
-      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.Rare.dll</HintPath>
-    </Reference>
     <Reference Include="I18N.West">
       <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.West.dll</HintPath>
     </Reference>

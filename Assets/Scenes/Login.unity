@@ -444,6 +444,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1741655091882535869, guid: 9759688fd1b415a48a0b03a52bad628d,
         type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: carSportCoupe
+      value: 
+      objectReference: {fileID: 1004896866716441028, guid: 45d6674ae12cc9e42862d2e104c8cadf,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: overlayManual
+      value: 
+      objectReference: {fileID: 7003953863849800861, guid: d82d3a68148fd644da1a913630bedfcb,
+        type: 3}
+    - target: {fileID: 3010006573409619415, guid: 3dde099dfc0270642b43128239138e4c,
+        type: 3}
+      propertyPath: overlayAutomatic
+      value: 
+      objectReference: {fileID: 9046416070137669269, guid: 8680210a54faca646b229ff54b2818a1,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3dde099dfc0270642b43128239138e4c, type: 3}
 --- !u!1001 &1492949112
@@ -551,12 +569,12 @@ PrefabInstance:
     - target: {fileID: 224063648551947834, guid: 91d7808a6a8d98e4dbac880bf60cb779,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -127.9
+      value: -141.4
       objectReference: {fileID: 0}
     - target: {fileID: 224063648551947834, guid: 91d7808a6a8d98e4dbac880bf60cb779,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 162.39
+      value: 192.1
       objectReference: {fileID: 0}
     - target: {fileID: 224586656288147924, guid: 91d7808a6a8d98e4dbac880bf60cb779,
         type: 3}

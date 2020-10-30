@@ -124,18 +124,20 @@ public class LevelManager : MonoBehaviour {
 			//carro
 			mainCar = InstantiateCar(currentSession.Car);
 
-			//marcha && velocimetro
+			//marcha && velocimetro (overlay começa os dois ligados e desliga o que não é)
 			if(currentSession.Gear == 0)//manual
 			{
 				mainCar.GetComponent<MainCarController>().enabled = true;
 				mainCar.GetComponent<CarControllerAutomatic>().enabled = false;
 				GameObject dashboard = Instantiate(canvasManual) as GameObject;
+				GameObject.FindGameObjectWithTag("DashboardAutomatic").SetActive(false);
 			}
 			else //automatic
 			{
 				mainCar.GetComponent<MainCarController>().enabled = false;
 				mainCar.GetComponent<CarControllerAutomatic>().enabled = true;
 				GameObject dashboard = Instantiate(canvasAutomatic) as GameObject;
+				GameObject.FindGameObjectWithTag("DashboardManual").SetActive(false);
 			}
 
 			//tempo e clima
@@ -196,6 +198,7 @@ public class LevelManager : MonoBehaviour {
 
 	private GameObject InstantiateCar(VirtualObject car)
 	{
+		Debug.Log("CAR: " + car.Prefab);
 		//pegar posicao inicial do carro de acordo com o cenario
 		KeyValuePair<Vector3,Quaternion> initialPosition = GetPosition(new VirtualObject().GetCarPositionByScenarioId(currentSession.Scenario.Id));
 		switch(car.Prefab)
@@ -244,6 +247,7 @@ public class LevelManager : MonoBehaviour {
         Destroy(mainCar.gameObject);
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 		SceneManager.LoadScene("Menu");
+		GameManager.instance.DisableVR();
     }
 	
 	public void RestartSession()
