@@ -308,7 +308,7 @@ public class SessionControlller : MonoBehaviour
         if(session.Psychologist.Id != GameManager.instance.Psychologist.Id){
             buttonAlter.gameObject.SetActive(false);
             buttonDelete.gameObject.SetActive(false);
-            buttonExecute.gameObject.SetActive(true);
+            buttonExecute.gameObject.SetActive(false);
         }
         buttonConfirm.gameObject.SetActive(false);
 
@@ -824,23 +824,27 @@ public class SessionControlller : MonoBehaviour
 
     public void CheckScenarioComponent()
     {
-        int comp_id = arrayAllComponents[dropdownComponent.value].Key;
-        if(currentScenario.Id > 0) //selected
+        if(arrayAllComponents.Length > 0) 
         {
-            int sce_id = currentScenario.Id;
-            int max = new ScenarioComponent().GetMaxQuantityScenarioComponent(comp_id,sce_id);
-            if(max > 1 && state != 0) // varios & esta para adicionar
+            int comp_id = arrayAllComponents[dropdownComponent.value].Key;
+            if(currentScenario.Id > 0) //selected
             {
-                sliderQuantity.interactable = true;
-                sliderQuantity.minValue = 1;
-                sliderQuantity.maxValue = max;
+                int sce_id = currentScenario.Id;
+                int max = new ScenarioComponent().GetMaxQuantityScenarioComponent(comp_id,sce_id);
+                if(max > 1 && state != 0) // varios & esta para adicionar
+                {
+                    sliderQuantity.interactable = true;
+                    sliderQuantity.minValue = 1;
+                    sliderQuantity.maxValue = max;
+                }
+                else
+                {
+                    sliderQuantity.interactable = false;
+                }
+                sliderQuantity.value = 1;
             }
-            else
-            {
-                sliderQuantity.interactable = false;
-            }
-            sliderQuantity.value = 1;
-        }
+        } 
+        
     }
 
     public void OnChangeSliderQuantityComponent()

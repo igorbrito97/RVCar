@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour {
         XRSettings.enabled = flag;
         Debug.Log("CHANGINGGGGGGGGGGGGGGGGGGGGGGGG: " + deviceName + " " + flag);
         Debug.Log("LAOADED2: "+ XRSettings.loadedDeviceName);
-        Debug.Log("!!!!!!!!!!!!: "+ XRSettings.supportedDevices[1]);
         
     }
 

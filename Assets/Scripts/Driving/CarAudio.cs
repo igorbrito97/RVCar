@@ -70,8 +70,6 @@ public class CarAudio : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log(engineStarted);
-        Debug.Log("MANUAL: " + isManual);
         if(LogitechGSDK.LogiButtonIsPressed(0, 10) && !engineStarted && !engineSoundStarted) //start button
         {
             engineStart = gameObject.AddComponent<AudioSource>();

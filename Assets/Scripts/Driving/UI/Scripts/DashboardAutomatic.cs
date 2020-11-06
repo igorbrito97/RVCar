@@ -51,23 +51,9 @@ public class DashboardAutomatic : MonoBehaviour
 	private float m_speedMs; 
 	private float m_engineRpm;
 
-
-	void OnEnable ()
-		{
-		//m_lastVehicleTime = -1.0f;
-		//m_warningTime = -10.0f;
-		
-		//instanciar o carro
-		/*
-		if (carController == null)
-			GameObject.Find(LevelManager.Instance.currentSession.Name);
-			carController = GetComponentInParent<MainCarController>();*/
-		}
-
 	void Start()
 	{
 		carController = GameObject.FindObjectOfType (typeof(CarControllerAutomatic))as CarControllerAutomatic;
-		Debug.Log("STARTANDO O DASHBOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD");
 	}
 
 
@@ -79,24 +65,9 @@ public class DashboardAutomatic : MonoBehaviour
 
 
 	void Update ()
-		{/*
-		if (vehicle == null || !vehicle.isActiveAndEnabled)
-			{
-			speedNeedle.SetValue(0.0f);
-			rpmNeedle.SetValue(0.0f);
-			m_speedMs.Reset(0.0f);
-			m_engineRpm.Reset(0.0f);
-
-			if (gearLabel != null) gearLabel.text = "-";
-			if (speedMphLabel != null) speedMphLabel.text = "-";
-
-			m_lastVehicleTime = -1.0f;
-			return;
-			}*/
+		{
 
 		speedNeedle.SetValue(m_speedMs);//speedMs * 3.6f);
-
-
 		// Gear label
 
 		if (gearLabel != null)

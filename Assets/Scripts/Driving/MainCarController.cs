@@ -147,12 +147,14 @@ public class MainCarController : MonoBehaviour
     {
         if(isPaused)
         {
-            frontRightWC.motorTorque =0;
+            frontRightWC.motorTorque = 0;
             frontLeftWC.motorTorque = 0;
             rearRightWC.motorTorque = 0;
             rearLeftWC.motorTorque = 0;
             rearRightWC.brakeTorque = 10000000;
             rearLeftWC.brakeTorque = 10000000; 
+            currentSpeed = Mathf.Lerp(currentSpeed,0,Time.deltaTime*0.4f);
+            currentRpm = Mathf.Lerp(currentRpm,MINRPM,Time.deltaTime*0.4f);
             Debug.Log("PAUSADO!!!!!!!!!!!");
             return;
         }
@@ -189,17 +191,7 @@ public class MainCarController : MonoBehaviour
                     if (gearAux != currentGear)
                     {
                         currentGear = gearAux;
-                        Debug.Log("RPM NOVO: " +  currentRpm * (float)currentSpeed / (float)gearRange[currentGear,1]);
                         newRpm = Mathf.Max(MINRPM, currentRpm * (float)currentSpeed / (float)gearRange[currentGear,1]);
-                        /*if (currentSpeed > gearRange[currentGear, 0] && currentSpeed < gearRange[gearAux, 1]) //velocidade normal - rotacao normal
-                            return;
-                        else if (currentSpeed > gearRange[currentGear, 1]) //velocidade acima do range - rotacao fica alta
-                            return;
-                        else //velocidade abaixo do range - rotacao fica baixa
-                            return;
-                            */
-                        //currentRpm = newRpm(op, marchaAtual - currentGear, rpmaux);
-                        //CALCULAR NOVO (TESTE) rpm = max(maxRPM,(float) RPMATUAL * (float)speed / (float)maxSpeedsPerGear[gear - 1]);
                     }
                     currentRpm = Mathf.Lerp(currentRpm,newRpm,Time.deltaTime*3);
                 }
@@ -209,8 +201,9 @@ public class MainCarController : MonoBehaviour
             }
             else
             {
+                Debug.Log("CURRENT GE: " + currentGear);
                 if(currentGear > -1) //alguma esta engatada, ai coloca o rpm novo de acordo com a marcha (nos returns ali em cima colocar uma variavel de rpm novo e alterar aqui (?))
-                {
+                {Debug.Log("BOBAO");
                     float multiplier = CheckSpeedGear(); // retorna multiplicador -> 1 normal
                     // ai muda em uma variavel multiplicadora [0 - 1]
                     Accelerate(multiplier);
@@ -269,6 +262,7 @@ public class MainCarController : MonoBehaviour
 
     public void Accelerate(float gearMultiplier)
     {
+        Debug.Log("ACELERANDO!");
         if(brakeInput > 0)//is braking
         {
             rearRightWC.brakeTorque = brakeInput * brakeForce;

@@ -90,7 +90,7 @@ public class LoginController : MonoBehaviour {
         catch (Exception ex)
         {
             Debug.Log(ex.Message);
-            errorText.text = "Algo deu errado ao conectar no banco! " + ex.Message + " - " + ex.InnerException;
+            errorText.text = "Algo deu errado ao conectar no banco! " + ex.Message + " - " + ex.InnerException.Message;
             errorText.gameObject.SetActive(true);
         }
     }

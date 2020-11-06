@@ -96,7 +96,6 @@ public class LevelManager : MonoBehaviour {
 
 	public void LoadSession(Session session)
 	{
-        Debug.Log("LOAD SESSIONANNANANANAN");
 		// selecionar cenario, carro com marcha correta, componentes, clima
 		currentSession = session;
 
@@ -119,11 +118,8 @@ public class LevelManager : MonoBehaviour {
 		SceneManager.SetActiveScene(scene);
 		if(scene.name != "Menu" && scene.name != "Login")
 		{
-			Debug.Log("LOADING SCENE: " + scene.name);
-
 			//carro
 			mainCar = InstantiateCar(currentSession.Car);
-
 			//marcha && velocimetro (overlay começa os dois ligados e desliga o que não é)
 			if(currentSession.Gear == 0)//manual
 			{
@@ -198,7 +194,6 @@ public class LevelManager : MonoBehaviour {
 
 	private GameObject InstantiateCar(VirtualObject car)
 	{
-		Debug.Log("CAR: " + car.Prefab);
 		//pegar posicao inicial do carro de acordo com o cenario
 		KeyValuePair<Vector3,Quaternion> initialPosition = GetPosition(new VirtualObject().GetCarPositionByScenarioId(currentSession.Scenario.Id));
 		switch(car.Prefab)

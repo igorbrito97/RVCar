@@ -257,6 +257,7 @@
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\HoverHandler.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\IgnitionKey.cs" />
     <Compile Include="Assets\Scripts\Driving\UI\Scripts\MainCanvasController.cs" />
+    <Compile Include="Assets\Scripts\Driving\UI\Scripts\MainOverlayController.cs" />
     <Compile Include="Assets\Scripts\Driving\old\CarController.cs" />
     <Compile Include="Assets\Scripts\Driving\old\CarUserControl.cs" />
     <Compile Include="Assets\Scripts\Driving\old\WheelEffects.cs" />
@@ -591,6 +592,9 @@
     </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="I18N">
+      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.dll</HintPath>
     </Reference>
     <Reference Include="I18N.West">
       <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.West.dll</HintPath>

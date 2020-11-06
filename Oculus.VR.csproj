@@ -347,6 +347,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="I18N">
+      <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.dll</HintPath>
+    </Reference>
     <Reference Include="I18N.West">
       <HintPath>D:/Igor/RVCar/Assets/Plugins/I18N.West.dll</HintPath>
     </Reference>
