@@ -182,6 +182,14 @@ public class MainCarController : MonoBehaviour
             int e = rec.rglSlider[0]; //embreagemSteer();
             currentSpeed = CarRigidbody.velocity.magnitude * 3.6f;
             gearAux = getActiveGear();
+            Debug.Log("gearAux: " + gearAux);
+            if(gearAux < 0) //ponto morto
+            {
+                currentGear = -1;
+                Accelerate(0);
+                currentRpm = Mathf.Lerp(currentRpm,MINRPM,Time.deltaTime*1.6f);
+            }
+
             if (e < 0) //pisou na embreagem
             {
                 if (gearAux > -1)// && velo > rangeMarchas[marchaEngatada,0])
@@ -203,7 +211,7 @@ public class MainCarController : MonoBehaviour
             {
                 Debug.Log("CURRENT GE: " + currentGear);
                 if(currentGear > -1) //alguma esta engatada, ai coloca o rpm novo de acordo com a marcha (nos returns ali em cima colocar uma variavel de rpm novo e alterar aqui (?))
-                {Debug.Log("BOBAO");
+                {
                     float multiplier = CheckSpeedGear(); // retorna multiplicador -> 1 normal
                     // ai muda em uma variavel multiplicadora [0 - 1]
                     Accelerate(multiplier);
@@ -262,7 +270,6 @@ public class MainCarController : MonoBehaviour
 
     public void Accelerate(float gearMultiplier)
     {
-        Debug.Log("ACELERANDO!");
         if(brakeInput > 0)//is braking
         {
             rearRightWC.brakeTorque = brakeInput * brakeForce;

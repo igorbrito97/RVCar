@@ -26,11 +26,7 @@ public class GameManager : MonoBehaviour {
             */
 
             //deixa a rv desligada, liga somente quando começar a sessão, e quando voltar tem que desligar de novo
-            DisableVR();
-            /*Debug.Log("LAOADED: "+ XRSettings.loadedDeviceName);
-            foreach(string i in XRSettings.supportedDevices)
-                Debug.Log("! = "+ i);
-                */
+            //DisableVR();
         }
         else
         {
@@ -78,6 +74,15 @@ public class GameManager : MonoBehaviour {
 
         return maxPK;
     }
+
+/*
+    void Close()
+    {
+        Debug.Log("IAHUDASDHYUASDUASDUASDUASDASiasd");
+        StartCoroutine(ChangeVRConfig("",false));
+        Application.Quit();
+        
+    }*/
 
     public MySqlConnection Con { get => con; set => con = value; }
     public Psychologist Psychologist { get => psychologist; set => psychologist = value; }

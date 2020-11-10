@@ -105,7 +105,7 @@ public class LevelManager : MonoBehaviour {
 		else 
 		{
 			//enable VR
-			GameManager.instance.EnableVR();
+			//GameManager.instance.EnableVR();
 			
 			SceneManager.LoadScene(scenarioPrefab);
 			SceneManager.sceneLoaded += OnSceneLoaded;
@@ -126,14 +126,14 @@ public class LevelManager : MonoBehaviour {
 				mainCar.GetComponent<MainCarController>().enabled = true;
 				mainCar.GetComponent<CarControllerAutomatic>().enabled = false;
 				GameObject dashboard = Instantiate(canvasManual) as GameObject;
-				GameObject.FindGameObjectWithTag("DashboardAutomatic").SetActive(false);
+				//GameObject.FindGameObjectWithTag("DashboardAutomatic").SetActive(false);
 			}
 			else //automatic
 			{
 				mainCar.GetComponent<MainCarController>().enabled = false;
 				mainCar.GetComponent<CarControllerAutomatic>().enabled = true;
 				GameObject dashboard = Instantiate(canvasAutomatic) as GameObject;
-				GameObject.FindGameObjectWithTag("DashboardManual").SetActive(false);
+				//GameObject.FindGameObjectWithTag("DashboardManual").SetActive(false);
 			}
 
 			//tempo e clima
@@ -242,7 +242,7 @@ public class LevelManager : MonoBehaviour {
         Destroy(mainCar.gameObject);
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 		SceneManager.LoadScene("Menu");
-		GameManager.instance.DisableVR();
+		//GameManager.instance.DisableVR();
     }
 	
 	public void RestartSession()
